@@ -1,7 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar.js"
-import ThemeToggle from "@/components/ThemeToggle.jsx"
+import ThemeToggle from "@/components/ThemeToggle.js"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,7 +25,7 @@ export default function RootLayout({ children }) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
 		
-      <body className="min-h-full flex flex-col">
+      <body className="w-screen h-screen flex flex-col">
       <Navbar/>
       {children}
       <ThemeToggle/>
