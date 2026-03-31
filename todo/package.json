@@ -1,5 +1,5 @@
 {
-  "name": "my-app",
+  "name": "todo",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -18,6 +18,6 @@
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
-    "tailwindcss": "^4"
+    "tailwindcss": "^4.2.2"
   }
 }
