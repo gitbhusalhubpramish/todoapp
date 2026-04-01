@@ -4,3 +4,6 @@
 
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
+* {
+  touch-action: manipulation; /* helps mobile clicks */
+}
