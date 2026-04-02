@@ -1,14 +1,20 @@
 import { cookies } from "next/headers";
 
-function checkSession() {
-    const cookieStore = cookies();
-    const session = cookieStore.get("session"); // your session key
+async function checkSession() {
+    const cookieStore = await cookies(); // ✅ FIX
+    const session = cookieStore.get("session");
 
-    return !!session; // true = exists, false = not
+    return !!session;
 }
 
-export default function UsrNav(){
+export default async function UsrNav(){
+	const login = await checkSession()
+	console.log("login: ",login)
 	return (
-		<></>
+		<div className="m-5">
+			<div>
+				
+			</div>
+		</div>
 	)
 }

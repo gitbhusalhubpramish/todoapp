@@ -27,7 +27,7 @@ export default function ThemeToggle() {
 
 	return (
 		<button
-			className="fixed z-50 cursor-pointer right-4 bottom-4 w-10 h-10 dark:bg-[#010101] bg-[#bff2d3] flex justify-center items-center rounded-full border-1 border-[#78ce9a]"
+			className="fixed z-50 cursor-pointer right-4 bottom-4 w-10 h-10 dark:bg-[#010101] bg-[#bff2d3] flex justify-center items-center rounded-full border-1 border-[#78ce9a] dark:border-[#04060d]"
 			onClick={e=>toggleTheme()}
 		>
 			{isDark ? "🌙" : "☀️"}

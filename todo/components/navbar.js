@@ -4,10 +4,10 @@ export default function Navbar(){
 	return (
 		<nav className="h-30 w-full bg-[#00c950] dark:bg-[#060a15] border-b-2 dark:border-[#04060d] border-[#149d4b] flex justify-center items-center">
 			<div className="w-full flex">
-				<div className="w-1/3">
-					<h1 className="ml-10  text-2xl dark:text-green-500 font-bold"><a href="/">ToDo</a></h1>
+				<div className="sm:w-1/3">
+					<h1 className="sm:ml-10 ml-7 mr-5 text-2xl dark:text-green-500 font-bold"><a href="/">ToDo</a></h1>
 				</div>
-				<div className="relative w-1/3">
+				<div className="relative w-1/3 flex items-center">
 					<input
 						type="text"
 						placeholder="Search..."
@@ -23,6 +23,7 @@ export default function Navbar(){
 						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z" />
 					</svg>
 				</div>
+				<UsrNav/>
 			</div>
 		</nav>
 	)
