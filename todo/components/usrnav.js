@@ -9,8 +9,8 @@ async function checkSession() {
 }
 
 export default async function UsrNav(){
-	//const login = await checkSession()
-	const login = true
+	const login = await checkSession()
+	//const login = true
 	let pp
 	const fallbackSVG = (
     <svg
@@ -28,6 +28,7 @@ export default async function UsrNav(){
       />
     </svg>
   );
+  
 	console.log("login: ",login)
 	return !login ? (
 		<div className="m-5 w-1/4 flex justify-evenly text-white">
@@ -40,17 +41,32 @@ export default async function UsrNav(){
 		</div>
 	) : (
 		<div className="m-5 w-1/4 flex justify-evenly">
-			<button className="text-white p-1 px-3 rounded-md border-1 border-green-700 dark:bg-green-500 text-center items-center flex cursor-pointer bg-[#26a85a] hover:bg-[#228e4d] dark:hover:bg-[#26a85a] hidden sm:inline-block"><span className="text-2xl mr-px">+</span> New Project</button>
-			<button className="h-10 flex items-center w-15 dark:bg-[#131d37] rounded-md bg-[#73aa89] cursor-pointer">
-				<div className="size-10 rounded-full ">
-					{pp ? (
-						<img className="size-10 rounded-full" src={pp} alt="profile pic" />
-					) : (
-						fallbackSVG
-					)}
-				</div>
-				<div className="w-0 h-0 border-l-5 border-l-transparent border-r-5 border-r-transparent border-b-10 border-b-[#5b6479] mx-auto" />
-			</button>
+			<button id = "triangleBtn" className="text-white p-1 px-3 rounded-md border-1 border-green-700 dark:bg-green-500 text-center items-center flex cursor-pointer bg-[#26a85a] hover:bg-[#228e4d] dark:hover:bg-[#26a85a] hidden sm:inline-block"><span className="text-2xl mr-px">+</span> New Project</button>
+			<div className="relative inline-block">
+			{/* Button */}
+  <label
+    htmlFor="toggle-triangle"
+    className="h-10 flex items-center w-15 dark:bg-[#131d37] rounded-md bg-[#73aa89] cursor-pointer relative"
+  >
+  {/* Hidden checkbox toggler */}
+  <input type="checkbox" id="toggle-triangle" className="hidden peer" />
+
+  
+    {/* Profile image stays unaffected */}
+    <div className="size-10 rounded-full">
+      {pp ? (
+        <img className="size-10 rounded-full" src={pp} alt="profile pic" />
+      ) : (
+        fallbackSVG
+      )}
+    </div>
+
+    {/* Triangle - only this rotates */}
+    <div
+      className="absolute right-2 top-1/2 -translate-y-1/2 w-0 h-0 border-l-5 border-l-transparent border-r-5 border-r-transparent border-b-10 border-b-[#5b6479] transition-transform duration-300 peer-checked:rotate-0 -rotate-180"
+    />
+  </label>
+</div>
 		</div>
 	)
 }
