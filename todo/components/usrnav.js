@@ -9,7 +9,8 @@ async function checkSession() {
 }
 
 export default async function UsrNav(){
-	const login = await checkSession()
+	//const login = await checkSession()
+	const login = true
 	let pp
 	const fallbackSVG = (
     <svg
@@ -39,7 +40,7 @@ export default async function UsrNav(){
 		</div>
 	) : (
 		<div className="m-5 w-1/4 flex justify-evenly">
-			<button className="text-white p-1 px-3 rounded-md border-1 border-green-700 dark:bg-green-500 text-center items-center flex cursor-pointer bg-[#26a85a] hover:bg-[#228e4d] dark:hover:bg-[#26a85a]"><span className="text-2xl mr-px">+</span> New Project</button>
+			<button className="text-white p-1 px-3 rounded-md border-1 border-green-700 dark:bg-green-500 text-center items-center flex cursor-pointer bg-[#26a85a] hover:bg-[#228e4d] dark:hover:bg-[#26a85a] hidden sm:inline-block"><span className="text-2xl mr-px">+</span> New Project</button>
 			<button className="h-10 flex items-center w-15 dark:bg-[#131d37] rounded-md bg-[#73aa89] cursor-pointer">
 				<div className="size-10 rounded-full ">
 					{pp ? (
