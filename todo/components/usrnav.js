@@ -11,10 +11,13 @@ export default async function UsrNav(){
 	const login = await checkSession()
 	console.log("login: ",login)
 	return (
-		<div className="m-5">
-			<div>
-				
-			</div>
+		<div className="m-5 flex">
+			<button>
+				login
+			</button>
+			<button>
+				signin
+			</button>
 		</div>
 	)
 }
