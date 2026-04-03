@@ -9,8 +9,8 @@ async function checkSession() {
 }
 
 export default async function UsrNav(){
-	const login = await checkSession()
-	//const login = true
+	//const login = await checkSession()
+	const login = true
 	let pp
 	const fallbackSVG = (
     <svg
@@ -28,6 +28,7 @@ export default async function UsrNav(){
       />
     </svg>
   );
+  
   
 	console.log("login: ",login)
 	return !login ? (
@@ -60,13 +61,14 @@ export default async function UsrNav(){
 					<div
 						className="absolute right-2 top-1/2 -translate-y-1/2 w-0 h-0 border-l-5 border-l-transparent border-r-5 border-r-transparent border-b-10 border-b-[#5b6479] transition-transform duration-300 peer-checked:rotate-0 -rotate-180"
 					/>
-					<div className="absolute top-10 -left-10 rounded-md z-15 w-30 text-white bg-gray-600 mr-5 [&>*]:border-b-1 [&>*]:border-black [&>*]:p-2 overflow-hidden peer-checked:block hidden">
+					<div className="absolute top-10 -left-10 rounded-md z-15 w-30 text-white dark:bg-gray-600 mr-5 [&>*]:border-b-1 [&>*]:border-black [&>*]:p-2 overflow-hidden peer-checked:block hidden bg-gray-400">
 						<div>Profile</div>
 						<div>New Project</div>
 						<div>Log Out</div>
 						<div>Delete Profile</div>
 						
 					</div>
+					<label htmlFor="toggle-triangle" className="w-screen h-screen absolute -top-6 -right-17 m-0 p-0 z-60 peer-checked:block hidden"></label>
 				</label>
 			</div>
 		</div>
