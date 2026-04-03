@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 
 export default function ThemeToggle() {
+	
   const [isDark, setIsDark] = useState(false);
+  
 
   useEffect(() => {
     const saved = localStorage.getItem("theme");
@@ -24,9 +26,12 @@ export default function ThemeToggle() {
     setIsDark(!isDark);
   };
 
-  return (
-    <button className="absolute cursor-pointer right-0 bottom-0 w-10 h-10 dark:bg-[#010101] bg-[#EEEEEE] flex justify-center items-center rounded-full m-2" onClick={toggleTheme}>
-      {isDark ? "🌙" : "☀️"}
-    </button>
-  );
+	return (
+		<button
+			className="fixed z-50 cursor-pointer right-4 bottom-4 w-10 h-10 dark:bg-[#010101] bg-[#bff2d3] flex justify-center items-center rounded-full border-1 border-[#78ce9a] dark:border-[#04060d]"
+			onClick={e=>toggleTheme()}
+		>
+			{isDark ? "🌙" : "☀️"}
+		</button>
+	);
 }
