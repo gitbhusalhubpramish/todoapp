@@ -1,0 +1,9 @@
+{
+	"options":[
+		{"option": "Profile", "img":"profile.svg", "href":"/profile"},
+		{"option": "Notification", "img": "notification.svg", "href":"/notifications"},
+		{"option": "New Project", "img": "newproject.svg", "href":"/newproject"},
+		{"option": "Log Out", "img": "logout.svg", "href":"/logout"},
+		{"option": "Delete account", "img": "deleteacc.svg", "href":"deleteacc"}
+	]
+}

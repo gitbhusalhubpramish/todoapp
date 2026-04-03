@@ -1,5 +1,7 @@
 import { cookies } from "next/headers";
 import Link from "next/link";
+import Image from 'next/image';
+import options from "@/data/option.json"
 
 async function checkSession() {
     const cookieStore = await cookies(); // ✅ FIX
@@ -44,33 +46,35 @@ export default async function UsrNav(){
 		<div className="m-5 w-1/4 flex justify-evenly">
 			<button id = "triangleBtn" className="text-white p-1 px-3 rounded-md border-1 border-green-700 dark:bg-green-500 text-center items-center flex cursor-pointer bg-[#26a85a] hover:bg-[#228e4d] dark:hover:bg-[#26a85a] hidden sm:inline-block"><span className="text-2xl mr-px">+</span> New Project</button>
 			<div className="relative inline-block">
-				<label
-					htmlFor="toggle-triangle"
-					className="h-10 flex flex-wrap items-center w-15 dark:bg-[#131d37] rounded-md bg-[#73aa89] cursor-pointer relative"
-				>
-					<input type="checkbox" id="toggle-triangle" className="hidden peer" />
+  <input type="checkbox" id="toggle-triangle" className="hidden peer" />
 
-					<div className="size-10 rounded-full">
-						{pp ? (
-							<img className="size-10 rounded-full" src={pp} alt="profile pic" />
-						) : (
-							fallbackSVG
-						)}
-					</div>
+  <label
+    htmlFor="toggle-triangle"
+    className="h-10 flex items-center w-15 dark:bg-[#131d37] rounded-md bg-[#73aa89] cursor-pointer relative z-20"
+  >
+    <div className="size-10 rounded-full">
+      {pp ? <img className="size-10 rounded-full" src={pp} alt="profile pic" /> : fallbackSVG}
+    </div>
 
-					<div
-						className="absolute right-2 top-1/2 -translate-y-1/2 w-0 h-0 border-l-5 border-l-transparent border-r-5 border-r-transparent border-b-10 border-b-[#5b6479] transition-transform duration-300 peer-checked:rotate-0 -rotate-180"
-					/>
-					<div className="absolute top-10 -left-10 rounded-md z-15 w-30 text-white dark:bg-gray-600 mr-5 [&>*]:border-b-1 [&>*]:border-black [&>*]:p-2 overflow-hidden peer-checked:block hidden bg-gray-400">
-						<div>Profile</div>
-						<div>New Project</div>
-						<div>Log Out</div>
-						<div>Delete Profile</div>
-						
-					</div>
-					<label htmlFor="toggle-triangle" className="w-screen h-screen absolute -top-6 -right-17 m-0 p-0 z-60 peer-checked:block hidden"></label>
-				</label>
-			</div>
+    <div className="absolute right-2 top-1/2 -translate-y-1/2 w-0 h-0 border-l-5 border-l-transparent border-r-5 border-r-transparent border-b-10 border-b-[#5b6479] transition-transform duration-300 peer-checked:rotate-0 -rotate-180" />
+  </label>
+
+  {/* Dropdown menu */}
+  <div className="absolute top-10 -left-20 rounded-md z-65 w-40 text-white dark:bg-gray-600 mr-5 overflow-hidden peer-checked:block hidden bg-gray-400 ">
+    {options.options.map((item, index) => (
+      <Link href={item.href} key={index} className="border-black p-2 border-b-1 block z-30 relative flex">
+      <Image width="40" height="40" className="size-5 object-center overflow-hidden mr-2" src={item.img} alt="" />
+        {item.option}
+      </Link>
+    ))}
+  </div>
+
+  {/* Fullscreen overlay to detect outside clicks */}
+  <label
+    htmlFor="toggle-triangle"
+    className="fixed inset-0 z-60 h-screen w-screen  peer-checked:block hidden pointer-events-auto"
+  />
+</div>
 		</div>
 	)
 }
