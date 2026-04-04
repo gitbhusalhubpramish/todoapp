@@ -1,16 +1,16 @@
 export default function Home() {
   return (
     <>
-	<div className="z-10 min-h-full min-w-full bg-[#dbffe9] dark:bg-[#0b1120] text-[#00bf00] flex flex-wrap">
-		<div className="sm:ml-50 sm:mt-20 ml-10 mt-5 font-bold font-[montserrat]">
+	<div className="z-10 min-h-screen w-full bg-[#dbffe9] dark:bg-[#0b1120] text-[#00bf00] flex flex-wrap overflow-x-hidden ">
+		<div className="sm:ml-50 sm:mt-20 ml-10 mt-5 font-bold font-[montserrat] overflow-x-hidden">
 			<h1 className="sm:text-7xl text-6xl">Sttater</h1>
 			<h1 className="sm:text-9xl text-8xl">Walls,</h1>
 			<h1 className="sm:text-7xl mt-1 text-6xl">Stack</h1>
 			<h1 className="sm:text-9xl text-8xl">Bricks.</h1>
 		</div>
 		<div className="flex-1">
-			<div className="h-2/3 flex justify-center items-center w-full ">
-				<div className="size-50 border-30 rounded-3xl border-[#00bf00] flex">
+			<div className="h-2/3 sm:flex justify-center items-center w-full ">
+				<div className="m-15 size-50 border-30 rounded-3xl border-[#00bf00] flex">
 					<div className="h-11/10 w-4/10 bg-[#00bf00] -rotate-30 rounded-full border-10 border-[#dbffe9] dark:border-[#0b1120]"/>
 					<div className="h-2/1 w-4/10 relative rotate-50 bottom-24 left-16 rounded-full flex items-end bg-[#dbffe9] dark:bg-[#0b1120]">
 						<div className="bg-[#00bf00] w-8/10 h-9/10 relative rounded-full"/>
