@@ -12,7 +12,9 @@ export default function Home() {
 			<div className="h-2/3 flex justify-center items-center w-full ">
 				<div className="size-50 border-30 rounded-3xl border-[#00bf00] flex">
 					<div className="h-11/10 w-4/10 bg-[#00bf00] -rotate-30 rounded-full border-10 border-[#dbffe9] dark:border-[#0b1120]"/>
-					<div className="h-2/1 w-4/10 bg-[#00bf00] relative rotate-60 bottom-20 left-18 rounded-full border-10 border-[#dbffe9] dark:border-[#0b1120] border-b-0"/>
+					<div className="h-2/1 w-4/10 relative rotate-50 bottom-24 left-16 rounded-full flex items-end bg-[#dbffe9] dark:bg-[#0b1120]">
+						<div className="bg-[#00bf00] w-8/10 h-9/10 relative rounded-full"/>
+					</div>
 				</div>
 			</div>
 		</div>
