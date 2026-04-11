@@ -1,8 +1,8 @@
 export default function Home() {
   return (
     <>
-	<div className="z-10 min-h-screen w-full bg-[#dbffe9] dark:bg-[#0b1120] text-[#00bf00] flex flex-wrap overflow-x-hidden ">
-		<div className="sm:ml-50 sm:mt-20 ml-10 mt-5 font-bold font-[montserrat] overflow-x-hidden">
+	<div className="z-10 mt-30 w-full bg-[#dbffe9] dark:bg-[#0b1120] text-[#00bf00] flex flex-wrap overflow-x-hidden h-screen">
+		<div className="sm:max-ml-50 sm:max-mt-20 ml-10 mt-5 font-bold font-[montserrat]">
 			<h1 className="sm:text-7xl text-6xl">Sttater</h1>
 			<h1 className="sm:text-9xl text-8xl">Walls,</h1>
 			<h1 className="sm:text-7xl mt-1 text-6xl">Stack</h1>
