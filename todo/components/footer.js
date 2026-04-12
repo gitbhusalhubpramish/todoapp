@@ -5,7 +5,7 @@ export default function Footer(){
 		<>
 			<div className="relative top-30 p-3 dark:bg-[#070a13] bg-[#a6d5b8] dark:text-white flex flex-col justify-center">
 				<div className="flex justify-center">
-					<p>© 2025 Pramish Bhusal. All rights reserved.</p>
+					<p>© 2026 Pramish Bhusal. All rights reserved.</p>
 				</div>
 				<div className="text-center">
 					<div>
