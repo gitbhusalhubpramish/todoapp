@@ -17,11 +17,11 @@ export default function Home() {
 						<div className="bg-[#00bf00] w-8/10 h-9/10 relative rounded-full"/>
 					</div>
 				</div>
-			{/*<div>
-				<p>
-					get started by <Link href="/login">logging in</Link> or <Link href="signin">signing up</Link>
+			<div className="items-end flex">
+				<p className="dark:text-white text-gray-500">
+					Get started by <Link href="/login" className="text-blue-500 underline">logging in</Link> or <Link href="signin" className="text-blue-500 underline">signing up</Link>
 				</p>
-			</div>*/}
+			</div>
 			</div>
 		</div>
 	</div>
