@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function Footer(){
 	return (
 		<>
-			<div className="relative top-30 p-3 dark:bg-[#070a13] bg-[#a6d5b8] dark:text-white flex flex-col justify-center">
+			<div className="relative top-30 dark:bg-[#070a13] bg-[#a6d5b8] dark:text-white flex flex-col justify-center">
 				<div className="flex justify-center">
 					<p>© 2026 Pramish Bhusal. All rights reserved.</p>
 				</div>
