@@ -2,7 +2,7 @@ import Link from "next/link";
 export default function Home() {
   return (
     <>
-	<div className="relative min-h-screen z-10 top-30 w-full bg-[#dbffe9] dark:bg-[#0b1120] text-[#00bf00] flex flex-wrap overflow-x-hidden ">
+	<div className="h-full min-h-screen overflow-visible bg-[#dbffe9] dark:bg-[#0b1120] text-[#00bf00] flex flex-wrap overflow-x-hidden ">
 		<div className="sm:ml-50 sm:mt-20 ml-10 mt-5 font-bold font-[montserrat] ">
 			<h1 className="sm:text-7xl text-6xl">Sttater</h1>
 			<h1 className="sm:text-9xl text-8xl">Walls,</h1>

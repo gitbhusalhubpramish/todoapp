@@ -28,8 +28,11 @@ export default function RootLayout({ children }) {
 		
       <body className="w-screen min-h-screen">
       <Navbar/>
-      {children}
-      <Footer/>
+      <div className="relative  z-10 top-30 w-full ">
+		{children}
+		<Footer/>
+      </div>
+      
       <ThemeToggle/>
       </body>
     </html>
