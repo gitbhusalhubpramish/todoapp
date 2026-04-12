@@ -7,8 +7,13 @@ export default function Footer(){
 				<div className="flex justify-center">
 					<p>© 2025 Pramish Bhusal. All rights reserved.</p>
 				</div>
-				<div>
-					
+				<div className="text-center">
+					<div>
+							<h1 className="m-1">Contact</h1>
+							<ul>
+								<li><a className="m-1 underline text-blue-500 hover:text-blue-600 " href="mailto:bpramish71@gmail.com">bpramish71@gmail.com</a></li>
+							</ul>
+						</div>
 				</div>
 				<div className="flex justify-center">
 					<div>
