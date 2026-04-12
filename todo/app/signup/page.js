@@ -3,7 +3,7 @@ import { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 
 export default function Signup() {
-  const [captchaToken, setCaptchaToken] = useState(null);
+  const [captchaToken, setCaptchaToken] = useState(false);
 
   const [form, setForm] = useState({
     email: "",
