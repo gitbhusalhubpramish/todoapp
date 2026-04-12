@@ -1,11 +1,12 @@
 "use client";
 import { useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 
 export default function LoginPage() {
+	const [capchatoken, setCaptchaToken] = useState(null)
   const [form, setForm] = useState({
     username: "",
-    password: "",
-    isRobotVerified: false,
+    password: ""
   });
 
   const handleChange = (e) => {
@@ -17,15 +18,18 @@ export default function LoginPage() {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!form.isRobotVerified) {
-      alert("Please verify you're not a robot");
-      return;
-    }
+  if (!capchatoken) {
+    alert("Please verify you're not a robot");
+    return;
+  }
 
-    console.log(form);
-  };
+  console.log({
+    ...form,
+    capchatoken,
+  });
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#dbffe9] dark:bg-[#0b1120]">
@@ -44,20 +48,14 @@ export default function LoginPage() {
 />
 
         {/* Robot Verification */}
-        <label className="flex items-center gap-2 text-sm cursor-pointer">
-          <input
-            type="checkbox"
-            name="isRobotVerified"
-            checked={form.isRobotVerified}
-            onChange={handleChange}
-            className="accent-[#00bf00] w-4 h-4"
-          />
-          I'm not a robot
-        </label>
+        <ReCAPTCHA
+        sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+        onChange={(token) => setCaptchaToken(token)}
+      />
 
         {/* Submit */}
         <button
-          type="submit"
+          type="submit" disabled={!capchatoken}
           className="bg-[#00bf00] text-white py-2 rounded-lg font-semibold hover:opacity-90 transition"
         >
           Login
