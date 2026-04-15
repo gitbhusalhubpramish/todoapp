@@ -45,38 +45,42 @@ export default function Signup() {
 
 };
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
+const handleSubmit = async (e) => {
+    e.preventDefault();
 
-		if (!captchaToken) {
-			alert("Please verify you're not a robot");
-			return;
-		}
+    if (form.password !== form.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
 
-		if (form.password !== form.confirmPassword) {
-			alert("Passwords do not match");
-			return;
-		}
+    // 👉 trigger invisible captcha
+    recaptchaRef.current.execute();
+  };
+const handleCaptchaVerify = async (token) => {
+    try {
+      setCaptchaToken(token);
 
-		console.log({
-			...form,
-			captchaToken,
-		});
-		const token = await getCaptchaToken();
+      const res = await fetch("/api/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...form,
+          captchaToken: token,
+        }),
+      });
 
-	const payload = {
-		...form,
-		captchaToken: token,
-	};
+      const data = await res.json();
+      console.log(data);
 
-	await fetch("/api/signup", {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify(payload),
-	});
-	recaptchaRef.current.reset();
-setCaptchaToken(null);
-	};
+      alert("Signup success");
+
+      recaptchaRef.current.reset();
+      setCaptchaToken(null);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+	
 
 	return (
 		<div className="min-h-screen flex items-center justify-center bg-[#dbffe9] dark:bg-[#0b1120]">
@@ -136,13 +140,13 @@ setCaptchaToken(null);
 				<ReCAPTCHA
 				ref={recaptchaRef}
 					sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
-					onChange={(token) => setCaptchaToken(token)}
+					onChange={handleCaptchaVerify}
+					size="invisible"
 				/>
 
 				{/* Submit */}
 				<button
 					type="submit"
-					disabled={!captchaToken}
 					className="bg-[#00bf00] text-white py-2 rounded-lg font-semibold hover:opacity-90 transition disabled:opacity-50"
 				>
 					Create Account
