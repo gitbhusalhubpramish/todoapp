@@ -1,13 +1,14 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 
 export default function Signup() {
+	const recaptchaRef = useRef(null);
 	const [mounted, setMounted] = useState(false);
 	const [captchaToken, setCaptchaToken] = useState(null);
-	useEffect(() => {
+	/*useEffect(() => {
 	setMounted(true);
-}, []);
+}, []);*/
 
 
 	const [form, setForm] = useState({
@@ -17,7 +18,7 @@ export default function Signup() {
 		confirmPassword: "",
 	});
 
-if (!mounted) return null;
+	//if (!mounted) return null;
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 
@@ -73,6 +74,8 @@ if (!mounted) return null;
 		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify(payload),
 	});
+	recaptchaRef.current.reset();
+setCaptchaToken(null);
 	};
 
 	return (
@@ -131,6 +134,7 @@ if (!mounted) return null;
 
 				{/* CAPTCHA */}
 				<ReCAPTCHA
+				ref={recaptchaRef}
 					sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
 					onChange={(token) => setCaptchaToken(token)}
 				/>

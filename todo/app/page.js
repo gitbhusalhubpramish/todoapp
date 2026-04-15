@@ -19,7 +19,7 @@ export default function Home() {
 				</div>
 			<div className="items-end flex">
 				<p className="dark:text-white text-gray-500">
-					Get started by <Link href="/login" className="text-blue-500 underline">logging in</Link> or <Link href="signin" className="text-blue-500 underline">signing up</Link>
+					Get started by <Link href="/login" className="text-blue-500 underline">logging in</Link> or <Link href="signup" className="text-blue-500 underline">signing up</Link>
 				</p>
 			</div>
 			</div>
