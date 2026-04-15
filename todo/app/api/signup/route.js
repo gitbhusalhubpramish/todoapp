@@ -35,7 +35,19 @@ export async function POST(req) {
     const users = db.collection("users");
 
     // (optional) check duplicate user
-    const existing = await users.findOne({ email: body.email });
+    const existing = await users.findOne({
+  $or: [
+    { email: body.email },
+    { username: body.username }
+  ]
+});
+
+if (existing) {
+  return Response.json(
+    { error: "User already exists" },
+    { status: 409 }
+  );
+}
     if (existing) {
 		console.log(users)
       return Response.json(

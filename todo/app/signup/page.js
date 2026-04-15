@@ -71,7 +71,7 @@ const handleCaptchaVerify = async (token) => {
 
       const data = await res.json();
       console.log(data);
-
+		
       alert("Signup success");
 
       recaptchaRef.current.reset();
