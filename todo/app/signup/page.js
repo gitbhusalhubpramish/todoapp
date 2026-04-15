@@ -6,6 +6,7 @@ export default function Signup() {
 	const recaptchaRef = useRef(null);
 	const [mounted, setMounted] = useState(false);
 	const [captchaToken, setCaptchaToken] = useState(null);
+	
 	/*useEffect(() => {
 	setMounted(true);
 }, []);*/
@@ -54,7 +55,8 @@ const handleSubmit = async (e) => {
     }
 
     // 👉 trigger invisible captcha
-    recaptchaRef.current.execute();
+    if (!recaptchaRef.current) return;
+recaptchaRef.current.execute();
   };
 const handleCaptchaVerify = async (token) => {
     try {
@@ -71,10 +73,11 @@ const handleCaptchaVerify = async (token) => {
 
       const data = await res.json();
       console.log(data);
-		
-      alert("Signup success");
+		if (res.status === 201){
+      alert("Signup success");}
 
-      recaptchaRef.current.reset();
+      //if (!recaptchaRef.current) return;
+      recaptchaRef.current?.reset();
       setCaptchaToken(null);
     } catch (err) {
       console.error(err);
