@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-
+import Link from "next/link";
 
 export default function Signup() {
 	const recaptchaRef = useRef(null);
@@ -178,7 +178,10 @@ const handleCaptchaVerify = async (token) => {
 				>
 					Create Account
 				</button>
+				<p className="dark:text-white text-center">Already have an account? <Link className="text-blue-500 underline" href="/login">Login</Link></p>
 			</form>
+			
 		</div>
+		
 	);
 }
