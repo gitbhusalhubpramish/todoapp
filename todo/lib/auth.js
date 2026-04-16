@@ -24,7 +24,6 @@ export async function getCurrentUser() {
 
 		return null;
 	}*/
-	console.log("fake login")
 
 	return session ? session : false;
 }
