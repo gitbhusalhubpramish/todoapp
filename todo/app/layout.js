@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/navbar.js"
 import ThemeToggle from "@/components/ThemeToggle.js"
 import Footer from "@/components/footer.js"
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,6 +30,10 @@ export default function RootLayout({ children }) {
       <body className="w-screen min-h-screen">
       <Navbar/>
       <div className="relative  z-10 top-30 w-full ">
+      <Script
+  src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
+  strategy="afterInteractive"
+/>
 		{children}
 		<Footer/>
       </div>

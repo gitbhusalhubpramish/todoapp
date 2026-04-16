@@ -1,0 +1,187 @@
+"use client";
+import { useState, useRef } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
+import Link from "next/link";
+
+export default function Signup() {
+	const recaptchaRef = useRef(null);
+	const [mounted, setMounted] = useState(false);
+	const [captchaToken, setCaptchaToken] = useState(null);
+	const [error, setError] = useState("")
+	
+	/*useEffect(() => {
+	setMounted(true);
+}, []);*/
+
+
+	const [form, setForm] = useState({
+		email: "",
+		username: "",
+		password: "",
+		confirmPassword: "",
+	});
+
+	//if (!mounted) return null;
+	const handleChange = (e) => {
+		const { name, value } = e.target;
+
+		setForm((prev) => ({
+			...prev,
+			[name]: value,
+		}));
+	};
+	const getCaptchaToken = () => {
+  return new Promise((resolve) => {
+    if (!window.grecaptcha) {
+      console.error("reCAPTCHA not loaded");
+      return;
+    }
+
+    window.grecaptcha.ready(() => {
+      window.grecaptcha
+        .execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY, {
+          action: "signup",
+        })
+        .then(resolve);
+    });
+  });
+
+};
+
+const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("")
+    if (!e.target.checkValidity()) {
+		e.target.reportValidity();
+		return;
+	}
+
+    if (form.password !== form.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    // 👉 trigger invisible captcha
+    if (!recaptchaRef.current) return;
+	recaptchaRef.current.execute();
+  };
+const handleCaptchaVerify = async (token) => {
+    try {
+      setCaptchaToken(token);
+
+      const res = await fetch("/api/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...form,
+          captchaToken: token,
+        }),
+      });
+
+      const data = await res.json();
+      console.log(data);
+		if (res.status === 201){
+      alert("Signup success");}
+      else{
+			setError(data.error)
+			//alert("Error: " + data.error);
+		}
+
+      //if (!recaptchaRef.current) return;
+      recaptchaRef.current?.reset();
+      setCaptchaToken(null);
+      setForm({
+		email: "",
+		username: "",
+		password: "",
+		confirmPassword: "",
+	})
+    } catch (err) {
+      console.error(err);
+    }
+  };
+	
+
+	return (
+		<div className="min-h-screen flex items-center justify-center bg-[#dbffe9] dark:bg-[#0b1120]">
+			<form
+				onSubmit={handleSubmit}
+				className="bg-white dark:bg-[#111827] p-8 rounded-2xl shadow-lg w-[350px] flex flex-col gap-4"
+			>
+				<h1 className="text-2xl font-bold text-center text-[#00bf00]">
+					Sign Up
+				</h1>
+				{error && (
+    <p className="text-red-500 text-sm font-medium text-center">
+      {error}
+    </p>
+  )}
+
+				{/* Email */}
+				<input
+					pattern="[a-zA-Z0-9_@.\-]+"
+					type="email"
+					name="email"
+					placeholder="Email"
+					value={form.email}
+					onChange={handleChange}
+					required
+					className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-600 dark:text-gray-300 placeholder:text-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#00bf00]"
+				/>
+
+				{/* Username */}
+				<input
+					pattern="[a-zA-Z0-9_@.\-]+"
+					type="text"
+					name="username"
+					placeholder="Username"
+					value={form.username}
+					onChange={handleChange}
+					required
+					className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-600 dark:text-gray-300 placeholder:text-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#00bf00]"
+				/>
+
+				{/* Password */}
+				<input
+					type="password"
+					name="password"
+					placeholder="Password"
+					value={form.password}
+					onChange={handleChange}
+					required
+					className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-600 dark:text-gray-300 placeholder:text-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#00bf00]"
+				/>
+
+				{/* Confirm Password */}
+				<input
+					type="password"
+					name="confirmPassword"
+					placeholder="Confirm Password"
+					value={form.confirmPassword}
+					onChange={handleChange}
+					required
+					className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-600 dark:text-gray-300 placeholder:text-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#00bf00]"
+				/>
+
+				{/* CAPTCHA */}
+				<ReCAPTCHA
+				ref={recaptchaRef}
+					sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+					onChange={handleCaptchaVerify}
+					size="invisible"
+				/>
+
+				{/* Submit */}
+				<button
+					type="submit"
+					className="bg-[#00bf00] text-white py-2 rounded-lg font-semibold hover:opacity-90 transition disabled:opacity-50"
+				>
+					Create Account
+				</button>
+				<p className="dark:text-white text-center">Already have an account? <Link className="text-blue-500 underline" href="/login">Login</Link></p>
+			</form>
+			
+		</div>
+		
+	);
+}
