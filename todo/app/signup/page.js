@@ -80,7 +80,7 @@ const handleCaptchaVerify = async (token) => {
 		if (res.status === 201){
       alert("Signup success");}
       else{
-			alert("an error occured: ",res.message)
+			alert("Error: " + data.error);
 		}
 
       //if (!recaptchaRef.current) return;
