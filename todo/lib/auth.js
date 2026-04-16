@@ -5,13 +5,14 @@ import clientPromise from "@/lib/mongodb";
 export async function getCurrentUser() {
 	const cookieStore = await cookies();
 
-	const sessionId = cookieStore.get("session")?.value;
-
+	const sessionId = cookieStore.get("sessionId")?.value;
+	
 	if (!sessionId) return false;
 
-	const db = (await clientPromise).db("app");
-
-	const session = await db.collection("sessions").findOne({
+	const client = await clientPromise;
+    const db = client.db("projectdata");
+	const sessions = db.collection("sessions");
+	const session = await sessions.findOne({
 		sessionId,
 	});
 
