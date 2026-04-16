@@ -6,6 +6,7 @@ export default function Signup() {
 	const recaptchaRef = useRef(null);
 	const [mounted, setMounted] = useState(false);
 	const [captchaToken, setCaptchaToken] = useState(null);
+	const [error, setError] = useState("")
 	
 	/*useEffect(() => {
 	setMounted(true);
@@ -80,7 +81,8 @@ const handleCaptchaVerify = async (token) => {
 		if (res.status === 201){
       alert("Signup success");}
       else{
-			alert("Error: " + data.error);
+			setError(data.error)
+			//alert("Error: " + data.error);
 		}
 
       //if (!recaptchaRef.current) return;
@@ -101,6 +103,11 @@ const handleCaptchaVerify = async (token) => {
 				<h1 className="text-2xl font-bold text-center text-[#00bf00]">
 					Sign Up
 				</h1>
+				{error && (
+    <p className="text-red-500 text-sm font-medium text-center">
+      {error}
+    </p>
+  )}
 
 				{/* Email */}
 				<input
