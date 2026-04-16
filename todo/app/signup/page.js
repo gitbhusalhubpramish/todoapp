@@ -49,6 +49,7 @@ export default function Signup() {
 
 const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("")
     if (!e.target.checkValidity()) {
 		e.target.reportValidity();
 		return;
@@ -88,6 +89,12 @@ const handleCaptchaVerify = async (token) => {
       //if (!recaptchaRef.current) return;
       recaptchaRef.current?.reset();
       setCaptchaToken(null);
+      setForm({
+		email: "",
+		username: "",
+		password: "",
+		confirmPassword: "",
+	})
     } catch (err) {
       console.error(err);
     }
