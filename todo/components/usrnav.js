@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import Image from 'next/image';
 import options from "@/data/option.json"
+import getCurrentUser form "@/lib/auth.js"
 
 async function checkSession() {
     const cookieStore = await cookies(); // ✅ FIX
@@ -11,7 +12,7 @@ async function checkSession() {
 }
 
 export default async function UsrNav(){
-	const login = await checkSession()
+	const login = await getCurrentUser()
 	
 	let pp
 	const fallbackSVG = (
