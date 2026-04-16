@@ -1,10 +1,12 @@
 import clientPromise from "@/lib/mongodb";
 import bcrypt from "bcrypt";
+import { cookies } from "next/headers";
+import { randomUUID } from "crypto";
 
 export async function POST(req) {
   try {
     const body = await req.json();
-    const token = body.captchaToken;
+    const { username, email, password, captchaToken } = body;
 
     const verifyRes = await fetch(
       "https://www.google.com/recaptcha/api/siteverify",
@@ -15,55 +17,42 @@ export async function POST(req) {
         },
         body: new URLSearchParams({
           secret: process.env.RECAPTCHA_SECRET_KEY,
-          response: token,
+          response: captchaToken,
         }),
       }
     );
 
     const data = await verifyRes.json();
 
-    // ❌ Block bots
     if (!data.success || (data.score && data.score < 0.5)) {
-		console.log(data.success, data.score)
-      return Response.json(
-        { error: "Bot detected" },
-        { status: 403 }
-      );
+      console.log(data.success, data.score);
+      return Response.json({ error: "Bot detected" }, { status: 403 });
     }
-	const usernameRegex = /^[a-zA-Z0-9_-]{3,20}$/;
-const emailRegex = /^[a-zA-Z0-9_@.\-]+$/;
 
-if (!usernameRegex.test(body.username)) {
-  return Response.json(
-    { error: "Invalid username" },
-    { status: 400 }
-  );
-}
+    const usernameRegex = /^[a-zA-Z0-9_-]{3,20}$/;
+    const emailRegex = /^[a-zA-Z0-9_@.\-]+$/;
 
-if (!emailRegex.test(body.email)) {
-  return Response.json(
-    { error: "Invalid email" },
-    { status: 400 }
-  );
-}
+    if (!usernameRegex.test(username)) {
+      return Response.json({ error: "Invalid username" }, { status: 400 });
+    }
 
-if (!body.password || body.password.length < 6) {
-  return Response.json(
-    { error: "Password too short" },
-    { status: 400 }
-  );
-}
+    if (!emailRegex.test(email)) {
+      return Response.json({ error: "Invalid email" }, { status: 400 });
+    }
+
+    if (!password || password.length < 6) {
+      return Response.json({ error: "Password too short" }, { status: 400 });
+    }
+
     const client = await clientPromise;
     const db = client.db("projectdata");
-    const users = db.collection("users");
 
-    // (optional) check duplicate user
+    const users = db.collection("users");
+    const sessions = db.collection("sessions");
+
     const existing = await users.findOne({
-  $or: [
-    { email: body.email },
-    { username: body.username }
-  ]
-});
+      $or: [{ email }, { username }],
+    });
 
     if (existing) {
       return Response.json(
@@ -71,14 +60,35 @@ if (!body.password || body.password.length < 6) {
         { status: 409 }
       );
     }
-    const SALT_ROUNDS = 10;
-	body.password = await bcrypt.hash(body.password, SALT_ROUNDS);
-    await users.insertOne({
-      email: body.email,
-      username: body.username,
-      password: body.password,
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const result = await users.insertOne({
+      email,
+      username,
+      password: hashedPassword,
       createdAt: new Date(),
     });
+
+    const sessionId = randomUUID();
+
+    await sessions.insertOne({
+      sessionId,
+      userId: result.insertedId,
+      username,
+      createdAt: new Date(),
+      expiresAt: new Date(Date.now() + 86400000), // 1 day
+    });
+
+    const cookieStore = await cookies();
+
+cookieStore.set("sessionId", sessionId, {
+  httpOnly: true,
+  secure: true,
+  sameSite: "lax",
+  path: "/",
+  maxAge: 60 * 60 * 24,
+});
 
     return Response.json(
       { message: "User created" },
@@ -86,7 +96,7 @@ if (!body.password || body.password.length < 6) {
     );
 
   } catch (err) {
-	  console.log(err)
+    console.log(err);
     return Response.json(
       { error: "Server error" },
       { status: 500 }
