@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import Image from 'next/image';
 import options from "@/data/option.json"
-import getCurrentUser form "@/lib/auth.js"
+import getCurrentUser from "@/lib/auth.js"
 
 async function checkSession() {
     const cookieStore = await cookies(); // ✅ FIX
