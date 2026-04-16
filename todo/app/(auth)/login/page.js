@@ -1,66 +1,154 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
+import Link from "next/link";
 
-export default function LoginPage() {
-	const [capchatoken, setCaptchaToken] = useState(null)
-  const [form, setForm] = useState({
-    username: "",
-    password: ""
+export default function Signup() {
+	const recaptchaRef = useRef(null);
+	const [mounted, setMounted] = useState(false);
+	const [captchaToken, setCaptchaToken] = useState(null);
+	const [error, setError] = useState("")
+	
+	/*useEffect(() => {
+	setMounted(true);
+}, []);*/
+
+
+	const [form, setForm] = useState({
+		username: "",
+		password: "",
+	});
+
+	//if (!mounted) return null;
+	const handleChange = (e) => {
+		const { name, value } = e.target;
+
+		setForm((prev) => ({
+			...prev,
+			[name]: value,
+		}));
+	};
+	const getCaptchaToken = () => {
+  return new Promise((resolve) => {
+    if (!window.grecaptcha) {
+      console.error("reCAPTCHA not loaded");
+      return;
+    }
+
+    window.grecaptcha.ready(() => {
+      window.grecaptcha
+        .execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY, {
+          action: "login",
+        })
+        .then(resolve);
+    });
   });
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setForm((prevState) => ({
-      ...prevState,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
-
-  const handleSubmit = (e) => {
-  e.preventDefault();
-
-  if (!capchatoken) {
-    alert("Please verify you're not a robot");
-    return;
-  }
-
-  console.log({
-    ...form,
-    capchatoken,
-  });
 };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-[#dbffe9] dark:bg-[#0b1120]">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white dark:bg-[#111827] p-8 rounded-2xl shadow-lg w-[350px] flex flex-col gap-5"
-      >
-        <h1 className="text-2xl font-bold text-center text-[#00bf00]">
-          Login
-        </h1>
+const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("")
+    if (!e.target.checkValidity()) {
+		e.target.reportValidity();
+		return;
+	}
+    // 👉 trigger invisible captcha
+    if (!recaptchaRef.current) return;
+	recaptchaRef.current.execute();
+  };
+const handleCaptchaVerify = async (token) => {
+    try {
+      setCaptchaToken(token);
 
-        <input type="text" name="username" placeholder="Username" value={form.username} onChange={handleChange} required className="p-3 rounded-lg border  border-gray-300 dark:border-gray-600  bg-transparent dark:text-gray-400 text-gray-600 placeholder:text-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#00bf00]"
-/>
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...form,
+          captchaToken: token,
+        }),
+      });
 
-<input type="password" name="password" placeholder="Password" value={form.password} onChange={handleChange} required className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent dark:text-gray-400 text-gray-600 placeholder:text-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#00bf00]"
-/>
+      const data = await res.json();
+      console.log(data);
+		if (res.status === 201){
+      alert("login success");}
+      else{
+			setError(data.error)
+			//alert("Error: " + data.error);
+		}
 
-        {/* Robot Verification */}
-        <ReCAPTCHA
-        sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
-        onChange={(token) => setCaptchaToken(token)}
-      />
+      //if (!recaptchaRef.current) return;
+      recaptchaRef.current?.reset();
+      setCaptchaToken(null);
+      setForm({
+		username: "",
+		password: "",
+	})
+    } catch (err) {
+      console.error(err);
+    }
+  };
+	
 
-        {/* Submit */}
-        <button
-          type="submit" disabled={!capchatoken}
-          className="bg-[#00bf00] text-white py-2 rounded-lg font-semibold hover:opacity-90 transition"
-        >
-          Login
-        </button>
-      </form>
-    </div>
-  );
+	return (
+		<div className="min-h-screen flex items-center justify-center bg-[#dbffe9] dark:bg-[#0b1120]">
+			<form
+				onSubmit={handleSubmit}
+				className="bg-white dark:bg-[#111827] p-8 rounded-2xl shadow-lg w-[350px] flex flex-col gap-4"
+			>
+				<h1 className="text-2xl font-bold text-center text-[#00bf00]">
+					Log In
+				</h1>
+				{error && (
+    <p className="text-red-500 text-sm font-medium text-center">
+      {error}
+    </p>
+  )}
+
+				{/* Username */}
+				<input
+					pattern="[a-zA-Z0-9_@.\-]+"
+					type="text"
+					name="username"
+					placeholder="Username"
+					value={form.username}
+					onChange={handleChange}
+					required
+					className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-600 dark:text-gray-300 placeholder:text-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#00bf00]"
+				/>
+
+				{/* Password */}
+				<input
+					type="password"
+					name="password"
+					placeholder="Password"
+					value={form.password}
+					onChange={handleChange}
+					required
+					className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-600 dark:text-gray-300 placeholder:text-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#00bf00]"
+				/>
+
+				{/* CAPTCHA */}
+				<ReCAPTCHA
+				ref={recaptchaRef}
+					sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+					onChange={handleCaptchaVerify}
+					size="invisible"
+				/>
+
+				{/* Submit */}
+				<button
+					type="submit"
+					className="bg-[#00bf00] text-white py-2 rounded-lg font-semibold hover:opacity-90 transition disabled:opacity-50"
+				>
+					Log In
+				</button>
+				<p className="dark:text-white text-center">Not having an account? <Link className="text-blue-500 underline" href="/signup">Sign up</Link></p>
+			</form>
+			
+		</div>
+		
+	);
 }

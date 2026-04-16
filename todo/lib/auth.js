@@ -24,6 +24,7 @@ export async function getCurrentUser() {
 
 		return null;
 	}*/
+	console.log(session)
 
 	return session ? session : false;
 }
