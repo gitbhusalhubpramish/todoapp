@@ -1,26 +1,29 @@
+import "server-only";
 import { cookies } from "next/headers";
 import clientPromise from "@/lib/mongodb";
 
 export async function getCurrentUser() {
-  const sessionId = cookies().get("sessionId")?.value;
+	const cookieStore = await cookies();
 
-  if (!sessionId) return null;
+	const sessionId = cookieStore.get("session")?.value;
 
-  const db = (await clientPromise).db("app");
+	if (!sessionId) return null;
 
-  const session = await db.collection("sessions").findOne({
-    sessionId,
-  });
+	const db = (await clientPromise).db("app");
 
-  if (!session) {
-    // invalidate cookie if session is fake
-    cookies().set("sessionId", "", {
-      maxAge: 0,
-      path: "/",
-    });
+	const session = await db.collection("sessions").findOne({
+		sessionId,
+	});
 
-    return null;
-  }
+	/*if (!session) {
+		cookieStore.set("session", "", {
+			maxAge: 0,
+			path: "/",
+		});
 
-  return session;
+		return null;
+	}*/
+	console.log("fake login")
+
+	return session;
 }

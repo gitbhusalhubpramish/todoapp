@@ -2,7 +2,7 @@
 import { NextResponse } from "next/server";
 
 export function middleware(req) {
-  const sessionId = req.cookies.get("sessionId")?.value;
+  const sessionId = req.cookies.get("session")?.value;
 
   if (!sessionId) return NextResponse.next();
 
