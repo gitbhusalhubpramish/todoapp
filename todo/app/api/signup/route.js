@@ -30,7 +30,29 @@ export async function POST(req) {
         { status: 403 }
       );
     }
+	const usernameRegex = /^[a-zA-Z0-9_-]{3,20}$/;
+const emailRegex = /^[a-zA-Z0-9_@.\-]+$/;
 
+if (!usernameRegex.test(body.username)) {
+  return Response.json(
+    { error: "Invalid username" },
+    { status: 400 }
+  );
+}
+
+if (!emailRegex.test(body.email)) {
+  return Response.json(
+    { error: "Invalid email" },
+    { status: 400 }
+  );
+}
+
+if (!body.password || body.password.length < 6) {
+  return Response.json(
+    { error: "Password too short" },
+    { status: 400 }
+  );
+}
     const client = await clientPromise;
     const db = client.db("projectdata");
     const users = db.collection("users");

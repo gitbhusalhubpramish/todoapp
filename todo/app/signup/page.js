@@ -48,6 +48,10 @@ export default function Signup() {
 
 const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!e.target.checkValidity()) {
+		e.target.reportValidity();
+		return;
+	}
 
     if (form.password !== form.confirmPassword) {
       alert("Passwords do not match");
@@ -75,6 +79,9 @@ const handleCaptchaVerify = async (token) => {
       console.log(data);
 		if (res.status === 201){
       alert("Signup success");}
+      else{
+			alert("an error occured: ",res.message)
+		}
 
       //if (!recaptchaRef.current) return;
       recaptchaRef.current?.reset();
@@ -97,6 +104,7 @@ const handleCaptchaVerify = async (token) => {
 
 				{/* Email */}
 				<input
+					pattern="[a-zA-Z0-9_@.\-]+"
 					type="email"
 					name="email"
 					placeholder="Email"
@@ -108,6 +116,7 @@ const handleCaptchaVerify = async (token) => {
 
 				{/* Username */}
 				<input
+					pattern="[a-zA-Z0-9_@.\-]+"
 					type="text"
 					name="username"
 					placeholder="Username"
