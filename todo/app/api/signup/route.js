@@ -1,4 +1,5 @@
 import clientPromise from "@/lib/mongodb";
+import bcrypt from "bcrypt";
 
 export async function POST(req) {
   try {
@@ -42,20 +43,14 @@ export async function POST(req) {
   ]
 });
 
-if (existing) {
-  return Response.json(
-    { error: "User already exists" },
-    { status: 409 }
-  );
-}
     if (existing) {
-		console.log(users)
       return Response.json(
         { error: "User already exists" },
         { status: 409 }
       );
     }
-
+    const SALT_ROUNDS = 10;
+	body.password = await bcrypt.hash(body.password, SALT_ROUNDS);
     await users.insertOne({
       email: body.email,
       username: body.username,
