@@ -7,7 +7,7 @@ export async function getCurrentUser() {
 
 	const sessionId = cookieStore.get("session")?.value;
 
-	if (!sessionId) return null;
+	if (!sessionId) return false;
 
 	const db = (await clientPromise).db("app");
 
@@ -25,5 +25,5 @@ export async function getCurrentUser() {
 	}*/
 	console.log("fake login")
 
-	return session;
+	return session ? session : false;
 }
