@@ -11,8 +11,8 @@ async function checkSession() {
 }
 
 export default async function UsrNav(){
-	//const login = await checkSession()
-	const login = true
+	const login = await checkSession()
+	
 	let pp
 	const fallbackSVG = (
     <svg
