@@ -17,7 +17,16 @@ export default function Signup() {
 	const [form, setForm] = useState({
 		username: "",
 		password: "",
+		forget: false,
 	});
+	
+	const handelForget = () =>{
+		setForm((prev)=>({
+			...prev,
+			forget: true,
+		}))
+		console.log(form)
+	}
 
 	//if (!mounted) return null;
 	const handleChange = (e) => {
@@ -101,7 +110,7 @@ const handleCaptchaVerify = async (token) => {
 				className="bg-white dark:bg-[#111827] p-8 rounded-2xl shadow-lg w-[350px] flex flex-col gap-4"
 			>
 				<h1 className="text-2xl font-bold text-center text-[#00bf00]">
-					Log In
+					{form.forget ? "reset password" : "Log In"}
 				</h1>
 				{error && (
     <p className="text-red-500 text-sm font-medium text-center">
@@ -131,7 +140,7 @@ const handleCaptchaVerify = async (token) => {
 					required
 					className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-600 dark:text-gray-300 placeholder:text-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#00bf00]"
 				/>
-				<p className="text-end text-blue-500"><button className="underline cursor-pointer">Forget password?</button></p>
+				{!form.forget && (<p className="text-end text-blue-500"><button className="underline cursor-pointer" onClick={handelForget}>Forgot password?</button></p>)}
 
 				{/* CAPTCHA */}
 				<ReCAPTCHA
@@ -146,7 +155,7 @@ const handleCaptchaVerify = async (token) => {
 					type="submit"
 					className="bg-[#00bf00] text-white py-2 rounded-lg font-semibold hover:opacity-90 transition disabled:opacity-50 cursor-pointer"
 				>
-					Log In
+					{form.forget ? "Submit" : "Log In"}
 				</button>
 				<p className="dark:text-white text-center">Not having an account? <Link className="text-blue-500 underline" href="/signup">Sign up</Link></p>
 			</form>

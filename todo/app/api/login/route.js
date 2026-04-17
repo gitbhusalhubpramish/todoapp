@@ -6,7 +6,7 @@ import { randomUUID } from "crypto";
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { username, password, captchaToken } = body;
+    const { username, password, captchaToken, forget } = body;
 
     const verifyRes = await fetch(
       "https://www.google.com/recaptcha/api/siteverify",
@@ -54,6 +54,10 @@ export async function POST(req) {
         { status: 401 }
       );
     }
+    if (forget){
+		console.log("forget ",forget)
+		const hashedPassword = await bcrypt.hash(password, 10);
+	}
 
     const isMatched = await bcrypt.compare(password, user.password);
     if(!isMatched){
