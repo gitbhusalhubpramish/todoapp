@@ -97,7 +97,7 @@ const handleCaptchaVerify = async (token) => {
 			alert("login success");
 			window.location.reload()
 		}
-      else{
+      else if (res.status>=400){
 			setError(data.error)
 			return
 			
@@ -113,6 +113,7 @@ const handleCaptchaVerify = async (token) => {
 				password: "",
 				code:null,
 			});
+			console.log(form)
 			return
 		}
       setForm({
@@ -142,7 +143,8 @@ const handleCaptchaVerify = async (token) => {
     </p>
   )}
 
-				{/* Username */}
+				{(["", "forget"].includes(form.action)) && (
+					<>{/* Username */}
 				<input
 					pattern="[a-zA-Z0-9_@.\-]+"
 					type="text"
@@ -175,7 +177,8 @@ const handleCaptchaVerify = async (token) => {
 					className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-600 dark:text-gray-300 placeholder:text-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#00bf00]"
 				/>
 				)}
-				{form.action ==="" && (<p className="text-end text-blue-500"><button className="underline cursor-pointer" onClick={handelForget}>Forgot password?</button></p>)}
+				{form.action ==="" && (<p className="text-end text-blue-500"><button className="underline cursor-pointer" type="button" onClick={handelForget}>Forgot password?</button></p>)}</>
+				)}
 
 				{/* CAPTCHA */}
 				<ReCAPTCHA
