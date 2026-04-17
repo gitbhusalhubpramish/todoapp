@@ -29,7 +29,7 @@ export async function POST(req) {
       return Response.json({ error: "Bot detected" }, { status: 403 });
     }
 
-    const usernameRegex = /^[a-zA-Z0-9_-]{3,20}$/;
+    const usernameRegex = /^[a-zA-Z0-9_@.\-]+$/;
 
     if (!usernameRegex.test(username)) {
       return Response.json({ error: "Invalid username" }, { status: 400 });
@@ -41,7 +41,12 @@ export async function POST(req) {
     const users = db.collection("users");
     const sessions = db.collection("sessions");
 
-    const user = await users.findOne({ username });
+    const user = await users.findOne({
+  $or: [
+    { email: username },
+    { username: username }
+  ],
+});
 
     if (!user) {
       return Response.json(

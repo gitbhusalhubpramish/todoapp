@@ -73,7 +73,9 @@ const handleCaptchaVerify = async (token) => {
       const data = await res.json();
       console.log(data);
 		if (res.status === 201){
-      alert("login success");}
+      alert("login success");
+      window.location.reload()
+      }
       else{
 			setError(data.error)
 			//alert("Error: " + data.error);
@@ -112,7 +114,7 @@ const handleCaptchaVerify = async (token) => {
 					pattern="[a-zA-Z0-9_@.\-]+"
 					type="text"
 					name="username"
-					placeholder="Username"
+					placeholder="Email or Username"
 					value={form.username}
 					onChange={handleChange}
 					required
@@ -129,6 +131,7 @@ const handleCaptchaVerify = async (token) => {
 					required
 					className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-600 dark:text-gray-300 placeholder:text-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#00bf00]"
 				/>
+				<p className="text-end text-blue-500"><button className="underline cursor-pointer">Forget password?</button></p>
 
 				{/* CAPTCHA */}
 				<ReCAPTCHA
@@ -141,7 +144,7 @@ const handleCaptchaVerify = async (token) => {
 				{/* Submit */}
 				<button
 					type="submit"
-					className="bg-[#00bf00] text-white py-2 rounded-lg font-semibold hover:opacity-90 transition disabled:opacity-50"
+					className="bg-[#00bf00] text-white py-2 rounded-lg font-semibold hover:opacity-90 transition disabled:opacity-50 cursor-pointer"
 				>
 					Log In
 				</button>
