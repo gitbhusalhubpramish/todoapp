@@ -60,8 +60,11 @@ export async function POST(req) {
 	
 	
 	if (action === "forget"){
+		if (!password || password.length < 6) {
+			return Response.json({ error: "Password too short" }, { status: 400 });
+		}
 		const forgetcode = db.collection("forgetcode");
-		console.log("forget ",forget)
+		console.log("forget ",action)
 		const hashedPassword = await bcrypt.hash(password, 10);
 		const resetCode = crypto.randomInt(100000, 999999).toString(); // 6-digit OTP
 		const lastRequest = await forgetcode.findOne(
@@ -89,6 +92,7 @@ export async function POST(req) {
 	}
 	if (action === "verify"){
 		
+    
 	}
 	
 

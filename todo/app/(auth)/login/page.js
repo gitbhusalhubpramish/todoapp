@@ -8,6 +8,7 @@ export default function Signup() {
 	const [mounted, setMounted] = useState(false);
 	const [captchaToken, setCaptchaToken] = useState(null);
 	const [error, setError] = useState("")
+	const [conformpass, setConformpass] = useState("")
 	
 	/*useEffect(() => {
 	setMounted(true);
@@ -64,6 +65,12 @@ const handleSubmit = async (e) => {
 		e.target.reportValidity();
 		return;
 	}
+	if (form.password !== conformpass){
+		setError("Password Doesn't Match")
+		console.log(form)
+		console.log(conformpass)
+		return
+	}
     // 👉 trigger invisible captcha
     if (!recaptchaRef.current) return;
 	recaptchaRef.current.execute();
@@ -80,28 +87,32 @@ const handleCaptchaVerify = async (token) => {
           captchaToken: token,
         }),
       });
-		if (form.action === "forget"){
+		
+      const data = await res.json();
+      console.log(data);
+		if (res.status === 201){
+			alert("login success");
+			window.location.reload()
+		}
+      else{
+			setError(data.error)
+			
+			//alert("Error: " + data.error);
+		}
+		
+
+      //if (!recaptchaRef.current) return;
+      recaptchaRef.current?.reset();
+      setCaptchaToken(null);
+      if (form.action === "forget"){
 			setForm({
 				action:"verify",
 				username: "",
 				password: "",
 				code:null,
 			});
+			return
 		}
-      const data = await res.json();
-      console.log(data);
-		if (res.status === 201){
-      alert("login success");
-      window.location.reload()
-      }
-      else{
-			setError(data.error)
-			//alert("Error: " + data.error);
-		}
-
-      //if (!recaptchaRef.current) return;
-      recaptchaRef.current?.reset();
-      setCaptchaToken(null);
       setForm({
 			action:"",
 			username: "",
@@ -151,6 +162,17 @@ const handleCaptchaVerify = async (token) => {
 					required
 					className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-600 dark:text-gray-300 placeholder:text-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#00bf00]"
 				/>
+				{form.action === "forget" && (
+					<input
+					type="password"
+					name="password"
+					placeholder="Conform Password"
+					value={conformpass}
+					onChange={(e)=>setConformpass(e.target.value)}
+					required
+					className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-600 dark:text-gray-300 placeholder:text-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#00bf00]"
+				/>
+				)}
 				{form.action ==="" && (<p className="text-end text-blue-500"><button className="underline cursor-pointer" onClick={handelForget}>Forgot password?</button></p>)}
 
 				{/* CAPTCHA */}
