@@ -3,12 +3,13 @@ import bcrypt from "bcrypt";
 import { cookies } from "next/headers";
 import { randomUUID } from "crypto";
 import crypto from "crypto";
+import { sendResetEmail } from "@/lib/mailer";
 
 
 export async function POST(req) {
   try {
 	const body = await req.json();
-	const { username, password, captchaToken, forget } = body;
+	const {action, username, password, code, captchaToken } = body;
 
 	const verifyRes = await fetch(
 	  "https://www.google.com/recaptcha/api/siteverify",
@@ -58,19 +59,36 @@ export async function POST(req) {
 	}
 	
 	
-	if (forget){
+	if (action === "forget"){
 		const forgetcode = db.collection("forgetcode");
 		console.log("forget ",forget)
 		const hashedPassword = await bcrypt.hash(password, 10);
 		const resetCode = crypto.randomInt(100000, 999999).toString(); // 6-digit OTP
+		const lastRequest = await forgetcode.findOne(
+			{ userId: user._id },
+			{ sort: { createdAt: -1 } }
+		);
+
+		if (lastRequest && Date.now() - new Date(lastRequest.createdAt).getTime() < 60000) {
+			return Response.json(
+				{ error: "Wait 60 seconds before requesting again" },
+				{ status: 429 }
+			);
+		}
+		await sendResetEmail(user.email, resetCode);
 		const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 min
 		await forgetcode.insertOne({
 			userId: user._id,
 			code: resetCode,
 			expiresAt,
+			newpass: hashedPassword,
 			used: false,
 			createdAt: new Date(),
 		});
+		return Response.json({ message: "Reset code sent" });
+	}
+	if (action === "verify"){
+		
 	}
 	
 
