@@ -90,20 +90,22 @@ const handleCaptchaVerify = async (token) => {
 		
       const data = await res.json();
       console.log(data);
+      
+      recaptchaRef.current?.reset();
+      setCaptchaToken(null);
 		if (res.status === 201){
 			alert("login success");
 			window.location.reload()
 		}
       else{
 			setError(data.error)
+			return
 			
 			//alert("Error: " + data.error);
 		}
 		
 
       //if (!recaptchaRef.current) return;
-      recaptchaRef.current?.reset();
-      setCaptchaToken(null);
       if (form.action === "forget"){
 			setForm({
 				action:"verify",
