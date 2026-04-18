@@ -92,7 +92,6 @@ export async function POST(req) {
 	}
 	if (action === "verify"){
 		
-    
 	}
 	
 

@@ -9,6 +9,7 @@ export default function Signup() {
 	const [captchaToken, setCaptchaToken] = useState(null);
 	const [error, setError] = useState("")
 	const [conformpass, setConformpass] = useState("")
+	const inputsRef = useRef([]);
 	
 	/*useEffect(() => {
 	setMounted(true);
@@ -19,7 +20,7 @@ export default function Signup() {
 		action:"",
 		username: "",
 		password: "",
-		code:null,
+		code:Array(6).fill(""),
 	});
 	
 	const handelForget = () =>{
@@ -40,6 +41,27 @@ export default function Signup() {
 			[name]: value,
 		}));
 	};
+	const handleChangeOTP = (value, index) => {
+	if (!/^\d?$/.test(value)) return;
+
+	const newCode = [...form.code];
+	newCode[index] = value;
+
+	setForm((prev) => ({
+		...prev,
+		code: newCode,
+	}));
+
+	if (value && index < 5) {
+		inputsRef.current[index + 1]?.focus();
+	}
+};
+
+const handleKeyDownOTP = (e, index) => {
+	if (e.key === "Backspace" && !form.code[index] && index > 0) {
+		inputsRef.current[index - 1]?.focus();
+	}
+};
 	const getCaptchaToken = () => {
   return new Promise((resolve) => {
     if (!window.grecaptcha) {
@@ -111,7 +133,7 @@ const handleCaptchaVerify = async (token) => {
 				action:"verify",
 				username: "",
 				password: "",
-				code:null,
+				code:Array(6).fill(""),
 			});
 			console.log(form)
 			return
@@ -120,7 +142,7 @@ const handleCaptchaVerify = async (token) => {
 			action:"",
 			username: "",
 			password: "",
-			code:null,
+			code:Array(6).fill(""),
 		})
     } catch (err) {
       console.error(err);
@@ -143,42 +165,59 @@ const handleCaptchaVerify = async (token) => {
     </p>
   )}
 
-				{(["", "forget"].includes(form.action)) && (
-					<>{/* Username */}
-				<input
-					pattern="[a-zA-Z0-9_@.\-]+"
-					type="text"
-					name="username"
-					placeholder="Email or Username"
-					value={form.username}
-					onChange={handleChange}
-					required
-					className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-600 dark:text-gray-300 placeholder:text-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#00bf00]"
-				/>
-
-				{/* Password */}
-				<input
-					type="password"
-					name="password"
-					placeholder="Password"
-					value={form.password}
-					onChange={handleChange}
-					required
-					className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-600 dark:text-gray-300 placeholder:text-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#00bf00]"
-				/>
-				{form.action === "forget" && (
+				{(["", "forget"].includes(form.action)) ? (
+					<>
+					{/* Username */}
 					<input
-					type="password"
-					name="password"
-					placeholder="Conform Password"
-					value={conformpass}
-					onChange={(e)=>setConformpass(e.target.value)}
-					required
-					className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-600 dark:text-gray-300 placeholder:text-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#00bf00]"
+						pattern="[a-zA-Z0-9_@.\-]+"
+						type="text"
+						name="username"
+						placeholder="Email or Username"
+						value={form.username}
+						onChange={handleChange}
+						required
+						className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-600 dark:text-gray-300 placeholder:text-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#00bf00]"
+					/>
+
+					{/* Password */}
+					<input
+						type="password"
+						name="password"
+						placeholder="Password"
+						value={form.password}
+						onChange={handleChange}
+						required
+						className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-600 dark:text-gray-300 placeholder:text-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#00bf00]"
+					/>
+					{form.action === "forget" && (
+						<input
+							type="password"
+							name="password"
+							placeholder="Conform Password"
+							value={conformpass}
+							onChange={(e)=>setConformpass(e.target.value)}
+							required
+							className="p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-600 dark:text-gray-300 placeholder:text-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#00bf00]"
+						/>
+					)}
+					{form.action ==="" && (<p className="text-end text-blue-500"><button className="underline cursor-pointer" type="button" onClick={handelForget}>Forgot password?</button></p>)}</>
+				):(<>
+					<div className="flex gap-2">
+			{form.code.map((digit, i) => (
+				<input
+					key={i}
+					ref={(el) => (inputsRef.current[i] = el)}
+					type="text"
+					inputMode="numeric"
+					maxLength={1}
+					value={digit}
+					onChange={(e) => handleChangeOTP(e.target.value, i)}
+					onKeyDown={(e) => handleKeyDownOTP(e, i)}
+					className="w-12 h-12 text-center text-lg p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-600 dark:text-gray-300 placeholder:text-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#00bf00]"
 				/>
-				)}
-				{form.action ==="" && (<p className="text-end text-blue-500"><button className="underline cursor-pointer" type="button" onClick={handelForget}>Forgot password?</button></p>)}</>
-				)}
+			))}
+		</div>
+				</>)}
 
 				{/* CAPTCHA */}
 				<ReCAPTCHA
