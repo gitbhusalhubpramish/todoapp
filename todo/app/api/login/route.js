@@ -34,7 +34,7 @@ export async function POST(req) {
 
 	const usernameRegex = /^[a-zA-Z0-9_@.\-]+$/;
 
-	if (!usernameRegex.test(username)) {
+	if (!usernameRegex.test(username) && action !== "verify") {
 	  return Response.json({ error: "Invalid username" }, { status: 400 });
 	}
 
@@ -51,7 +51,8 @@ export async function POST(req) {
   ],
 });
 
-	if (!user) {
+	if (!user && action !== "verify") {
+		console.log(action, username, email, code)
 	  return Response.json(
 		{ error: "Password or username incorrect" },
 		{ status: 401 }
@@ -88,14 +89,27 @@ export async function POST(req) {
 			used: false,
 			createdAt: new Date(),
 		});
+		console.log(resetCode)
 		return Response.json({ message: "Reset code sent" });
 	}
 	if (action === "verify"){
+		const forgetcode = db.collection("forgetcode");
 		const otp = await forgetcode.findOne(
 			{ userId: user._id },
 			{ sort: { createdAt: -1 } }
 		);
 		console.log(otp)
+		const usrotp = code.join("")
+		console.log(usrotp)
+		if (otp.expiresAt < new Date()) {
+			return Response.json({ error: "OTP incorrect or expired" }, { status: 400 });
+		}
+		if (otp.code === usrotp){
+			console.log("otp is correct")
+		}
+		
+		//if otp
+		return Response.json({ error: "OTP incorrect or expired" }, { status: 400 });
 	}
 	
 

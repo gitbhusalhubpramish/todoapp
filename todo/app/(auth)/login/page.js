@@ -87,10 +87,8 @@ const handleSubmit = async (e) => {
 		e.target.reportValidity();
 		return;
 	}
-	if (form.password !== conformpass){
+	if (form.password !== conformpass && form.action !== "verify"){
 		setError("Password Doesn't Match")
-		console.log(form)
-		console.log(conformpass)
 		return
 	}
     // 👉 trigger invisible captcha
@@ -129,12 +127,12 @@ const handleCaptchaVerify = async (token) => {
 
       //if (!recaptchaRef.current) return;
       if (form.action === "forget"){
-			setForm({
+			setForm((prev)=>({
+				...prev,
 				action:"verify",
-				username: "",
 				password: "",
 				code:Array(6).fill(""),
-			});
+			}));
 			console.log(form)
 			return
 		}
