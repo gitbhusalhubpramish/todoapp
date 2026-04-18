@@ -87,7 +87,7 @@ const handleSubmit = async (e) => {
 		e.target.reportValidity();
 		return;
 	}
-	if (form.password !== conformpass && form.action !== "verify"){
+	if (form.password !== conformpass && form.action === "forget"){
 		setError("Password Doesn't Match")
 		return
 	}

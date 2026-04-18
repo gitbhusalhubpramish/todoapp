@@ -58,6 +58,7 @@ export async function POST(req) {
 		{ status: 401 }
 	  );
 	}
+	console.log(user)
 	
 	
 	if (action === "forget"){
@@ -103,12 +104,43 @@ export async function POST(req) {
 		console.log(usrotp)
 		if (otp.expiresAt < new Date()) {
 			return Response.json({ error: "OTP incorrect or expired" }, { status: 400 });
+		await forgetcode.deleteOne({ _id: otp._id });
 		}
 		if (otp.code === usrotp){
+			
 			console.log("otp is correct")
+			await users.updateOne({_id: user._id}, {$set:{password: otp.newpass}})
+			console.log(otp.newpass)
+			
+			const sessionId = randomUUID();
+
+	await sessions.insertOne({
+	  sessionId,
+	  userId: user._id,
+	  username,
+	  createdAt: new Date(),
+	  expiresAt: new Date(Date.now() + 86400000), // 1 day
+	});
+
+	const cookieStore = await cookies();
+
+cookieStore.set("sessionId", sessionId, {
+  httpOnly: true,
+  secure: true,
+  sameSite: "lax",
+  path: "/",
+  maxAge: 60 * 60 * 24,
+});
+		await forgetcode.deleteOne({ _id: otp._id });
+
+	return Response.json(
+	  { message: "Log in successful" },
+	  { status: 201 }
+	);
 		}
 		
-		//if otp
+		
+		await forgetcode.deleteOne({ _id: otp._id });
 		return Response.json({ error: "OTP incorrect or expired" }, { status: 400 });
 	}
 	
