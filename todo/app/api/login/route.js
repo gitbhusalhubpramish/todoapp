@@ -91,7 +91,11 @@ export async function POST(req) {
 		return Response.json({ message: "Reset code sent" });
 	}
 	if (action === "verify"){
-		
+		const otp = await forgetcode.findOne(
+			{ userId: user._id },
+			{ sort: { createdAt: -1 } }
+		);
+		console.log(otp)
 	}
 	
 

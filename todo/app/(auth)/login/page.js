@@ -213,7 +213,7 @@ const handleCaptchaVerify = async (token) => {
 					value={digit}
 					onChange={(e) => handleChangeOTP(e.target.value, i)}
 					onKeyDown={(e) => handleKeyDownOTP(e, i)}
-					className="w-12 h-12 text-center text-lg p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-600 dark:text-gray-300 placeholder:text-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#00bf00]"
+					className="w-10 h-12 text-center text-lg p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-600 dark:text-gray-300 placeholder:text-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#00bf00]"
 				/>
 			))}
 		</div>
