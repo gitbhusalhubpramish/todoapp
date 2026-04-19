@@ -47,7 +47,7 @@ export default async function UsrNav(){
 		</div>
 	) : (
 		<div className="m-5 w-1/4 flex justify-evenly">
-			<button id = "triangleBtn" className="text-white p-1 px-3 rounded-md border-1 border-green-700 dark:bg-green-500 text-center items-center flex cursor-pointer bg-[#26a85a] hover:bg-[#228e4d] dark:hover:bg-[#26a85a] hidden sm:inline-block"><span className="text-2xl mr-px">+</span> New Project</button>
+			<Link href="/newproject" id = "triangleBtn" className="text-white p-1 px-3 rounded-md border-1 border-green-700 dark:bg-green-500 text-center items-center flex cursor-pointer bg-[#26a85a] hover:bg-[#228e4d] dark:hover:bg-[#26a85a] hidden sm:inline-block"><span className="text-2xl mr-px">+</span> New Project</Link>
 			<div className="relative inline-block">
   <input type="checkbox" id="toggle-triangle" className="hidden peer" />
 
