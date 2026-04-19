@@ -117,7 +117,7 @@ export async function POST(req) {
 	await sessions.insertOne({
 	  sessionId,
 	  userId: user._id,
-	  user.username,
+	  username:user.username,
 	  createdAt: new Date(),
 	  expiresAt: new Date(Date.now() + 86400000), // 1 day
 	});
@@ -159,7 +159,7 @@ cookieStore.set("sessionId", sessionId, {
 	await sessions.insertOne({
 	  sessionId,
 	  userId: user._id,
-	  username,
+	  username:user.username,
 	  createdAt: new Date(),
 	  expiresAt: new Date(Date.now() + 86400000), // 1 day
 	});
