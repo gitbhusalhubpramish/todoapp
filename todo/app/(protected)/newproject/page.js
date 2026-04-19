@@ -55,6 +55,7 @@ export default function NewProjectPage() {
 					isdone: false,
 				})),
 			};
+			console.log(payload)
 
 			const res = await fetch("/api/newproject", {
 				method: "POST",
