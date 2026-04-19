@@ -58,6 +58,7 @@ export default function NewProjectPage() {
 
 			const res = await fetch("/api/newproject", {
 				method: "POST",
+				credentials: "include", 
 				headers: {
 					"Content-Type": "application/json",
 				},
