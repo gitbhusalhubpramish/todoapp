@@ -25,8 +25,20 @@ export async function POST(req) {
 		content,
 	}
 	console.log(JSON.stringify(project, null, 2));
-	projects = db.collection("projects")
+	const projects = db.collection("projects")
+	const existproject = await projects.findOne({
+		owner: user,
+		"content.title": content.title,
+	});
+
+	if (existproject) {
+		return Response.json(
+			{ error: "Project already exists" },
+			{ status: 409 }
+		);
+	}
+	
 	await projects.insertOne(project)
-	console.log(projects)
+	//console.log(projects)
 	return Response.json({ ok: true });
 }
