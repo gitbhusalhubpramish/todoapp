@@ -2,6 +2,7 @@ import clientPromise from "@/lib/mongodb";
 import bcrypt from "bcrypt";
 import { cookies } from "next/headers";
 import { randomUUID } from "crypto";
+import profilepic from "@/public/profile.svg"
 
 
 export async function POST(req) {
@@ -50,6 +51,7 @@ export async function POST(req) {
 
     const users = db.collection("users");
     const sessions = db.collection("sessions");
+    const usrdta = db.collection("usrdata");
 
     const existing = await users.findOne({
       $or: [{ email }, { username }],
@@ -70,6 +72,16 @@ export async function POST(req) {
       password: hashedPassword,
       createdAt: new Date(),
     });
+    const usrdtares = await users.insertOne({
+		username,
+		profilepic: "/profile.svg",
+		projects: [],
+		notifications: [],
+		followers: [],
+		likedprojects: [],
+		following: [],
+	})
+	console.log(usrdtares)
 
     const sessionId = randomUUID();
 
