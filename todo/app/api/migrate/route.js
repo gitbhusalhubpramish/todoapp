@@ -4,35 +4,50 @@ export async function GET() {
     const client = await clientPromise;
     const db = client.db("projectdata");
 
-    const users = db.collection("users");
+    const projects = db.collection("projects");
     const usrdata = db.collection("usrdata");
-    await usrdata.createIndex({ userId: 1 }, { unique: true });
 
-    const existing = await usrdata.distinct("userId");
+    // 1. get all projects
+    const allProjects = await projects.find({}).toArray();
 
-    const missingUsers = await users.find({
-        _id: { $nin: existing }
-    }).toArray();
+    // 2. group by username
+    const map = new Map();
 
-    const docs = missingUsers.map(user => ({
-        userId: user._id,
-        profilepic: "/profile.svg", // ✅ fixed
-        projects: [],
-        notifications: [],
-        followers: [],
-        likedprojects: [],
-        following: [],
-        createdAt: new Date(),
-    }));
+    for (const p of allProjects) {
+        if (!p.owner) {
+            console.log("no user");
+            continue;
+        }
 
-    if (docs.length > 0) {
-        await usrdata.insertMany(docs);
+        const key = p.owner; // ✅ FIXED
+
+        if (!map.has(key)) {
+            map.set(key, []);
+        }
+
+        map.get(key).push({
+            projectId: p._id,
+            title: p.content.title
+        });
+    }
+
+    // 3. update usrdata
+    const allUsers = await usrdata.find({}).toArray();
+
+    for (const user of allUsers) {
+        await usrdata.updateOne(
+            { username: user.username },
+            {
+                $set: {
+                    projects: map.get(user.username) || []
+                }
+            }
+        );
     }
 
     return Response.json({
-    totalUsers: await users.countDocuments(),
-    totalUsrdata: await usrdata.countDocuments(),
-    existing,
-    missingUsersCount: missingUsers.length,
-});
+        success: true,
+        totalProjects: allProjects.length,
+        groupedUsers: map.size
+    });
 }
