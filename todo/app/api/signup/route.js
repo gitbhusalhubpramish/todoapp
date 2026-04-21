@@ -80,6 +80,7 @@ export async function POST(req) {
 		followers: [],
 		likedprojects: [],
 		following: [],
+		bio: "",
 	})
 	console.log(usrdtares)
 
