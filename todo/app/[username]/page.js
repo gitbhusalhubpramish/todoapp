@@ -39,6 +39,9 @@ export default function ProfilePage({ params }) {
 	if (notFoundState) {
 		return notFound();
 	}
+	const Skeleton = ({ className }) => (
+		<div className={`animate-pulse bg-gray-600/50 rounded ${className}`} />
+	)
 	
 
 	return (
@@ -46,7 +49,7 @@ export default function ProfilePage({ params }) {
 			<div className="flex justify-center">
 				<div>
 					<Image
-						src={user?.profilepic || "/default.png"}
+						src={user?.profilepic || "/profile.svg"}
 						alt="profile"
 						width={160}
 						height={160}
@@ -54,7 +57,11 @@ export default function ProfilePage({ params }) {
 					/>
                 </div>
 				<div>
-					<h1 className="text-4xl h-1/2 flex items-end m-3">{user?.username}</h1>
+					<h1 className="text-4xl h-1/2 flex items-end m-3">{user ? user.username : (<Skeleton className="w-30 h-5"/>)}</h1>
+					<div className="flex gap-2 m-3">
+						<div>{user ? (user.follower?.length ?? 0) : <Skeleton className="h-4 w-10" />} followers</div>
+						<div>{user ? (user.following?.length ?? 0) : <Skeleton className="h-4 w-10" />} following</div>
+					</div>
 				</div>
 			</div>
 		</div>
