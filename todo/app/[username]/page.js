@@ -54,7 +54,7 @@ export default function ProfilePage({ params }) {
 					/>
                 </div>
 				<div>
-					<h1>{user?.username}</h1>
+					<h1 className="text-4xl h-1/2 flex items-end m-3">{user?.username}</h1>
 				</div>
 			</div>
 		</div>
