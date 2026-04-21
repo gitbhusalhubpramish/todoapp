@@ -59,8 +59,8 @@ export default function ProfilePage({ params }) {
 				<div>
 					<h1 className="text-4xl h-1/2 flex items-end m-3">{user ? user.username : (<Skeleton className="w-30 h-5"/>)}</h1>
 					<div className="flex gap-2 m-3">
-						<div>{user ? (user.follower?.length ?? 0) : <Skeleton className="h-4 w-10" />} followers</div>
-						<div>{user ? (user.following?.length ?? 0) : <Skeleton className="h-4 w-10" />} following</div>
+						<div>{user ? (user.follower?.length ?? 0)+" followers" : <Skeleton className="h-4 w-10" />}</div>
+						<div>{user ? (user.following?.length ?? 0)+" following" : <Skeleton className="h-4 w-10" />} </div>
 					</div>
 				</div>
 			</div>
