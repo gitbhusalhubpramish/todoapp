@@ -14,8 +14,9 @@ export default function ProfilePage({ params }) {
 
 	useEffect(() => {
 		async function loadSession() {
-			const res = await fetch("/api/me");
+			const res = await fetch("/api/me/auth");
 			const data = await res.json();
+			console.log("session raw data ",data)
 			setSessionUser(data.user);
 		}
 
@@ -49,7 +50,9 @@ export default function ProfilePage({ params }) {
 	const Skeleton = ({ className }) => (
 		<div className={`animate-pulse bg-gray-600/50 rounded ${className}`} />
 	)
-	async function Followbtn(){
+	const Followbtn = ()=>{
+		console.log("session ", session)
+		console.log("user ", user)
 		if (session?.username === user?.username){
 			return (
 				<button className="px-5 py-2 rounded-full font-medium text-sm transition-all duration-200 bg-green-600 text-white hover:bg-green-700 active:scale-95 shadow-md hover:shadow-lg dark:bg-green-500 dark:hover:bg-green-600 cursor-pointer">
@@ -57,7 +60,7 @@ export default function ProfilePage({ params }) {
 				</button>
 			)
 		}
-		if (user?.follower.includes(session?.username)){
+		if (user?.followers.includes(session?.username)){
 			return (
 				<button className="px-5 py-2 rounded-full font-medium text-sm transition-all duration-200 bg-green-600 text-white hover:bg-green-700 active:scale-95 shadow-md hover:shadow-lg dark:bg-green-500 dark:hover:bg-green-600 cursor-pointer">
 					{user?.following.includes(session?.username) ? "Friends" : "Following"}
@@ -68,7 +71,7 @@ export default function ProfilePage({ params }) {
 			<button className="px-5 py-2 rounded-full font-medium text-sm transition-all duration-200 bg-green-600 text-white hover:bg-green-700 active:scale-95 shadow-md hover:shadow-lg dark:bg-green-500 dark:hover:bg-green-600 cursor-pointer">
 				Follow
 			</button>
-			)
+		)
 	}
 	
 
