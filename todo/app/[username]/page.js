@@ -50,25 +50,44 @@ export default function ProfilePage({ params }) {
 	const Skeleton = ({ className }) => (
 		<div className={`animate-pulse bg-gray-600/50 rounded ${className}`} />
 	)
-	const Followbtn = ()=>{
+	const Followbtn = () => {
 		console.log("session ", session)
 		console.log("user ", user)
-		if (session?.username === user?.username){
+
+		// keep Follow button style same
+		const followStyle = "px-5 py-2 rounded-full font-medium text-sm transition-all duration-200 bg-green-600 text-white hover:bg-green-700 active:scale-95 shadow-md hover:shadow-lg dark:bg-green-500 dark:hover:bg-green-600 cursor-pointer"
+
+		// redesigned styles for others
+		const secondaryStyle = "px-5 py-2 rounded-full font-semibold text-sm transition-all duration-200 border border-gray-300 bg-white text-gray-800 hover:bg-gray-100 hover:border-gray-400 active:scale-95 shadow-sm dark:bg-zinc-900 dark:text-white dark:border-zinc-700 dark:hover:bg-zinc-800 cursor-pointer"
+
+		const friendStyle = "px-5 py-2 rounded-full font-semibold text-sm transition-all duration-200 bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:scale-[1.02] active:scale-95 shadow-md hover:shadow-lg cursor-pointer"
+
+		if (session?.username === user?.username) {
 			return (
-				<button className="px-5 py-2 rounded-full font-medium text-sm transition-all duration-200 bg-green-600 text-white hover:bg-green-700 active:scale-95 shadow-md hover:shadow-lg dark:bg-green-500 dark:hover:bg-green-600 cursor-pointer">
+				<button className={secondaryStyle}>
 					Edit Profile
 				</button>
 			)
 		}
-		if (user?.followers.includes(session?.username)){
+
+		if (user?.followers.includes(session?.username)) {
 			return (
-				<button className="px-5 py-2 rounded-full font-medium text-sm transition-all duration-200 bg-green-600 text-white hover:bg-green-700 active:scale-95 shadow-md hover:shadow-lg dark:bg-green-500 dark:hover:bg-green-600 cursor-pointer">
-					{user?.following.includes(session?.username) ? "Friends" : "Following"}
+				<button
+					className={
+						user?.following.includes(session?.username)
+							? friendStyle
+							: secondaryStyle
+					}
+				>
+					{user?.following.includes(session?.username)
+						? "Friends"
+						: "Following"}
 				</button>
 			)
 		}
+
 		return (
-			<button className="px-5 py-2 rounded-full font-medium text-sm transition-all duration-200 bg-green-600 text-white hover:bg-green-700 active:scale-95 shadow-md hover:shadow-lg dark:bg-green-500 dark:hover:bg-green-600 cursor-pointer">
+			<button className={followStyle}>
 				Follow
 			</button>
 		)
