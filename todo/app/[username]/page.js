@@ -10,6 +10,17 @@ export default function ProfilePage({ params }) {
 	const [user, setUser] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const [notFoundState, setNotFoundState] = useState(false);
+	const [session, setSessionUser] = useState(null);
+
+	useEffect(() => {
+		async function loadSession() {
+			const res = await fetch("/api/me");
+			const data = await res.json();
+			setSessionUser(data.user);
+		}
+
+		loadSession();
+	}, []);
 
 	useEffect(() => {
 		async function loadUser() {
@@ -38,6 +49,27 @@ export default function ProfilePage({ params }) {
 	const Skeleton = ({ className }) => (
 		<div className={`animate-pulse bg-gray-600/50 rounded ${className}`} />
 	)
+	async function Followbtn(){
+		if (session?.username === user?.username){
+			return (
+				<button className="px-5 py-2 rounded-full font-medium text-sm transition-all duration-200 bg-green-600 text-white hover:bg-green-700 active:scale-95 shadow-md hover:shadow-lg dark:bg-green-500 dark:hover:bg-green-600 cursor-pointer">
+					Edit Profile
+				</button>
+			)
+		}
+		if (user?.follower.includes(session?.username)){
+			return (
+				<button className="px-5 py-2 rounded-full font-medium text-sm transition-all duration-200 bg-green-600 text-white hover:bg-green-700 active:scale-95 shadow-md hover:shadow-lg dark:bg-green-500 dark:hover:bg-green-600 cursor-pointer">
+					{user?.following.includes(session?.username) ? "Friends" : "Following"}
+				</button>
+			)
+		}
+		return (
+			<button className="px-5 py-2 rounded-full font-medium text-sm transition-all duration-200 bg-green-600 text-white hover:bg-green-700 active:scale-95 shadow-md hover:shadow-lg dark:bg-green-500 dark:hover:bg-green-600 cursor-pointer">
+				Follow
+			</button>
+			)
+	}
 	
 
 	return (
@@ -60,9 +92,7 @@ export default function ProfilePage({ params }) {
 					</div>
 				</div>
 				<div className="flex justify-center sm:justify-start items-center mt-4 sm:mt-0 sm:ml-6">
-					<button className="px-5 py-2 rounded-full font-medium text-sm transition-all duration-200 bg-green-600 text-white hover:bg-green-700 active:scale-95 shadow-md hover:shadow-lg dark:bg-green-500 dark:hover:bg-green-600 cursor-pointer">
-						Follow
-					</button>
+					<Followbtn/>
 				</div>
 			</div>
 		</div>
