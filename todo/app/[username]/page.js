@@ -50,20 +50,34 @@ export default function ProfilePage({ params }) {
 	const Skeleton = ({ className }) => (
 		<div className={`animate-pulse bg-gray-600/50 rounded ${className}`} />
 	)
-	const handelFollow = async ()=>{
-		if (user?.followers.includes(session?.username)) {
-			const res = await fetch(`/api/users/${username}/follow`, {
-				method: "DELETE"
-			})
-			console.log(res)
-			return
-		}
+	const handelFollow = async () => {
+		const isFollowing = user?.followers?.includes(session?.username);
+
 		const res = await fetch(`/api/users/${username}/follow`, {
-			method: "POST"
-		})
-		console.log(res)
-		return
-	}
+			method: isFollowing ? "DELETE" : "POST",
+		});
+
+		const data = await res.json();
+
+		if (!res.ok) {
+			console.error(data.error);
+			return;
+		}
+
+		// 🔥 UPDATE UI STATE MANUALLY (IMPORTANT FIX)
+		setUser((prev) => {
+			if (!prev) return prev;
+
+			const updatedFollowers = isFollowing
+				? prev.followers.filter((u) => u !== session?.username)
+				: [...(prev.followers || []), session?.username];
+
+			return {
+				...prev,
+				followers: updatedFollowers,
+			};
+		});
+	};
 	const Followbtn = () => {
 		console.log("session ", session)
 		console.log("user ", user)
