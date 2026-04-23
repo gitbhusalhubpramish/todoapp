@@ -50,6 +50,20 @@ export default function ProfilePage({ params }) {
 	const Skeleton = ({ className }) => (
 		<div className={`animate-pulse bg-gray-600/50 rounded ${className}`} />
 	)
+	const handelFollow = async ()=>{
+		if (user?.followers.includes(session?.username)) {
+			const res = await fetch(`/api/users/${username}/follow`, {
+				method: "DELETE"
+			})
+			console.log(res)
+			return
+		}
+		const res = await fetch(`/api/users/${username}/follow`, {
+			method: "POST"
+		})
+		console.log(res)
+		return
+	}
 	const Followbtn = () => {
 		console.log("session ", session)
 		console.log("user ", user)
@@ -78,6 +92,7 @@ export default function ProfilePage({ params }) {
 							? friendStyle
 							: secondaryStyle
 					}
+					onClick={handelFollow}
 				>
 					{user?.following.includes(session?.username)
 						? "Friends"
@@ -87,7 +102,7 @@ export default function ProfilePage({ params }) {
 		}
 
 		return (
-			<button className={followStyle}>
+			<button className={followStyle} onClick={handelFollow}>
 				Follow
 			</button>
 		)
