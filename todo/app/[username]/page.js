@@ -15,11 +15,7 @@ export default function ProfilePage({ params }) {
 		async function loadUser() {
 			setLoading(true);
 
-			const res = await fetch("/api/users", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ username }),
-			});
+			const res = await fetch(`/api/users/${username}`);
 
 			if (res.status === 404) {
 				setNotFoundState(true);

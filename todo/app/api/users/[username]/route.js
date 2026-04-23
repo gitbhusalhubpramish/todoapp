@@ -1,8 +1,7 @@
 import clientPromise from "@/lib/mongodb";
 
-export async function POST(req) {
-    const body = await req.json();
-    const username = body.username;
+export async function GET(req, { params }) {
+    const { username } = await params;
 
     const client = await clientPromise;
     const db = client.db("projectdata");
@@ -19,7 +18,10 @@ export async function POST(req) {
     );
 
     if (!user) {
-        return Response.json({ error: "user not found" }, { status: 404 });
+        return Response.json(
+            { error: "user not found" },
+            { status: 404 }
+        );
     }
 
     return Response.json({ user });
