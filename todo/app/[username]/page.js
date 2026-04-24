@@ -150,74 +150,77 @@ export default function ProfilePage({ params }) {
 			</div>
 			<div className="max-w-2xl mx-auto my-30 border-t border-gray-500 pt-4">
 			
-			{/* Tabs */}
-			<div className="flex gap-4 justify-center mb-6">
-				<button
-					onClick={() => setActiveTab("projects")}
-					className={`flex items-center gap-2 px-4 py-2 rounded-full transition ${
-						activeTab === "projects"
-							? "bg-[#dbffe9] dark:bg-[#0b1120] border border-green-400"
-							: "opacity-60"
-					}`}
-				>
-					<Folder size={18} />
-					Projects
-				</button>
+				{/* Tabs */}
+				<div className="flex gap-4 justify-center mb-6">
+					<button
+						onClick={() => setActiveTab("projects")}
+						className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200  hover:scale-105 cursor-pointer ${activeTab === "projects" ? "bg-[#dbffe9] dark:bg-[#0b1120] border-green-400 text-gray-900 dark:text-gray-100 shadow-md border border-green-400" : "opacity-70 text-gray-700 dark:text-gray-300 border border-transparent"}`}
+					>
+						<Folder size={18} /> Projects
+					</button>
 
-				<button
-					onClick={() => setActiveTab("likes")}
-					className={`flex items-center gap-2 px-4 py-2 rounded-full transition ${
-						activeTab === "likes"
-							? "bg-[#dbffe9] dark:bg-[#0b1120] border border-pink-400"
-							: "opacity-60"
-					}`}
-				>
-					<Heart size={18} />
-					Likes
-				</button>
-			</div>
+					<button
+						onClick={() => setActiveTab("likes")}
+						className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200  hover:scale-105 cursor-pointer ${activeTab === "likes" ? "bg-[#dbffe9] dark:bg-[#0b1120] border-green-400 text-gray-900 dark:text-gray-100 shadow-md border border-green-400" : "opacity-70 text-gray-700 dark:text-gray-300 border border-transparent"}`}
+					>
+						<Heart size={18} /> Likes
+					</button>
+				</div>
 
-			{/* Content */}
-			<div className="space-y-3">
-  {activeTab === "projects" &&
-    (user?.projects.length ? (
-      user?.projects.map((p, i) => (
-        <div
-          key={i}
-          className="p-3 rounded-lg border border-gray-300 dark:border-gray-700
-                     bg-white/60 dark:bg-gray-900/40
-                     hover:bg-white dark:hover:bg-gray-800
-                     hover:shadow-md transition-all duration-200"
-        >
-          <h3 className="text-gray-900 dark:text-gray-100 font-medium tracking-wide">
-            {p.title}
-          </h3>
-        </div>
-      ))
-    ) : (
-      <p className="text-sm opacity-60 text-center">No projects yet</p>
-    ))}
+				{/* Content */}
+				<div className="space-y-3">
+					{activeTab === "projects" &&
+						(user?.projects.length ? (
+							user?.projects.map((p, i) => (
+								<div
+									key={i}
+									className="p-3 rounded-lg border border-gray-300 dark:border-gray-700 cursor-pointer bg-white/60 dark:bg-gray-900/40 hover:bg-white dark:hover:bg-gray-800 hover:shadow-md transition-all duration-200"
+								>
+									<div className="flex justify-between items-start gap-3">
+  <div className="flex-1">
+    <h3 className="text-gray-900 dark:text-gray-100 font-medium tracking-wide">
+      {p.title}
+    </h3>
 
-  {activeTab === "likes" &&
-    (user?.likedprojects.length ? (
-      user?.likedprojects.map((p, i) => (
-        <div
-          key={i}
-          className="p-3 rounded-lg border border-gray-300 dark:border-gray-700
-                     bg-white/60 dark:bg-gray-900/40
-                     hover:bg-white dark:hover:bg-gray-800
-                     hover:shadow-md transition-all duration-200"
-        >
-          <h3 className="text-gray-900 dark:text-gray-100 font-medium tracking-wide">
-            {p.title}
-          </h3>
-        </div>
-      ))
-    ) : (
-      <p className="text-sm opacity-60 text-center">No liked projects</p>
-    ))}
+    <p className="border-l-1 border-gray-600 pl-1 text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
+      {p.description || "No description"}
+    </p>
+  </div>
+
+  {/* status badge */}
+  <span
+    className={`text-xs px-2 py-1 rounded-full font-medium ${
+      p.isdone
+        ? "bg-green-500/20 text-green-600 dark:text-green-400"
+        : "bg-yellow-500/20 text-yellow-600 dark:text-yellow-400"
+    }`}
+  >
+    {p.isdone ? "Done" : "Pending"}
+  </span>
 </div>
-		</div>
+								</div>
+							))
+						) : (
+							<p className="text-sm opacity-60 text-center">No projects yet</p>
+					))}
+
+					{activeTab === "likes" &&
+						(user?.likedprojects.length ? (
+							user?.likedprojects.map((p, i) => (
+								<div
+									key={i}
+									className="p-3 rounded-lg border border-gray-300 dark:border-gray-700 cursor-pointer bg-white/60 dark:bg-gray-900/40 hover:bg-white dark:hover:bg-gray-800 hover:shadow-md transition-all duration-200"
+								>
+									<h3 className="text-gray-900 dark:text-gray-100 font-medium tracking-wide">
+										{p.title}
+									</h3>
+								</div>
+							))
+						) : (
+							<p className="text-sm opacity-60 text-center">No liked projects</p>
+					))}
+				</div>
+			</div>
 		</div>
 	);
 }
