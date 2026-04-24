@@ -3,6 +3,7 @@
 import { useEffect, useState, use } from "react";
 import Image from "next/image"
 import { notFound } from "next/navigation";
+import { Folder, Heart } from "lucide-react";
 
 export default function ProfilePage({ params }) {
 	const { username } = use(params)
@@ -11,6 +12,7 @@ export default function ProfilePage({ params }) {
 	const [loading, setLoading] = useState(true);
 	const [notFoundState, setNotFoundState] = useState(false);
 	const [session, setSessionUser] = useState(null);
+	const [activeTab, setActiveTab] = useState("projects");
 
 	useEffect(() => {
 		async function loadSession() {
@@ -134,7 +136,7 @@ export default function ProfilePage({ params }) {
 						height={160}
 						className="rounded-full"
 					/>
-                </div>
+								</div>
 				<div>
 					<h1 className="sm:text-4xl text-3xl h-1/2 flex items-end m-3">{user ? user.username : (<Skeleton className="w-30 h-5"/>)}</h1>
 					<div className="flex gap-2 m-3 text-gray-500 ">
@@ -146,7 +148,76 @@ export default function ProfilePage({ params }) {
 					<Followbtn/>
 				</div>
 			</div>
-			<div className="h-50 w-full mx-2/10 border-t-5 border-gray-500"></div>
+			<div className="max-w-2xl mx-auto my-30 border-t border-gray-500 pt-4">
+			
+			{/* Tabs */}
+			<div className="flex gap-4 justify-center mb-6">
+				<button
+					onClick={() => setActiveTab("projects")}
+					className={`flex items-center gap-2 px-4 py-2 rounded-full transition ${
+						activeTab === "projects"
+							? "bg-[#dbffe9] dark:bg-[#0b1120] border border-green-400"
+							: "opacity-60"
+					}`}
+				>
+					<Folder size={18} />
+					Projects
+				</button>
+
+				<button
+					onClick={() => setActiveTab("likes")}
+					className={`flex items-center gap-2 px-4 py-2 rounded-full transition ${
+						activeTab === "likes"
+							? "bg-[#dbffe9] dark:bg-[#0b1120] border border-pink-400"
+							: "opacity-60"
+					}`}
+				>
+					<Heart size={18} />
+					Likes
+				</button>
+			</div>
+
+			{/* Content */}
+			<div className="space-y-3">
+  {activeTab === "projects" &&
+    (user?.projects.length ? (
+      user?.projects.map((p, i) => (
+        <div
+          key={i}
+          className="p-3 rounded-lg border border-gray-300 dark:border-gray-700
+                     bg-white/60 dark:bg-gray-900/40
+                     hover:bg-white dark:hover:bg-gray-800
+                     hover:shadow-md transition-all duration-200"
+        >
+          <h3 className="text-gray-900 dark:text-gray-100 font-medium tracking-wide">
+            {p.title}
+          </h3>
+        </div>
+      ))
+    ) : (
+      <p className="text-sm opacity-60 text-center">No projects yet</p>
+    ))}
+
+  {activeTab === "likes" &&
+    (user?.likedprojects.length ? (
+      user?.likedprojects.map((p, i) => (
+        <div
+          key={i}
+          className="p-3 rounded-lg border border-gray-300 dark:border-gray-700
+                     bg-white/60 dark:bg-gray-900/40
+                     hover:bg-white dark:hover:bg-gray-800
+                     hover:shadow-md transition-all duration-200"
+        >
+          <h3 className="text-gray-900 dark:text-gray-100 font-medium tracking-wide">
+            {p.title}
+          </h3>
+        </div>
+      ))
+    ) : (
+      <p className="text-sm opacity-60 text-center">No liked projects</p>
+    ))}
+</div>
+		</div>
 		</div>
 	);
 }
