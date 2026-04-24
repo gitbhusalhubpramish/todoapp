@@ -99,9 +99,9 @@ export default function ProfilePage({ params }) {
 
 		if (session?.username === user?.username) {
 			return (
-				<button className={secondaryStyle}>
+				<Link href="/setting" className={secondaryStyle}>
 					Edit Profile
-				</button>
+				</Link>
 			)
 		}
 
