@@ -2,8 +2,10 @@
 
 import { useEffect, useState, use } from "react";
 import Image from "next/image"
+import Link from "next/link"
 import { notFound } from "next/navigation";
 import { Folder, Heart } from "lucide-react";
+import { redirect } from "next/navigation";
 
 export default function ProfilePage({ params }) {
 	const { username } = use(params)
@@ -53,6 +55,9 @@ export default function ProfilePage({ params }) {
 		<div className={`animate-pulse bg-gray-600/50 rounded ${className}`} />
 	)
 	const handelFollow = async () => {
+		if (!session){
+			redirect("/login");
+		}
 		const isFollowing = user?.followers?.includes(session?.username);
 
 		const res = await fetch(`/api/users/${username}/follow`, {
