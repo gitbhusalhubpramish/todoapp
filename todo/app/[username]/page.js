@@ -178,9 +178,10 @@ export default function ProfilePage({ params }) {
 					{activeTab === "projects" &&
 						(user?.projects.length ? (
 							user?.projects.map((p, i) => (
-								<div
+								<Link
+									href={`/${user.username}/${p.title}`}
 									key={i}
-									className="p-3 rounded-lg border border-gray-300 dark:border-gray-700 cursor-pointer bg-white/60 dark:bg-gray-900/40 hover:bg-white dark:hover:bg-gray-800 hover:shadow-md transition-all duration-200"
+									className="block p-3 rounded-lg border border-gray-300 dark:border-gray-700 cursor-pointer bg-white/60 dark:bg-gray-900/40 hover:bg-white dark:hover:bg-gray-800 hover:shadow-md transition-all duration-200"
 								>
 									<div className="flex justify-between items-start gap-3">
 										<div className="flex-1">
@@ -200,7 +201,7 @@ export default function ProfilePage({ params }) {
 											{p.isdone ? "Done" : "Pending"}
 										</span>
 									</div>
-								</div>
+								</Link>
 							))
 						) : (
 							<p className="text-sm opacity-60 text-center">No projects yet</p>
