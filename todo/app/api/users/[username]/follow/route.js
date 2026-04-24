@@ -9,6 +9,18 @@ export async function POST(req, { params }) {
 			return Response.json({ error: "Unauthorized" }, { status: 401 });
 		}
 		const { username } = await params;
+		const client = await clientPromise;
+		const db = client.db("projectdata");
+		const targetUser = await db.collection("usrdata").findOne({
+			username: username,
+		});
+
+		if (!targetUser) {
+			return Response.json(
+				{ error: "User not found" },
+				{ status: 404 }
+			);
+		}
 
 		if (session.username === username) {
 			return Response.json(
@@ -17,8 +29,6 @@ export async function POST(req, { params }) {
 			);
 		}
 
-		const client = await clientPromise;
-		const db = client.db("projectdata");
 
 		const currentUser = await db.collection("usrdata").findOne({
 			username: session.username,
@@ -57,9 +67,19 @@ export async function DELETE(req, { params }) {
 		}
 
 		const { username } = await params;
-
 		const client = await clientPromise;
 		const db = client.db("projectdata");
+		const targetUser = await db.collection("usrdata").findOne({
+			username: username,
+		});
+
+		if (!targetUser) {
+			return Response.json(
+				{ error: "User not found" },
+				{ status: 404 }
+			);
+		}
+
 
 		const currentUser = await db.collection("usrdata").findOne({
 			username: session.username,
