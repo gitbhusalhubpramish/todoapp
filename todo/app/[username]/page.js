@@ -136,7 +136,7 @@ export default function ProfilePage({ params }) {
 						height={160}
 						className="rounded-full"
 					/>
-								</div>
+				</div>
 				<div>
 					<h1 className="sm:text-4xl text-3xl h-1/2 flex items-end m-3">{user ? user.username : (<Skeleton className="w-30 h-5"/>)}</h1>
 					<div className="flex gap-2 m-3 text-gray-500 ">
@@ -148,6 +148,7 @@ export default function ProfilePage({ params }) {
 					<Followbtn/>
 				</div>
 			</div>
+			<p>{user?.bio}</p>
 			<div className="max-w-2xl mx-auto my-30 border-t border-gray-500 pt-4">
 			
 				{/* Tabs */}
@@ -177,27 +178,23 @@ export default function ProfilePage({ params }) {
 									className="p-3 rounded-lg border border-gray-300 dark:border-gray-700 cursor-pointer bg-white/60 dark:bg-gray-900/40 hover:bg-white dark:hover:bg-gray-800 hover:shadow-md transition-all duration-200"
 								>
 									<div className="flex justify-between items-start gap-3">
-  <div className="flex-1">
-    <h3 className="text-gray-900 dark:text-gray-100 font-medium tracking-wide">
-      {p.title}
-    </h3>
+										<div className="flex-1">
+											<h3 className="text-gray-900 dark:text-gray-100 font-medium tracking-wide">
+												{p.title}
+											</h3>
 
-    <p className="border-l-1 border-gray-600 pl-1 text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
-      {p.description || "No description"}
-    </p>
-  </div>
+											<p className="border-l-1 border-gray-600 pl-1 text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
+												{p.description || "No description"}
+											</p>
+										</div>
 
-  {/* status badge */}
-  <span
-    className={`text-xs px-2 py-1 rounded-full font-medium ${
-      p.isdone
-        ? "bg-green-500/20 text-green-600 dark:text-green-400"
-        : "bg-yellow-500/20 text-yellow-600 dark:text-yellow-400"
-    }`}
-  >
-    {p.isdone ? "Done" : "Pending"}
-  </span>
-</div>
+										{/* status badge */}
+										<span
+											className={`text-xs px-2 py-1 rounded-full font-medium ${ p.isdone ? "bg-green-500/20 text-green-600 dark:text-green-400" : "bg-yellow-500/20 text-yellow-600 dark:text-yellow-400"}`}
+										>
+											{p.isdone ? "Done" : "Pending"}
+										</span>
+									</div>
 								</div>
 							))
 						) : (
