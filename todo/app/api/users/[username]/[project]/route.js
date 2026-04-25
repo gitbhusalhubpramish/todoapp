@@ -60,8 +60,8 @@ export async function PATCH(req, { params }) {
 	}
 
 	// toggle isDone
-	tasks[taskIndex].isDone = !tasks[taskIndex].isDone;
-	const allDone = tasks.every((t) => t.isDone === true);
+	tasks[taskIndex].isdone = !tasks[taskIndex].isdone;
+	const allDone = tasks.every((t) => t.isdone === true);
 
 
 	await db.collection("projects").updateOne(
@@ -69,7 +69,7 @@ export async function PATCH(req, { params }) {
 		{
 			$set: {
 				"content.tasks": tasks,
-				"content.isDone": allDone,
+				"content.isdone": allDone,
 			},
 		}
 	);

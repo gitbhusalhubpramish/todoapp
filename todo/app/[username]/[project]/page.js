@@ -68,15 +68,19 @@ export default function project({ params }) {
 			if (!res.ok) return;
 	
 			const data = await res.json();
+			console.log(data)
 
 			// update local state (important)
 			setProject((prev) => ({
 				...prev,
+				
 				content: {
 					...prev.content,
+					isdone: data.projectDone,
 					tasks: data.updatedTasks,
 				},
 			}));
+			console.log(projects)
 		} catch (err) {
 			console.error(err);
 		}
@@ -96,12 +100,12 @@ export default function project({ params }) {
 
 						<span
 							className={`text-xs px-3 py-1 rounded-full font-medium
-								${projects?.content.isDone
+								${projects?.content.isdone
 								? "bg-green-200 text-green-800 dark:bg-green-800 dark:text-green-100"
 								: "bg-yellow-200 text-yellow-800 dark:bg-yellow-700 dark:text-yellow-100"
 							}`}
 						>
-							{projects?.content.isDone ? "Project Done" : "In Progress"}
+							{projects?.content.isdone ? "Project Done" : "In Progress"}
 						</span>
 					</div>
 
@@ -118,7 +122,7 @@ export default function project({ params }) {
 								key={index}
 								onClick={() => handleTaskToggle(index)}
 								className={`p-4 rounded-xl border space-y-2 transition-all duration-200 block w-full text-start cursor-pointer
-									${task?.isDone
+									${task?.isdone
 										? "border-green-400 bg-green-50 dark:bg-green-900/10 opacity-80"
 										: "border-gray-200 dark:border-gray-700 bg-white/40 dark:bg-white/5"
 									}
@@ -131,7 +135,7 @@ export default function project({ params }) {
 								<div className="flex items-center justify-between">
 									<h3
 										className={`text-base font-semibold
-											${task?.isDone
+											${task?.isdone
 											? "line-through text-green-600 dark:text-green-400"
 											: "text-gray-900 dark:text-white"
 										}`}
@@ -142,18 +146,18 @@ export default function project({ params }) {
 									{/* status badge */}
 									<span
 										className={`text-xs px-2 py-1 rounded-full
-											${task?.isDone
+											${task?.isdone
 											? "bg-green-200 text-green-800 dark:bg-green-800 dark:text-green-100"
 											: "bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-200"
 										}`}
 									>
-										{task?.isDone ? "Done" : "Pending"}
+										{task?.isdone ? "Done" : "Pending"}
 									</span>
 								</div>
 
 								<p
 									className={`text-sm leading-relaxed
-										${task?.isDone
+										${task?.isdone
 										? "text-gray-500 dark:text-gray-400"
 										: "text-gray-600 dark:text-gray-300"
 									}`}
