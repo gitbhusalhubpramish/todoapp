@@ -21,6 +21,9 @@ export async function GET(req, { params }) {
 			}
 		}
 	);
+	if (!user || !projectData){
+		return Response.json({error: "user or project not found"}, {status: 404})
+	}
 
 	projectData.profilepic = user?.profilepic || null;
 
