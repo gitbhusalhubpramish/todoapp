@@ -38,7 +38,7 @@ export async function PATCH(req, { params }) {
 	
 	const session = await getCurrentUser()
 	if (session.username !== username){
-		return Response.json({error: "Unathorized"}, {status: 401})
+		return Response.json({error: "Forbidden"}, {status: 403})
 	}
 
 	const client = await clientPromise;
@@ -55,20 +55,27 @@ export async function PATCH(req, { params }) {
 	}
 
 	const tasks = doc.content.tasks;
+	if (!tasks?.[taskIndex]) {
+		return Response.json({ error: "Invalid task" }, { status: 400 });
+	}
 
 	// toggle isDone
 	tasks[taskIndex].isDone = !tasks[taskIndex].isDone;
+	const allDone = tasks.every((t) => t.isDone === true);
+
 
 	await db.collection("projects").updateOne(
 		{ _id: doc._id },
 		{
 			$set: {
 				"content.tasks": tasks,
+				"content.isDone": allDone,
 			},
 		}
 	);
 
 	return Response.json({
 		updatedTasks: tasks,
+		projectDone: allDone,
 	});
 }
