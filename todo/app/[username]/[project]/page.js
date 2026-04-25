@@ -52,6 +52,7 @@ export default function project({ params }) {
 	}, [session, projects]);
 	
 	const handleTaskToggle = async (taskIndex) => {
+		console.log("clicked")
 		try {
 			const res = await fetch(
 				`/api/users/${username}/${project}`,

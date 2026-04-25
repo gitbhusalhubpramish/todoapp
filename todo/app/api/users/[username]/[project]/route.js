@@ -1,4 +1,5 @@
 import clientPromise from "@/lib/mongodb";
+import {getCurrentUser} from "@/lib/auth.js"
 
 export async function GET(req, { params }) {
 	const { username, project } = await params;
@@ -29,5 +30,45 @@ export async function GET(req, { params }) {
 
 	return Response.json({
 		project: projectData
+	});
+}
+export async function PATCH(req, { params }) {
+	const { username, project } = await params;
+	const { taskIndex } = await req.json();
+	
+	const session = await getCurrentUser()
+	if (session.username !== username){
+		return Response.json({error: "Unathorized"}, {status: 401})
+	}
+
+	const client = await clientPromise;
+	const db = client.db("projectdata");
+	console.log(username, project)
+
+	const doc = await db.collection("projects").findOne({
+		owner: username,
+		"content.title": project
+	});
+
+	if (!doc) {
+		return Response.json({ error: "Not found" }, { status: 404 });
+	}
+
+	const tasks = doc.content.tasks;
+
+	// toggle isDone
+	tasks[taskIndex].isDone = !tasks[taskIndex].isDone;
+
+	await db.collection("projects").updateOne(
+		{ _id: doc._id },
+		{
+			$set: {
+				"content.tasks": tasks,
+			},
+		}
+	);
+
+	return Response.json({
+		updatedTasks: tasks,
 	});
 }
