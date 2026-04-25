@@ -14,6 +14,7 @@ export default function project({ params }) {
 	const [loading, setLoading] = useState(true);
 	const [notFoundState, setNotFoundState] = useState(false);
 	const [session, setSessionUser] = useState(null);
+	const [owner, setOwner] = useState(false)
 
 	useEffect(() => {
 		async function loadSession() {
@@ -44,6 +45,11 @@ export default function project({ params }) {
 	}, [username, project]);
 
 	if (notFoundState) return notFound();
+	useEffect(() => {
+		if (session?.username && projects?.owner) {
+			setOwner(session.username === projects.owner);
+		}
+	}, [session, projects]);
 
 	return (
 		<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] flex justify-center items-start py-10 px-4">
@@ -79,11 +85,16 @@ export default function project({ params }) {
 						{projects?.content.tasks.map((task, index) => (
 							<button
 								key={index}
-								className={`p-4 rounded-xl border space-y-2 transition block w-full text-start
+								className={`p-4 rounded-xl border space-y-2 transition-all duration-200 block w-full text-start
 									${task?.isDone
-									? "border-green-400 bg-green-50 dark:bg-green-900/10 opacity-80"
-									: "border-gray-200 dark:border-gray-700 bg-white/40 dark:bg-white/5"
-								}`}
+										? "border-green-400 bg-green-50 dark:bg-green-900/10 opacity-80"
+										: "border-gray-200 dark:border-gray-700 bg-white/40 dark:bg-white/5"
+									}
+									${owner
+										? "hover:scale-[1.01] hover:shadow-md hover:border-green-400 active:scale-[0.99]"
+										: ""
+									}
+								`}
 							>
 								<div className="flex items-center justify-between">
 									<h3
