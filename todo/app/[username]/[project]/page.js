@@ -8,7 +8,7 @@ import { Folder, Heart } from "lucide-react";
 import { redirect } from "next/navigation";
 
 export default function project({ params }){
-	const { username } = use(params)
+	const { username, project } = use(params)
 
 	const [user, setUser] = useState(null);
 	const [loading, setLoading] = useState(true);
