@@ -50,6 +50,36 @@ export default function project({ params }) {
 			setOwner(session.username === projects.owner);
 		}
 	}, [session, projects]);
+	
+	const handleTaskToggle = async (taskIndex) => {
+		try {
+			const res = await fetch(
+				`/api/users/${username}/${project}`,
+				{
+					method: "PATCH",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ taskIndex }),
+				}
+			);
+
+			if (!res.ok) return;
+	
+			const data = await res.json();
+
+			// update local state (important)
+			setProject((prev) => ({
+				...prev,
+				content: {
+					...prev.content,
+					tasks: data.updatedTasks,
+				},
+			}));
+		} catch (err) {
+			console.error(err);
+		}
+	};
 
 	return (
 		<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] flex justify-center items-start py-10 px-4">
@@ -85,7 +115,8 @@ export default function project({ params }) {
 						{projects?.content.tasks.map((task, index) => (
 							<button
 								key={index}
-								className={`p-4 rounded-xl border space-y-2 transition-all duration-200 block w-full text-start
+								onClick={() => handleTaskToggle(index)}
+								className={`p-4 rounded-xl border space-y-2 transition-all duration-200 block w-full text-start cursor-pointer
 									${task?.isDone
 										? "border-green-400 bg-green-50 dark:bg-green-900/10 opacity-80"
 										: "border-gray-200 dark:border-gray-700 bg-white/40 dark:bg-white/5"
