@@ -67,7 +67,11 @@ export default function project({ params }) {
 						{projects?.content.tasks.map((task, index) => (
 							<div
 								key={index}
-								className="p-4 rounded-xl border border-gray-200 dark:border-gray-700 space-y-2 bg-white/40 dark:bg-white/5"
+									className={`p-4 rounded-xl border space-y-2 transition
+										${task?.isDone
+										? "border-green-400 bg-green-50 dark:bg-green-900/10 opacity-80"
+										: "border-gray-200 dark:border-gray-700 bg-white/40 dark:bg-white/5"
+										}`}
 							>
 								<h3 className="text-base font-semibold text-gray-900 dark:text-white">
 									{task?.name}
