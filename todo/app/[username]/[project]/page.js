@@ -77,9 +77,9 @@ export default function project({ params }) {
 					<div className="space-y-4">
 
 						{projects?.content.tasks.map((task, index) => (
-							<div
+							<button
 								key={index}
-								className={`p-4 rounded-xl border space-y-2 transition
+								className={`p-4 rounded-xl border space-y-2 transition block w-full text-start
 									${task?.isDone
 									? "border-green-400 bg-green-50 dark:bg-green-900/10 opacity-80"
 									: "border-gray-200 dark:border-gray-700 bg-white/40 dark:bg-white/5"
@@ -117,7 +117,7 @@ export default function project({ params }) {
 								>
 									{task?.description}
 								</p>
-							</div>
+							</button>
 						))}
 					</div>
 				</div>
