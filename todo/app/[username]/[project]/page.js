@@ -102,9 +102,10 @@ export default function project({ params }) {
 					/>
 				</div>
 				<div>
-					<h1 className="sm:text-4xl text-3xl dark:text-white h-1/2 flex items-end m-3">{projects ? (<Link className="cursor-pointer" href={`/${username}`}>{projects.owner}</Link>) : (<Skeleton className="w-30 h-5"/>)}</h1>
+					<h1 className="sm:text-4xl text-3xl dark:text-white h-full flex items-center mx-4">{projects ? (<Link className="cursor-pointer" href={`/${username}`}>{projects.owner}</Link>) : (<Skeleton className="w-30 h-5"/>)}</h1>
 					
 				</div>
+				<li className="flex items-center text-gray-500">{projects?.createdAt}</li>
 			</div>
 			<div className="w-full max-w-3xl bg-white dark:bg-[#111827] rounded-2xl shadow-lg p-6 space-y-6">
 
