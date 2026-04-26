@@ -90,7 +90,22 @@ export default function project({ params }) {
 	)
 
 	return (
-		<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] flex justify-center items-start py-10 px-4">
+		<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] flex flex-col justify-center items-center gap-7 py-20 px-4">
+			<div className="flex justify-center flex-wrap">
+				<div className="sm:w-40 sm:h-40">
+					<Image
+						src={projects?.profilepic || "/profile.svg"}
+						alt="profile"
+						width={160}
+						height={160}
+						className="rounded-full"
+					/>
+				</div>
+				<div>
+					<h1 className="sm:text-4xl text-3xl dark:text-white h-1/2 flex items-end m-3">{projects ? projects.owner : (<Skeleton className="w-30 h-5"/>)}</h1>
+					
+				</div>
+			</div>
 			<div className="w-full max-w-3xl bg-white dark:bg-[#111827] rounded-2xl shadow-lg p-6 space-y-6">
 
 				<div className="space-y-5">
