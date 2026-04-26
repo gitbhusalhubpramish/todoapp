@@ -38,6 +38,7 @@ export default function project({ params }) {
 
 			const data = await res.json();
 			setProject(data.project);
+			console.log(data)
 			setLoading(false);
 		}
 
@@ -89,35 +90,51 @@ export default function project({ params }) {
 		<div className={`animate-pulse bg-gray-600/50 rounded ${className}`} />
 	)
 	function formatTimeAgo(dateString) {
-	const now = new Date();
-	const past = new Date(dateString);
+		const now = new Date();
+		const past = new Date(dateString);
 
-	const diffMs = now - past;
-	const diffSec = Math.floor(diffMs / 1000);
-	const diffMin = Math.floor(diffSec / 60);
-	const diffHr = Math.floor(diffMin / 60);
-	const diffDay = Math.floor(diffHr / 24);
-	const diffMonth = Math.floor(diffDay / 30);
-	const diffYear = Math.floor(diffDay / 365);
+		const diffMs = now - past;
+		const diffSec = Math.floor(diffMs / 1000);
+		const diffMin = Math.floor(diffSec / 60);
+		const diffHr = Math.floor(diffMin / 60);
+		const diffDay = Math.floor(diffHr / 24);
+		const diffMonth = Math.floor(diffDay / 30);
+		const diffYear = Math.floor(diffDay / 365);
 
-	if (diffSec < 60) {
-		return "Just now";
+		if (diffSec < 60) {
+			return "Just now";
+		}
+		if (diffMin < 60) {
+			return `${diffMin} min`;
+		}
+		if (diffHr < 24) {
+			return `${diffHr} hr`;
+		}
+		if (diffDay < 30) {
+			return `${diffDay} day${diffDay > 1 ? "s" : ""}`;
+		}
+		if (diffMonth < 12) {
+			return `${diffMonth} month${diffMonth > 1 ? "s" : ""}`;
+		}
+	
+		return `${diffYear} year${diffYear > 1 ? "s" : ""}`;
 	}
-	if (diffMin < 60) {
-		return `${diffMin} min`;
+	const handelLike = async ()=>{
+		console.log("liked")
+		const res = await fetch(`/api/users/${username}/${project}/like`, {
+				method: "POST"
+			}
+		)
+		const data = res.json()
+		if (!res.ok){
+			console.log(data.error)
+			return
+		}
+		setProject((prev)=>({
+			...prev,
+			likes: [prev.likes, session.username]
+		}))
 	}
-	if (diffHr < 24) {
-		return `${diffHr} hr`;
-	}
-	if (diffDay < 30) {
-		return `${diffDay} day${diffDay > 1 ? "s" : ""}`;
-	}
-	if (diffMonth < 12) {
-		return `${diffMonth} month${diffMonth > 1 ? "s" : ""}`;
-	}
-
-	return `${diffYear} year${diffYear > 1 ? "s" : ""}`;
-}
 
 	return (
 		<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] flex flex-col justify-center items-center gap-7 py-20 px-4">
@@ -251,11 +268,16 @@ export default function project({ params }) {
 								</p>
 							</button>
 						))}
-						<div className="flex justify-end ">
-							<button className="flex items-center gap-1 text-gray-600 dark:text-gray-300 hover:text-red-500 transition-colors cursor-pointer">
+						<div className="flex justify-end gap-2">
+							<button disable={owner.toString()} onClick={handelLike} className="flex items-center gap-1 text-gray-600 dark:text-gray-300 hover:text-red-500 transition-colors cursor-pointer">
 								<Heart size={18} className="fill-current" />
 								{projects?.likes?.length}
 							</button>
+							{owner && (
+								<button className="flex items-center gap-1 text-gray-600 dark:text-gray-300 cursor-pointer">
+									<Settings size={18} className="border-current"/>
+								</button>
+							)}
 						</div>
 					</div>
 				</div>
