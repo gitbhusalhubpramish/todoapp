@@ -4,7 +4,7 @@ import { useEffect, useState, use } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Folder, Heart } from "lucide-react";
+import { Settings, Heart } from "lucide-react";
 import { redirect } from "next/navigation";
 
 export default function project({ params }) {
@@ -170,6 +170,7 @@ export default function project({ params }) {
 
 						{projects ? projects.content.tasks.map((task, index) => (
 							<button
+								disable={(!owner).toString()}
 								key={index}
 								onClick={() => handleTaskToggle(index)}
 								className={`p-4 rounded-xl border space-y-2 transition-all duration-200 block w-full text-start cursor-pointer
