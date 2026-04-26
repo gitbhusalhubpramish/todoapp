@@ -85,6 +85,9 @@ export default function project({ params }) {
 			console.error(err);
 		}
 	};
+	const Skeleton = ({ className }) => (
+		<div className={`animate-pulse bg-gray-600/50 rounded ${className}`} />
+	)
 
 	return (
 		<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] flex justify-center items-start py-10 px-4">
@@ -95,7 +98,7 @@ export default function project({ params }) {
 					{/* Project Title */}
 					<div className="flex items-center justify-between">
 						<h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-							{projects?.content.title}
+							{projects ? projects.content.title : (<Skeleton className="w-50 h-7"/>)}
 						</h1>
 
 						<span
@@ -111,13 +114,13 @@ export default function project({ params }) {
 
 					{/* Project Description */}
 					<p className="w-full text-sm leading-relaxed text-gray-700 dark:text-gray-300">
-						{projects?.content.description}
+						{projects ? projects.content.description : (<Skeleton className="w-70 h-3"/>)}
 					</p>
 
 					{/* Tasks */}
 					<div className="space-y-4">
 
-						{projects?.content.tasks.map((task, index) => (
+						{projects ? projects.content.tasks.map((task, index) => (
 							<button
 								key={index}
 								onClick={() => handleTaskToggle(index)}
@@ -163,6 +166,39 @@ export default function project({ params }) {
 									}`}
 								>
 									{task?.description}
+								</p>
+							</button>
+						)) : [1,2,3].map((index)=>(
+							<button
+								key={index}
+								onClick={() => handleTaskToggle(index)}
+								className={`p-4 rounded-xl border space-y-2 transition-all duration-200 block w-full text-start cursor-pointer border-gray-200 dark:border-gray-700 bg-white/40 dark:bg-white/5
+								`}
+							>
+								<div className="flex items-center justify-between">
+									<h3
+										className={`text-base font-semibold
+											text-gray-900 dark:text-white
+										}`}
+									>
+										<Skeleton className="h-5 w-20"/>
+									</h3>
+
+									{/* status badge */}
+									<span
+										className={`text-xs px-2 py-1 rounded-full bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-200
+										}`}
+									>
+										Pending
+									</span>
+								</div>
+
+								<p
+									className={`text-sm leading-relaxed
+										text-gray-600 dark:text-gray-300
+									}`}
+								>
+									<Skeleton className="w-30 h-2"/>
 								</p>
 							</button>
 						))}
