@@ -250,9 +250,10 @@ export default function project({ params }) {
 								</p>
 							</button>
 						))}
-						<div className="flex justify-end cursor-pointer">
-							<button className="flex items-center gap-1">
-								<Heart size={18} /> {projects?.likes?.length}
+						<div className="flex justify-end ">
+							<button className="flex items-center gap-1 text-gray-600 dark:text-gray-300 hover:text-red-500 transition-colors cursor-pointer">
+								<Heart size={18} className="fill-current" />
+								{projects?.likes?.length}
 							</button>
 						</div>
 					</div>
