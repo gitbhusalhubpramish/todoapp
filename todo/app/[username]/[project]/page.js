@@ -102,7 +102,7 @@ export default function project({ params }) {
 					/>
 				</div>
 				<div>
-					<h1 className="sm:text-4xl text-3xl dark:text-white h-1/2 flex items-end m-3">{projects ? projects.owner : (<Skeleton className="w-30 h-5"/>)}</h1>
+					<h1 className="sm:text-4xl text-3xl dark:text-white h-1/2 flex items-end m-3">{projects ? (<Link className="cursor-pointer" href={`/${username}`}>{projects.owner}</Link>) : (<Skeleton className="w-30 h-5"/>)}</h1>
 					
 				</div>
 			</div>
