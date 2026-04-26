@@ -130,10 +130,10 @@ export default function project({ params }) {
 			console.log(data.error)
 			return
 		}
-		setProject((prev)=>({
+		setProject((prev) => ({
 			...prev,
-			likes: [prev.likes, session.username]
-		}))
+			likes: [...(prev.likes || []), session.username],
+		}));
 	}
 
 	return (
