@@ -88,6 +88,36 @@ export default function project({ params }) {
 	const Skeleton = ({ className }) => (
 		<div className={`animate-pulse bg-gray-600/50 rounded ${className}`} />
 	)
+	function formatTimeAgo(dateString) {
+	const now = new Date();
+	const past = new Date(dateString);
+
+	const diffMs = now - past;
+	const diffSec = Math.floor(diffMs / 1000);
+	const diffMin = Math.floor(diffSec / 60);
+	const diffHr = Math.floor(diffMin / 60);
+	const diffDay = Math.floor(diffHr / 24);
+	const diffMonth = Math.floor(diffDay / 30);
+	const diffYear = Math.floor(diffDay / 365);
+
+	if (diffSec < 60) {
+		return "Just now";
+	}
+	if (diffMin < 60) {
+		return `${diffMin} min`;
+	}
+	if (diffHr < 24) {
+		return `${diffHr} hr`;
+	}
+	if (diffDay < 30) {
+		return `${diffDay} day${diffDay > 1 ? "s" : ""}`;
+	}
+	if (diffMonth < 12) {
+		return `${diffMonth} month${diffMonth > 1 ? "s" : ""}`;
+	}
+
+	return `${diffYear} year${diffYear > 1 ? "s" : ""}`;
+}
 
 	return (
 		<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] flex flex-col justify-center items-center gap-7 py-20 px-4">
@@ -106,7 +136,7 @@ export default function project({ params }) {
 					
 				</div>
 				<ul className="flex items-center text-gray-500 list-disc">
-					<li className="ml-2">{projects?.createdAt}</li>
+					<li className="ml-2">{projects ? formatTimeAgo(projects?.createdAt) : <Skeleton className="w-9 h-5"/>}</li>
 				</ul>
 			</div>
 			<div className="w-full max-w-3xl bg-white dark:bg-[#111827] rounded-2xl shadow-lg p-6 space-y-6">
