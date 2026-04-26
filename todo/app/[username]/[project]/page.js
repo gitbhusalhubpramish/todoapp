@@ -250,6 +250,11 @@ export default function project({ params }) {
 								</p>
 							</button>
 						))}
+						<div className="flex justify-end cursor-pointer">
+							<button className="flex items-center gap-1">
+								<Heart size={18} /> {projects?.likes?.length}
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>
