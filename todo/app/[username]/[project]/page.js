@@ -15,6 +15,7 @@ export default function project({ params }) {
 	const [notFoundState, setNotFoundState] = useState(false);
 	const [session, setSessionUser] = useState(null);
 	const [owner, setOwner] = useState(false)
+	const [liked, setLiked] = useState(false)
 
 	useEffect(() => {
 		async function loadSession() {
@@ -39,6 +40,7 @@ export default function project({ params }) {
 			const data = await res.json();
 			setProject(data.project);
 			console.log(data)
+			setLiked(data.project?.likes?.includes(session?.username) || false);
 			setLoading(false);
 		}
 
@@ -49,8 +51,10 @@ export default function project({ params }) {
 	useEffect(() => {
 		if (session?.username && projects?.owner) {
 			setOwner(session.username === projects.owner);
+			setLiked(projects.likes.includes(session.username));
 		}
 	}, [session, projects]);
+	
 	
 	const handleTaskToggle = async (taskIndex) => {
 		console.log("clicked")
@@ -134,7 +138,9 @@ export default function project({ params }) {
 			...prev,
 			likes: [...(prev.likes || []), session.username],
 		}));
+		setLiked(true)
 	}
+
 
 	return (
 		<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] flex flex-col justify-center items-center gap-7 py-20 px-4">
@@ -269,7 +275,16 @@ export default function project({ params }) {
 							</button>
 						))}
 						<div className="flex justify-end gap-2">
-							<button disable={owner.toString()} onClick={handelLike} className="flex items-center gap-1 text-gray-600 dark:text-gray-300 hover:text-red-500 transition-colors cursor-pointer">
+							<button
+								onClick={handelLike}
+								className={`
+								flex items-center gap-1 transition-colors cursor-pointer
+									${liked
+										? "text-red-500"
+										: "text-gray-600 dark:text-gray-300 hover:text-red-500"
+									}
+								`}
+							>
 								<Heart size={18} className="fill-current" />
 								{projects?.likes?.length}
 							</button>
