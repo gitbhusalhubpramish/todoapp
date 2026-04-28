@@ -125,10 +125,17 @@ export default function project({ params }) {
 	}
 	const handelLike = async ()=>{
 		console.log("liked")
-		const res = await fetch(`/api/users/${username}/${project}/like`, {
-				method: "POST"
-			}
-		)
+		if (liked){
+			const res = await fetch(`/api/users/${username}/${project}/like`, {
+					method: "POST"
+				}
+			)
+		}else{
+			const res = await fetch(`/api/users/${username}/${project}/like`, {
+					method: "DELETE"
+				}
+			)
+		}
 		const data = res.json()
 		if (!res.ok){
 			console.log(data.error)

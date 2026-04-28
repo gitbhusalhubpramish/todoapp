@@ -3,30 +3,52 @@ import { getCurrentUser } from "@/lib/auth.js";
 
 export async function POST(req, { params }) {
 	const { username, project } = await params;
-	console.log(username, project)
 
 	const session = await getCurrentUser();
 
 	if (!session) {
-		return Response.json({ error: "Unauthorized" }, { status: 401 });
+		return Response.json(
+			{ error: "Unauthorized" },
+			{ status: 401 }
+		);
 	}
 
 	if (session.username === username) {
-		return Response.json({ error: "Forbidden" }, { status: 403 });
+		return Response.json(
+			{ error: "Forbidden" },
+			{ status: 403 }
+		);
 	}
 
 	const client = await clientPromise;
 	const db = client.db("projectdata");
 
+	// check current user exists
+	const user = await db.collection("usrdata").findOne({
+		username: session.username,
+	});
+
+	if (!user) {
+		return Response.json(
+			{ error: "User not found" },
+			{ status: 404 }
+		);
+	}
+
+	// check target project exists
 	const doc = await db.collection("projects").findOne({
 		owner: username,
 		"content.title": project,
 	});
 
 	if (!doc) {
-		return Response.json({ error: "Not found" }, { status: 404 });
+		return Response.json(
+			{ error: "Project not found" },
+			{ status: 404 }
+		);
 	}
 
+	// prevent double like
 	if (doc.likes?.includes(session.username)) {
 		return Response.json(
 			{ error: "Already liked" },
@@ -34,6 +56,7 @@ export async function POST(req, { params }) {
 		);
 	}
 
+	// add like to project
 	await db.collection("projects").updateOne(
 		{ _id: doc._id },
 		{
@@ -43,5 +66,99 @@ export async function POST(req, { params }) {
 		}
 	);
 
-	return Response.json({ ok: true }, { status: 200 });
+	// add liked project to user
+	await db.collection("usrdata").updateOne(
+		{ username: session.username },
+		{
+			$addToSet: {
+				likedprojects: `${username}/${project}`,
+			},
+		}
+	);
+
+	return Response.json(
+		{ ok: true, message: "Project liked" },
+		{ status: 200 }
+	);
+}
+
+export async function DELETE(req, { params }) {
+	const { username, project } = await params;
+
+	const session = await getCurrentUser();
+
+	if (!session) {
+		return Response.json(
+			{ error: "Unauthorized" },
+			{ status: 401 }
+		);
+	}
+
+	if (session.username === username) {
+		return Response.json(
+			{ error: "Forbidden" },
+			{ status: 403 }
+		);
+	}
+
+	const client = await clientPromise;
+	const db = client.db("projectdata");
+
+	// check current user exists
+	const user = await db.collection("usrdata").findOne({
+		username: session.username,
+	});
+
+	if (!user) {
+		return Response.json(
+			{ error: "User not found" },
+			{ status: 404 }
+		);
+	}
+
+	// check target project exists
+	const doc = await db.collection("projects").findOne({
+		owner: username,
+		"content.title": project,
+	});
+
+	if (!doc) {
+		return Response.json(
+			{ error: "Project not found" },
+			{ status: 404 }
+		);
+	}
+
+	// ensure user already liked
+	if (!doc.likes?.includes(session.username)) {
+		return Response.json(
+			{ error: "Project not liked yet" },
+			{ status: 409 }
+		);
+	}
+
+	// remove like from project
+	await db.collection("projects").updateOne(
+		{ _id: doc._id },
+		{
+			$pull: {
+				likes: session.username,
+			},
+		}
+	);
+
+	// remove liked project from user
+	await db.collection("usrdata").updateOne(
+		{ username: session.username },
+		{
+			$pull: {
+				likedprojects: `${username}/${project}`,
+			},
+		}
+	);
+
+	return Response.json(
+		{ ok: true, message: "Like removed" },
+		{ status: 200 }
+	);
 }
