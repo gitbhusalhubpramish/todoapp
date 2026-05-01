@@ -126,7 +126,7 @@ export default function project({ params }) {
 	}
 	const handelLike = async () => {
 		console.log("clicked");
-		if (!session.username){
+		if (!session?.username){
 			redirect("/login")
 		}
 
@@ -321,9 +321,9 @@ export default function project({ params }) {
 								{projects?.likes?.length}
 							</button>
 							{owner && (
-								<button className="flex items-center gap-1 text-gray-600 dark:text-gray-300 cursor-pointer">
+								<Link href={`/${username}/${project}/setting`} className="flex items-center gap-1 text-gray-600 dark:text-gray-300 cursor-pointer">
 									<Settings size={18} className="border-current"/>
-								</button>
+								</Link>
 							)}
 						</div>
 					</div>
