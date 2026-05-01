@@ -123,30 +123,51 @@ export default function project({ params }) {
 	
 		return `${diffYear} year${diffYear > 1 ? "s" : ""}`;
 	}
-	const handelLike = async ()=>{
-		console.log("liked")
-		if (liked){
-			const res = await fetch(`/api/users/${username}/${project}/like`, {
-					method: "POST"
-				}
-			)
-		}else{
-			const res = await fetch(`/api/users/${username}/${project}/like`, {
-					method: "DELETE"
-				}
-			)
+	const handelLike = async () => {
+		console.log("clicked");
+
+		let res;
+
+		if (liked) {
+			// UNLIKE
+			res = await fetch(`/api/users/${username}/${project}/like`, {
+				method: "DELETE",
+			});
+		} else {
+			// LIKE
+			res = await fetch(`/api/users/${username}/${project}/like`, {
+				method: "POST",
+			});
 		}
-		const data = res.json()
-		if (!res.ok){
-			console.log(data.error)
-			return
+
+		const data = await res.json();
+
+		if (!res.ok) {
+			console.log(data.error);
+			return;
 		}
-		setProject((prev) => ({
-			...prev,
-			likes: [...(prev.likes || []), session.username],
-		}));
-		setLiked(true)
-	}
+
+		setProject((prev) => {
+			let updatedLikes;
+
+			if (liked) {
+				// remove username
+				updatedLikes = prev.likes.filter(
+					(user) => user !== session.username
+				);
+			} else {
+				// add username
+				updatedLikes = [...(prev.likes || []), session.username];
+			}
+
+			return {
+				...prev,
+				likes: updatedLikes,
+			};
+		});
+
+		setLiked(!liked);
+	};
 
 
 	return (
