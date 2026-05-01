@@ -27,8 +27,9 @@ export default function project({ params }) {
 	}, []);
 
 	useEffect(() => {
+		if (!username || !project) return;
+		setLoading(true);
 		async function loadProject() {
-			setLoading(true);
 
 			const res = await fetch(`/api/users/${username}/${project}`);
 			if (res.status === 404) {
@@ -125,6 +126,9 @@ export default function project({ params }) {
 	}
 	const handelLike = async () => {
 		console.log("clicked");
+		if (!session.username){
+			redirect("/login")
+		}
 
 		let res;
 
