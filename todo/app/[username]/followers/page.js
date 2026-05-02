@@ -40,7 +40,7 @@ export default function followers({ params }){
 	)
 	
 	return (
-		<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] flex justify-center gap-7 py-20 px-4">
+		<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] flex flex-col items-center gap-7 py-20 px-4 ">
 			<div className="flex justify-center flex-wrap sm:h-40">
 				<div className="sm:w-40 sm:h-40">
 					<Image
@@ -58,6 +58,9 @@ export default function followers({ params }){
 						<div className="underline decoration-dashed">{user ? (user.following?.length ?? 0)+" following" : <Skeleton className="h-4 w-10" />} </div>
 					</div>
 				</div>
+			</div>
+			<div className="w-screen dark:text-white">
+				<h1 className="text-center text-4xl">Who follows {username}</h1>
 			</div>
 		</div>
 	)
