@@ -6,14 +6,14 @@ import Image from "next/image";
 const dummyNotifications = [
   {
     type: "follow",
-    user: { username: "ram123", profilePic: "/default.png" },
+    user: { username: "ram123", profilePic: "/profile.png" },
     entity: { type: "user", username: "ram123" },
     createdAt: "2026-05-02T12:00:00Z",
     read: false,
   },
   {
     type: "like",
-    user: { username: "sita_dev", profilePic: "/default.png" },
+    user: { username: "sita_dev", profilePic: "/profile.png" },
     entity: { type: "project", username: "pramish", project: "todo-app" },
     createdAt: "2026-05-02T10:30:00Z",
     read: true,
@@ -45,7 +45,7 @@ function getHref(entity) {
 
 export default function NotificationsPage() {
   return (
-    <div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120]">
+    <div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] dark:text-white">
       <div className="max-w-2xl mx-auto p-4">
         <h1 className="text-xl font-semibold mb-4">Notifications</h1>
 
@@ -54,7 +54,7 @@ export default function NotificationsPage() {
             <Link
               key={index}
               href={getHref(notif.entity)}
-              className={`dark:text-white relative flex items-center gap-3 p-3 rounded-xl transition
+              className={` relative flex items-center gap-3 p-3 rounded-xl transition
                 ${
                   !notif.read
                     ? "bg-white/70 dark:bg-zinc-900/60"
