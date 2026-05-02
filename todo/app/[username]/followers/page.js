@@ -61,6 +61,36 @@ export default function followers({ params }){
 			</div>
 			<div className="w-screen dark:text-white">
 				<h1 className="text-center text-4xl">Who follows {username}</h1>
+				<div className="w-full max-w-2xl mx-auto mt-6 space-y-3">
+	{followers ? followers.map((usr, index) => (
+		<Link
+			key={index}
+			href={`/${usr.username}`}
+			className="flex items-center gap-4 p-3 rounded-xl bg-white/70 dark:bg-[#1e293b] hover:bg-white dark:hover:bg-[#334155] transition shadow-sm"
+		>
+			<Image
+				src={usr.profilepic || "/profile.svg"}
+				alt={usr.username}
+				width={50}
+				height={50}
+				className="rounded-full object-cover"
+			/>
+
+			<div className="flex flex-col">
+				<span className="font-semibold text-lg">{usr.username}</span>
+				<span className="text-sm text-gray-500 dark:text-gray-400">
+					{usr.bio || "No bio"}
+				</span>
+			</div>
+		</Link>
+	)) : (
+		<div className="space-y-3">
+			<Skeleton className="h-16 w-full" />
+			<Skeleton className="h-16 w-full" />
+			<Skeleton className="h-16 w-full" />
+		</div>
+	)}
+</div>
 			</div>
 		</div>
 	)
