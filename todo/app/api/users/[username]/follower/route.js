@@ -8,7 +8,7 @@ export async function GET(req, { params }) {
 	
 	const user = await db.collection("usrdata").findOne(
 		{ username },
-		{ projection: { followers: 1, profilepic:1 } }
+		{ projection: { followers: 1, profilepic:1, following:1 } }
 	);
 	if (!user) {
 		return Response.json({ error: "User not found" }, { status: 404 });
