@@ -54,8 +54,8 @@ export default function followers({ params }){
 				<div>
 					<h1 className="sm:text-4xl text-3xl h-1/2 flex items-end m-3 dark:text-white">{user ? username : (<Skeleton className="w-30 h-5"/>)}</h1>
 					<div className="flex gap-2 m-3 text-gray-500 ">
-						<div className="underline decoration-dashed">{user ? (user.followers?.length ?? 0)+" followers" : <Skeleton className="h-4 w-10" />}</div>
-						<div className="underline decoration-dashed">{user ? (user.following?.length ?? 0)+" following" : <Skeleton className="h-4 w-10" />} </div>
+						<Link href={`/${username}/followers`} className="underline decoration-dashed">{user ? (user.followers?.length ?? 0)+" followers" : <Skeleton className="h-4 w-10" />}</Link>
+						<Link href={`/${username}/following`} className="underline decoration-dashed">{user ? (user.following?.length ?? 0)+" following" : <Skeleton className="h-4 w-10" />} </Link>
 					</div>
 				</div>
 			</div>
