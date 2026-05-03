@@ -6,14 +6,14 @@ import Image from "next/image";
 const dummyNotifications = [
   {
     type: "follow",
-    user: { username: "ram123", profilePic: "/profile.png" },
+    user: { username: "ram123", profilePic: "/profile.svg" },
     entity: { type: "user", username: "ram123" },
     createdAt: "2026-05-02T12:00:00Z",
     read: false,
   },
   {
     type: "like",
-    user: { username: "sita_dev", profilePic: "/profile.png" },
+    user: { username: "sita_dev", profilePic: "/profile.svg" },
     entity: { type: "project", username: "pramish", project: "todo-app" },
     createdAt: "2026-05-02T10:30:00Z",
     read: true,
@@ -84,7 +84,7 @@ export default function NotificationsPage() {
 
                 <span>
                   <span className="font-semibold">
-                    {notif.user.username}
+                    <Link href={`/${notif.user.username}`}>{notif.user.username}</Link>
                   </span>{" "}
                   {notif.type === "follow"
                     ? "started following you"
