@@ -104,7 +104,6 @@ export async function POST(req, { params }) {
 			type: "like",
 			user: [session.username],
 			entity: `/${username}/${project}`,
-			project,
 			createdAt: new Date(),
 			isRead: false,
 		});
