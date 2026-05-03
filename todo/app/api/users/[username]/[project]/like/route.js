@@ -86,7 +86,7 @@ export async function POST(req, { params }) {
 		? notifications[notifications.length - 1]
 		: null;
 
-	if (last && last.type === "like") {
+	if (last && last.type === "like" && last.entity === `/${username}/${project}`) {
 		// 🔥 MERGE INTO LAST LIKE NOTIFICATION
 		const updatedUsers = Array.isArray(last.user)
 			? Array.from(new Set([...last.user, session.username]))
