@@ -19,6 +19,27 @@ export async function GET(req, { params }) {
 		{ username },
 		{ projection: { notifications: 1} }
 	);
-	//const notification = user.notifications
-	return Response.json({user})
+	
+	const notifications = user.notifications
+	
+	const allUsernames = notifications.flatMap(n => n.user);
+	const usersData = await db.collection("usrdata")
+		.find({ username: { $in: allUsernames } })
+		.project({ username: 1, profilepic: 1 })
+		.toArray();
+	
+	const userMap = {};
+	for (const user of usersData) {
+		userMap[user.username] = user.profilepic;
+	}
+	
+	const updatedNotifications = notifications.map(notification => ({
+		...notification,
+		user: notification.user.map(username => ({
+			username,
+			profilepic: userMap[username] || null
+		}))
+	}));
+	
+	return Response.json({updatedNotifications})
 }
