@@ -1,31 +1,11 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-const dummyNotifications = [
-	{
-		type: "follow",
-		user: [
-			{ username: "ram123", profilePic: "/profile.svg" },
-			{ username: "sita_dev", profilePic: "/profile.svg" },
-			{ username: "hari", profilePic: "/profile.svg" },
-			{ username: "gita", profilePic: "/profile.svg" },
-		],
-		entity: "/arepeat10000/followers",
-		createdAt: "2026-05-02T12:00:00Z",
-		isRead: false,
-	},
-	{
-		type: "like",
-		user: [
-			{ username: "sita_dev", profilePic: "/profile.svg" },
-		],
-		entity: "/arepeat10000/fsda",
-		createdAt: "2026-05-02T10:30:00Z",
-		isRead: true,
-	},
-];
+
+
 
 function timeAgo(date) {
 	const seconds = Math.floor((new Date() - new Date(date)) / 1000);
@@ -45,13 +25,55 @@ function timeAgo(date) {
 }
 
 export default function NotificationsPage() {
+	const [notifications, setNotifications] = useState(null); 
+	const [loading, setLoading] = useState(true); 
+	const [session, setSessionUser] = useState(null);
+	
+	useEffect(() => {
+		async function loadSession() {
+			const res = await fetch("/api/me/auth");
+			const data = await res.json();
+			console.log("session raw data ",data)
+			setSessionUser(data.user);
+		}
+
+		loadSession();
+	}, []);
+	const username= session?.username
+	
+	useEffect(() => { 
+		const fetchNotifications = async () => { 
+			try { 
+				const res = await fetch( `/api/users/${username}/notification`, { 
+					method: "POST", 
+				} ); 
+				const data = await res.json(); 
+				if (!res.ok) { 
+					console.error(data.error); 
+					return; 
+				} 
+				setNotifications(data.updatedNotifications || []); 
+			} catch (err) { 
+				console.error(err); 
+			} finally { 
+				setLoading(false); 
+			} 
+		}; 
+		if (username) fetchNotifications(); 
+	}, [username]);
+	if (!loading && (!notifications || notifications.length === 0)) { 
+		return ( <div className="p-4 text-center text-sm text-zinc-500"> No notifications </div> ); 
+	}
+	const Skeleton = ({ className }) => (
+		<div className={`animate-pulse bg-gray-600/50 rounded ${className}`} />
+	)
 	return (
 		<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] dark:text-white">
 			<div className="max-w-2xl mx-auto p-4">
 				<h1 className="text-xl font-semibold mb-4">Notifications</h1>
 
 				<div className="flex flex-col gap-2">
-					{dummyNotifications.map((notif, index) => {
+					{notifications ? notifications.map((notif, index) => {
 						const users = notif.user || [];
 
 						const firstThree = users.slice(0, 3);
@@ -79,7 +101,7 @@ export default function NotificationsPage() {
 									{users.slice(0, 2).map((u, i) => (
 										<Image
 											key={i}
-											src={u.profilePic}
+											src={u.profilepic}
 											alt="pfp"
 											width={32}
 											height={32}
@@ -122,7 +144,7 @@ export default function NotificationsPage() {
 								</div>
 							</Link>
 						);
-					})}
+					}) : (<Skeleton className="w-full h-15"/>)}
 				</div>
 			</div>
 		</div>
