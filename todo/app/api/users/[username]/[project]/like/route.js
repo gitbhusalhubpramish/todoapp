@@ -75,6 +75,45 @@ export async function POST(req, { params }) {
 			},
 		}
 	);
+	
+	const targetUser = await db.collection("usrdata").findOne({
+		username,
+	});
+
+	let notifications = targetUser?.notifications || [];
+
+	const last = notifications.length
+		? notifications[notifications.length - 1]
+		: null;
+
+	if (last && last.type === "like") {
+		// 🔥 MERGE INTO LAST LIKE NOTIFICATION
+		const updatedUsers = Array.isArray(last.user)
+			? Array.from(new Set([...last.user, session.username]))
+			: [session.username];
+
+		notifications[notifications.length - 1] = {
+			...last,
+			user: updatedUsers,
+			createdAt: new Date(),
+			isRead: false,
+		};
+	} else {
+		// 🆕 NEW LIKE NOTIFICATION
+		notifications.push({
+			type: "like",
+			user: [session.username],
+			entity: `/${username}/${project}`,
+			project,
+			createdAt: new Date(),
+			isRead: false,
+		});
+	}
+
+	await db.collection("usrdata").updateOne(
+		{ username },
+		{ $set: { notifications } }
+	);
 
 	return Response.json(
 		{ ok: true, message: "Project liked" },
