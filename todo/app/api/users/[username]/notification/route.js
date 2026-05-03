@@ -41,5 +41,14 @@ export async function POST(req, { params }) {
 		}))
 	}));
 	
+	await db.collection("usrdata").updateOne(
+	{ username },
+	{
+		$set: {
+			"notifications.$[].isRead": true
+		}
+	}
+);
+	
 	return Response.json({updatedNotifications})
 }
