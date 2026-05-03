@@ -49,8 +49,74 @@ export async function POST(req, { params }) {
 
 		await db.collection("usrdata").updateOne(
 			{ username: username },
-			{ $addToSet: { followers: session.username } }
+			{ $addToSet: { followers: session.username}}
 		);
+		await db.collection("usrdata").updateOne(
+			{ username },
+			[
+				{
+					$set: {
+						notifications: {
+							$cond: [
+								{
+									$and: [
+										{ $gt: [{ $size: "$notifications" }, 0] },
+								{
+									$eq: [
+										{
+											$arrayElemAt: ["$notifications.type", -1]
+										},
+										"follow"
+									]
+								}
+							]
+						},
+
+						// ✅ CASE 1: last notification is "follow"
+						{
+							$concatArrays: [
+								{ 
+									$slice: ["$notifications", 0, { $subtract: [{ $size: "$notifications" }, 1] }] },
+									[
+										{
+											$mergeObjects: [
+												{ $arrayElemAt: ["$notifications", -1] },
+												{
+													user: {
+														$setUnion: [
+															{ $arrayElemAt: ["$notifications.user", -1] },
+															[session.username]
+														]
+													},
+													createdAt: new Date()
+												}
+											]
+										}
+									]
+								]
+							},
+
+							// ❌ CASE 2: last notification not "follow"
+							{
+								$concatArrays: [
+									"$notifications",
+									[
+										{
+											type: "follow",
+											user: [session.username],
+											entity: `/${username}/followers`,
+											createdAt: new Date(),
+											isRead: false
+										}
+									]
+								]
+							}
+						]
+					}
+				}
+			}
+		]
+	);
 
 		return Response.json({ success: true, following: true });
 	} catch (err) {
