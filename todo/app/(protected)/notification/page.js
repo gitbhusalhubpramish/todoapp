@@ -53,6 +53,7 @@ export default function NotificationsPage() {
 					return; 
 				} 
 				setNotifications(data.updatedNotifications || []); 
+				console.log(data.updatedNotifications)
 			} catch (err) { 
 				console.error(err); 
 			} finally { 

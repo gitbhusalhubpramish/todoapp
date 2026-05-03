@@ -8,18 +8,17 @@ export async function POST(req, { params }) {
 		if (!session) {
 			return Response.json({ error: "Unauthorized" }, { status: 401 });
 		}
+
 		const { username } = await params;
 		const client = await clientPromise;
 		const db = client.db("projectdata");
+
 		const targetUser = await db.collection("usrdata").findOne({
-			username: username,
+			username,
 		});
 
 		if (!targetUser) {
-			return Response.json(
-				{ error: "User not found" },
-				{ status: 404 }
-			);
+			return Response.json({ error: "User not found" }, { status: 404 });
 		}
 
 		if (session.username === username) {
@@ -29,12 +28,10 @@ export async function POST(req, { params }) {
 			);
 		}
 
-
 		const currentUser = await db.collection("usrdata").findOne({
 			username: session.username,
 		});
 
-		// ❌ already following
 		if (currentUser?.following?.includes(username)) {
 			return Response.json(
 				{ error: "Already following this user" },
@@ -42,14 +39,55 @@ export async function POST(req, { params }) {
 			);
 		}
 
+		// -----------------------------
+		// FOLLOW RELATION UPDATE
+		// -----------------------------
 		await db.collection("usrdata").updateOne(
 			{ username: session.username },
 			{ $addToSet: { following: username } }
 		);
 
 		await db.collection("usrdata").updateOne(
-			{ username: username },
+			{ username },
 			{ $addToSet: { followers: session.username } }
+		);
+
+		// -----------------------------
+		// NOTIFICATIONS (SAFE VERSION)
+		// -----------------------------
+		const target = await db.collection("usrdata").findOne({ username });
+
+		let notifications = target?.notifications || [];
+
+		const last = notifications.length
+			? notifications[notifications.length - 1]
+			: null;
+
+		if (last && last.type === "follow") {
+			// merge into last notification
+			const updatedUserList = Array.isArray(last.user)
+				? Array.from(new Set([...last.user, session.username]))
+				: [session.username];
+
+			notifications[notifications.length - 1] = {
+				...last,
+				user: updatedUserList,
+				createdAt: new Date(),
+			};
+		} else {
+			// new notification
+			notifications.push({
+				type: "follow",
+				user: [session.username],
+				entity: `/${username}/followers`,
+				createdAt: new Date(),
+				isRead: false,
+			});
+		}
+
+		await db.collection("usrdata").updateOne(
+			{ username },
+			{ $set: { notifications } }
 		);
 
 		return Response.json({ success: true, following: true });
@@ -69,23 +107,19 @@ export async function DELETE(req, { params }) {
 		const { username } = await params;
 		const client = await clientPromise;
 		const db = client.db("projectdata");
+
 		const targetUser = await db.collection("usrdata").findOne({
-			username: username,
+			username,
 		});
 
 		if (!targetUser) {
-			return Response.json(
-				{ error: "User not found" },
-				{ status: 404 }
-			);
+			return Response.json({ error: "User not found" }, { status: 404 });
 		}
-
 
 		const currentUser = await db.collection("usrdata").findOne({
 			username: session.username,
 		});
 
-		// ❌ not following
 		if (!currentUser?.following?.includes(username)) {
 			return Response.json(
 				{ error: "You are not following this user" },
@@ -99,7 +133,7 @@ export async function DELETE(req, { params }) {
 		);
 
 		await db.collection("usrdata").updateOne(
-			{ username: username },
+			{ username },
 			{ $pull: { followers: session.username } }
 		);
 
