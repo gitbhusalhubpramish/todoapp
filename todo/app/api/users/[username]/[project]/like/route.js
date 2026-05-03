@@ -73,7 +73,7 @@ export async function POST(req, { params }) {
 
 	const targetUser = await db.collection("usrdata").findOne(
 		{ username },
-		{ projection: { notifications: { $slice: -1 } } } // only last item
+		{ projection: { notifications: { $slice: 1 } } } 
 	);
 
 	const last = targetUser?.notifications?.[0];
