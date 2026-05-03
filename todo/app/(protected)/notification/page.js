@@ -14,7 +14,7 @@ const dummyNotifications = [
 		],
 		entity: "/arepeat10000/followers",
 		createdAt: "2026-05-02T12:00:00Z",
-		read: false,
+		isRead: false,
 	},
 	{
 		type: "like",
@@ -23,7 +23,7 @@ const dummyNotifications = [
 		],
 		entity: "/arepeat10000/fsda",
 		createdAt: "2026-05-02T10:30:00Z",
-		read: true,
+		isRead: true,
 	},
 ];
 
@@ -63,14 +63,14 @@ export default function NotificationsPage() {
 								href={notif.entity}
 								className={`relative flex items-center gap-3 p-3 rounded-xl transition
 									${
-										!notif.read
+										!notif.isRead
 											? "bg-white/70 dark:bg-zinc-900/60"
 											: "hover:bg-black/5 dark:hover:bg-white/5"
 									}
 								`}
 							>
 								{/* unread bar */}
-								{!notif.read && (
+								{!notif.isRead && (
 									<div className="absolute left-0 top-0 h-full w-1 bg-green-500 rounded-l-xl" />
 								)}
 
@@ -92,7 +92,7 @@ export default function NotificationsPage() {
 
 								{/* content */}
 								<div className="flex-1 text-sm flex items-center gap-2">
-									{!notif.read && (
+									{!notif.isRead && (
 										<div className="w-2 h-2 bg-green-500 rounded-full" />
 									)}
 

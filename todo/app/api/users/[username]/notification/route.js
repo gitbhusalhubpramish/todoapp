@@ -1,7 +1,7 @@
 import clientPromise from "@/lib/mongodb";
 import { getCurrentUser } from "@/lib/auth";
 
-export async function GET(req, { params }) {
+export async function POST(req, { params }) {
 	const { username } = await params;
 	
 	const session = await getCurrentUser();
