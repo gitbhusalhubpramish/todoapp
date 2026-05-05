@@ -12,7 +12,7 @@ export async function GET(req, { params }) {
 	const client = await clientPromise;
 	const db = client.db("projectdata");
 	
-	const user = db.collection("usrdata").findOne(
+	const user = await db.collection("usrdata").findOne(
 		{username},
 		{
 			projection: {
@@ -20,14 +20,11 @@ export async function GET(req, { params }) {
 				profilepic: 1,
 				bio: 1,
 				projects: 1,
-				_id: 0,
-				notifications: 0,
-				userId: 0
 			},
 		}
 	)
 	if (!user){
 		return Response.json({ error: "user not found" }, { status: 404 });
 	}
-	return Responce.json(user)
+	return Response.json(user)
 }
