@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -15,7 +15,13 @@ import { redirect } from "next/navigation";
 //  change pass
 //	del acc
 //	logout
-export default function setting(){
+export default function setting({params}){
+	const { username } = use(params)
+
+	const [user, setUser] = useState(null);
+	const [loading, setLoading] = useState(true);
+	const [notFoundState, setNotFoundState] = useState(false);
+	const [session, setSessionUser] = useState(null);
 	return (
 		<></>
 	)
