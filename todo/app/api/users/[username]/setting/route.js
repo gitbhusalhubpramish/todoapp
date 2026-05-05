@@ -26,5 +26,8 @@ export async function GET(req, { params }) {
 			},
 		}
 	)
+	if (!user){
+		return Response.json({ error: "user not found" }, { status: 404 });
+	}
 	return Responce.json(user)
 }
