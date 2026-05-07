@@ -7,7 +7,7 @@ import { notFound } from "next/navigation";
 import { SquarePen, Camera } from "lucide-react";
 import { redirect } from "next/navigation";
 //           pp      usrname
-//           bioooooooooo
+//           bioooooooooo edtpen
 //  -----------------------------------
 //     project one 				del
 //     project 2 				del
@@ -15,8 +15,7 @@ import { redirect } from "next/navigation";
 //  change pass
 //	del acc
 //	logout
-export default function setting({params}){
-	const { username } = use(params)
+export default function Setting(){
 
 	const [user, setUser] = useState(null);
 	const [loading, setLoading] = useState(true);
@@ -37,7 +36,7 @@ export default function setting({params}){
 		async function loadUser() {
 			setLoading(true);
 
-			const res = await fetch(`/api/users/${username}/setting`);
+			const res = await fetch(`/api/users/${session?.username}/setting`);
 
 			if (res.status === 404) {
 				setNotFoundState(true);
@@ -52,14 +51,65 @@ export default function setting({params}){
 		}
 
 		loadUser();
-	}, [username, session]);
-	if (notFoundState){
-		notFound()
-	}
-	if (!user){
-		redirect("/login")
-	}
+		
+	}, [session]);
+	
+	const Skeleton = ({ className }) => (
+		<div className={`animate-pulse bg-gray-600/50 rounded ${className}`} />
+	)
 	return (
-		<></>
+		<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] text-black dark:text-white p-6 ">
+			<div className="flex justify-center flex-wrap">
+				<div className="sm:w-40 sm:h-40">
+					<Image
+						src={user?.profilepic || "/profile.svg"}
+						alt="profile"
+						width={160}
+						height={160}
+						className="rounded-full"
+					/>
+				</div>
+				<div>
+					<h1 className="sm:text-4xl text-3xl h-1/2 flex items-end m-3">{user ? user.username : (<Skeleton className="w-30 h-5"/>)}</h1>
+				</div>
+			</div>
+			<p>{user?.bio}</p>
+			<div className="max-w-2xl mx-auto my-30 border-t border-gray-500 pt-4">
+				{/* Content */}
+				<div className="space-y-3">
+					{user?.projects.length ? (
+							user?.projects.map((p, i) => (
+								<Link
+									href={`/${user.username}/${p.title}`}
+									key={i}
+									className="block p-3 rounded-lg border border-gray-300 dark:border-gray-700 cursor-pointer bg-white/60 dark:bg-gray-900/40 hover:bg-white dark:hover:bg-gray-800 hover:shadow-md transition-all duration-200"
+								>
+									<div className="flex justify-between items-start gap-3">
+										<div className="flex-1">
+											<h3 className="text-gray-900 dark:text-gray-100 font-medium tracking-wide">
+												{p.title}
+											</h3>
+
+											{/*<p className="border-l-1 border-gray-600 pl-1 text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
+												{p.description || "No description"}
+											</p>
+											*/}
+										</div>
+
+										{/* status badge */}
+										<span
+											className={`text-xs px-2 py-1 rounded-full font-medium ${ p.isdone ? "bg-green-500/20 text-green-600 dark:text-green-400" : "bg-yellow-500/20 text-yellow-600 dark:text-yellow-400"}`}
+										>
+											{p.isdone ? "Done" : "Pending"}
+										</span>
+									</div>
+								</Link>
+							))
+						) : (
+							<p className="text-sm opacity-60 text-center">No projects yet</p>
+					)}
+				</div>
+			</div>
+		</div>
 	)
 }
