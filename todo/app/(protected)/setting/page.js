@@ -74,7 +74,8 @@ export default function Setting(){
 	return (
 		<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] text-black dark:text-white p-6 ">
 			<div className="flex justify-center flex-wrap">
-				<div className="sm:w-40 sm:h-40">
+				<div className="sm:w-40 sm:h-40 flex items-stretch">
+					<div className="absolute insert-0"></div>
 					<Image
 						src={user?.profilepic || "/profile.svg"}
 						alt="profile"
@@ -87,7 +88,7 @@ export default function Setting(){
 					<h1 className="sm:text-4xl text-3xl h-1/2 flex items-end m-3">{user ? user.username : (<Skeleton className="w-30 h-5"/>)}</h1>
 				</div>
 			</div>
-			<p>{user?.bio}</p>
+			<p className="text-center my-2">{user?.bio}</p>
 			<div className="max-w-2xl mx-auto my-30 border-t border-gray-500 pt-4">
 				{/* Content */}
 				<div className="space-y-3">
