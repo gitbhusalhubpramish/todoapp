@@ -33,30 +33,44 @@ export default function Setting(){
 		loadSession();
 	}, []);
 	useEffect(() => {
+		if (!session?.username) return;
+
 		async function loadUser() {
-			setLoading(true);
+			try {
+				setLoading(true);
 
-			const res = await fetch(`/api/users/${session?.username}/setting`);
+				const res = await fetch(
+					`/api/users/${session.username}/setting`
+				);
 
-			if (res.status === 404) {
-				setNotFoundState(true);
+				if (res.status === 404) {
+					setNotFoundState(true);
+					return;
+				}
+
+				if (res.status === 401) {
+					return;
+				}
+
+				const data = await res.json();
+
+				console.log(data);
+
+				setUser(data);
+			} catch (err) {
+				console.error(err);
+			} finally {
 				setLoading(false);
-				return;
 			}
-
-			const data = await res.json();
-			console.log(data)
-			setUser(data.user);
-			setLoading(false);
 		}
 
 		loadUser();
-		
 	}, [session]);
 	
 	const Skeleton = ({ className }) => (
 		<div className={`animate-pulse bg-gray-600/50 rounded ${className}`} />
 	)
+	console.log("user state ", user)
 	return (
 		<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] text-black dark:text-white p-6 ">
 			<div className="flex justify-center flex-wrap">
