@@ -21,6 +21,7 @@ export default function Setting(){
 	const [loading, setLoading] = useState(true);
 	const [notFoundState, setNotFoundState] = useState(false);
 	const [session, setSessionUser] = useState(null);
+	const [editingBio, setEditingBio] = useState(false);
 	
 	useEffect(() => {
 		async function loadSession() {
@@ -66,6 +67,9 @@ export default function Setting(){
 
 		loadUser();
 	}, [session]);
+	const handelbiochange = ()=>{
+		
+	}
 	
 	const Skeleton = ({ className }) => (
 		<div className={`animate-pulse bg-gray-600/50 rounded ${className}`} />
@@ -91,7 +95,27 @@ export default function Setting(){
 					<h1 className="sm:text-4xl text-3xl h-1/2 flex items-end m-3">{user ? user.username : (<Skeleton className="w-30 h-5"/>)}</h1>
 				</div>
 			</div>
-			<p className="text-center my-2">{user?.bio}</p>
+			<div className="text-center flex justify-center gap-2 my-2">
+			{editingBio ? (
+					<textarea
+						value={user?.bio}
+						onChange={(e) => handelbiochange(e.target.value)}
+						className="w-1/2 border rounded-md p-2 resize-none outline-none"
+					/>
+				) : (
+					<p className="">{user?.bio}</p>
+				)}
+
+				<button
+					onClick={() => setEditingBio(!editingBio)}
+					className="group p-2 rounded-lg transition-colors hover:bg-black/10 dark:hover:bg-white/10"
+				>
+					<SquarePen
+						size={20}
+						className="text-neutral-500 transition-colors duration-200 group-hover:text-neutral-700 dark:text-neutral-400 dark:group-hover:text-neutral-200"
+					/>
+				</button>
+			</div>
 			<div className="max-w-2xl mx-auto my-30 border-t border-gray-500 pt-4">
 				{/* Content */}
 				<div className="space-y-3">
@@ -125,6 +149,27 @@ export default function Setting(){
 							<p className="text-sm opacity-60 text-center">No projects yet</p>
 					)}
 				</div>
+			</div>
+			<div
+				className="max-w-2xl mx-auto my-30 border-t border-neutral-300 dark:border-neutral-700 pt-5 flex flex-col gap-2"
+			>
+				<button
+					className="w-full text-left px-4 py-3 rounded-xl text-neutral-700 dark:text-neutral-200 hover:bg-black/5 dark:hover:bg-white/5 transition-colors duration-200 cursor-pointer"
+				>
+					Change Password
+				</button>
+
+				<button
+					className="w-full text-left px-4 py-3 rounded-xl text-red-500 dark:text-red-400 hover:bg-red-500/10 transition-colors duration-200 cursor-pointer"
+				>
+					Delete Account
+				</button>
+
+				<button
+					className="w-full text-left px-4 py-3 rounded-xl text-neutral-700 dark:text-neutral-200 hover:bg-black/5 dark:hover:bg-white/5	transition-colors duration-200 cursor-pointer"
+				>
+					Logout
+				</button>
 			</div>
 		</div>
 	)
