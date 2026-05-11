@@ -4,7 +4,7 @@ import { useEffect, useState, use } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { SquarePen, Camera } from "lucide-react";
+import { SquarePen, Camera , Trash2} from "lucide-react";
 import { redirect } from "next/navigation";
 //           pp      usrname
 //           bioooooooooo edtpen
@@ -115,10 +115,8 @@ export default function Setting(){
 										</div>
 
 										{/* status badge */}
-										<span
-											className={`text-xs px-2 py-1 rounded-full font-medium ${ p.isdone ? "bg-green-500/20 text-green-600 dark:text-green-400" : "bg-yellow-500/20 text-yellow-600 dark:text-yellow-400"}`}
-										>
-											{p.isdone ? "Done" : "Pending"}
+										<span>
+											<Trash2 size={25} className="text-red-500" />
 										</span>
 									</div>
 								</Link>
