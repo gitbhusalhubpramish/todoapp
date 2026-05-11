@@ -75,7 +75,8 @@ export default function Setting(){
 		<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] text-black dark:text-white p-6 ">
 			<div className="flex justify-center flex-wrap">
 				<div className="sm:w-40 sm:h-40 flex items-stretch relative group">
-					<label className="absolute inset-0 hidden group-hover:block bg-black/40 z-10 rounded-full group-hover:cursor-pointer">
+					<label className="absolute inset-0 hidden group-hover:flex items-center justify-center bg-black/40 z-10 rounded-full group-hover:cursor-pointer">
+						<Camera size={50}/>
 					</label>
 
 					<Image
