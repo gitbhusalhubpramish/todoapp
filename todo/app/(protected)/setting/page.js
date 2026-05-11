@@ -79,7 +79,8 @@ export default function Setting(){
 		<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] text-black dark:text-white p-6 ">
 			<div className="flex justify-center flex-wrap">
 				<div className="sm:w-40 sm:h-40 flex items-stretch relative group">
-					<label className="absolute inset-0 hidden group-hover:flex items-center justify-center bg-black/40 z-10 rounded-full group-hover:cursor-pointer">
+					<label htmlFor="ppinp" className="absolute inset-0 hidden group-hover:flex items-center justify-center bg-black/40 z-10 rounded-full group-hover:cursor-pointer">
+						<input id="ppinp" type="file" className="hidden" accept=".png,.jpg,.jpeg,.webp,.gif"/>
 						<Camera size={50}/>
 					</label>
 
@@ -95,7 +96,7 @@ export default function Setting(){
 					<h1 className="sm:text-4xl text-3xl h-1/2 flex items-end m-3">{user ? user.username : (<Skeleton className="w-30 h-5"/>)}</h1>
 				</div>
 			</div>
-			<div className="text-center flex justify-center gap-2 my-2">
+			<div className="text-center flex items-center justify-center gap-2 my-2">
 			{editingBio ? (
 					<textarea
 						value={user?.bio}
