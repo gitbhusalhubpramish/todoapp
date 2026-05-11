@@ -108,7 +108,7 @@ export default function Setting(){
 
 				<button
 					onClick={() => setEditingBio(!editingBio)}
-					className="group p-2 rounded-lg transition-colors hover:bg-black/10 dark:hover:bg-white/10"
+					className="group p-2 rounded-lg transition-colors hover:bg-black/10 dark:hover:bg-white/10 cursor-pointer"
 				>
 					<SquarePen
 						size={20}
@@ -124,24 +124,22 @@ export default function Setting(){
 								<Link
 									href={`/${user.username}/${p.title}`}
 									key={i}
-									className="block p-3 rounded-lg border border-gray-300 dark:border-gray-700 cursor-pointer bg-white/60 dark:bg-gray-900/40 hover:bg-white dark:hover:bg-gray-800 hover:shadow-md transition-all duration-200"
+									className="block  rounded-lg border border-gray-300 dark:border-gray-700 cursor-pointer bg-white/60 dark:bg-gray-900/40 hover:bg-white dark:hover:bg-gray-800 hover:shadow-md transition-all duration-200"
 								>
-									<div className="flex justify-between items-start gap-3">
+									<div className="flex justify-between items-center gap-3">
 										<div className="flex-1">
-											<h3 className="text-gray-900 dark:text-gray-100 font-medium tracking-wide">
+											<h3 className="text-gray-900 dark:text-gray-100 font-medium tracking-wide m-3">
 												{p.title}
 											</h3>
-
-											{/*<p className="border-l-1 border-gray-600 pl-1 text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
-												{p.description || "No description"}
-											</p>
-											*/}
 										</div>
-
-										{/* status badge */}
-										<span>
-											<Trash2 size={25} className="text-red-500" />
-										</span>
+										<button
+											className="m-1 p-2 rounded-lg cursor-pointer border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-950/30 hover:bg-red-100 dark:hover:bg-red-900/40 hover:border-red-300 dark:hover:border-red-800 transition-colors duration-200"
+										>
+											<Trash2
+												size={22}
+												className="text-red-500 dark:text-red-400 transition-colors duration-200"
+											/>
+										</button>
 									</div>
 								</Link>
 							))
