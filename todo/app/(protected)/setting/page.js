@@ -225,8 +225,8 @@ export default function Setting(){
 				<button type="button" className="w-full text-left px-4 py-3 rounded-xl text-neutral-700 dark:text-neutral-200 hover:bg-black/5 dark:hover:bg-white/5 transition-colors duration-200 cursor-pointer" onClick={() => (window.location.href = "/logout")}>Logout</button>
 
 				<div className="flex gap-2">
-					<button type="submit" className="flex-1 px-4 py-3 rounded-xl bg-green-500 text-white">Save</button>
-					<button type="button" onClick={handleCancel} className="flex-1 px-4 py-3 rounded-xl bg-gray-300">Cancel</button>
+					<button type="submit" className="flex-1 px-4 py-3 rounded-xl bg-green-500 text-white cursor-pointer">Save</button>
+					<button type="button" onClick={handleCancel} className="flex-1 px-4 py-3 rounded-xl bg-gray-300 cursor-pointer">Cancel</button>
 				</div>
 			</form>
 		</div>
