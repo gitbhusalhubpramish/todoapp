@@ -4,8 +4,6 @@ import { getCurrentUser } from "@/lib/auth";
 export async function POST(req, {params}){
 	const {username} = await params;
 	
-	
-	
 	const session = await getCurrentUser();
 	if (session?.username !== username) {
 		return Response.json({ error: "Unauthorized" }, { status: 401 });
