@@ -65,5 +65,5 @@ export async function POST(req, {params}){
 		}
 	)
 	
-	return Response.json({message:"got"}, {status:200})
+	return Response.json( {status:200})
 }
