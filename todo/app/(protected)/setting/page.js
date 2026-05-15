@@ -67,9 +67,13 @@ export default function Setting(){
 		loadUser();
 	}, [session]);
 
+	const MAX_CHARS = 150;
+
 	const handelbiochange = (val) => {
-		setBio(val);
-	}
+		if (val.length <= MAX_CHARS) {
+			setBio(val);
+		}
+	};
 
 	const handleDeleteProject = (title) => {
 		setDeletedProjects((prev) => [...prev, title]);
@@ -164,25 +168,32 @@ export default function Setting(){
 					</h1>
 				</div>
 			</div>
-
-			<div className="text-center flex items-center justify-center gap-2 my-2">
+			<div className="flex items-start justify-center gap-3 my-2">
 				{editingBio ? (
-					<textarea
-						value={bio}
-						onChange={(e) => handelbiochange(e.target.value)}
-						className="w-1/2 border rounded-md p-2 resize-none outline-none"
-					/>
+					<div className="w-1/2">
+						<textarea
+							value={bio}
+							onChange={(e) => handelbiochange(e.target.value)}
+							maxLength={150}
+							className="w-full border rounded-md p-2 resize-none outline-none"
+						/>
+						<div className="text-xs text-gray-500 mt-1 text-right">
+							{bio.length} / 150
+						</div>
+					</div>
 				) : (
-					<p className="">{bio || user?.bio}</p>
+					<p className="w-1/2 text-center text-neutral-700 dark:text-neutral-300">
+						{bio || user?.bio}
+					</p>
 				)}
 
 				<button
 					onClick={() => setEditingBio(!editingBio)}
-					className="group p-2 rounded-lg transition-colors hover:bg-black/10 dark:hover:bg-white/10 cursor-pointer"
+					className="p-2 rounded-lg transition-colors hover:bg-black/10 dark:hover:bg-white/10 cursor-pointer"
 				>
 					<SquarePen
 						size={20}
-						className="text-neutral-500 transition-colors duration-200 group-hover:text-neutral-700 dark:text-neutral-400 dark:group-hover:text-neutral-200"
+						className="text-neutral-500 transition-colors duration-200 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200"
 					/>
 				</button>
 			</div>
