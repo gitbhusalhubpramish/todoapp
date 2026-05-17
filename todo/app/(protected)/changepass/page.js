@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 export default function ChangePasswordPage() {
 	const router = useRouter();
 
+	const [session, setSessionUser] = useState(null);
+
 	const [formData, setFormData] = useState({
 		oldPassword: "",
 		newPassword: "",
@@ -14,6 +16,7 @@ export default function ChangePasswordPage() {
 	});
 
 	const [otp, setOtp] = useState("");
+
 	const [show, setShow] = useState({
 		old: false,
 		new: false,
@@ -25,6 +28,27 @@ export default function ChangePasswordPage() {
 	const [cooldown, setCooldown] = useState(0);
 	const [error, setError] = useState("");
 	const [success, setSuccess] = useState("");
+
+	useEffect(() => {
+		async function loadSession() {
+			try {
+				const res = await fetch("/api/me/auth");
+				const data = await res.json();
+
+				console.log("session raw data ", data);
+
+				setSessionUser(data.user);
+
+				if (!data.user) {
+					router.push("/login");
+				}
+			} catch (err) {
+				console.log(err);
+			}
+		}
+
+		loadSession();
+	}, [router]);
 
 	useEffect(() => {
 		if (cooldown <= 0) return;
@@ -44,7 +68,8 @@ export default function ChangePasswordPage() {
 	}
 
 	function validatePasswords() {
-		const { oldPassword, newPassword, confirmPassword } = formData;
+		const { oldPassword, newPassword, confirmPassword } =
+			formData;
 
 		if (
 			!oldPassword.trim() ||
@@ -67,7 +92,9 @@ export default function ChangePasswordPage() {
 		}
 
 		if (
-			!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/.test(newPassword)
+			!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/.test(
+				newPassword
+			)
 		) {
 			return "Weak password";
 		}
@@ -90,7 +117,7 @@ export default function ChangePasswordPage() {
 			setLoading(true);
 
 			const res = await fetch(
-				"/api/users/pramish/changepass/request",
+				`/api/users/${session.username}/changepass/request`,
 				{
 					method: "POST",
 					headers: {
@@ -130,7 +157,7 @@ export default function ChangePasswordPage() {
 			setLoading(true);
 
 			const res = await fetch(
-				"/api/users/pramish/changepass/verify",
+				`/api/users/${session.username}/changepass/verify`,
 				{
 					method: "POST",
 					headers: {
@@ -184,21 +211,29 @@ export default function ChangePasswordPage() {
 		return "Strong";
 	}
 
+	if (!session) {
+		return (
+			<div className="min-h-screen flex items-center justify-center bg-[#dbffe9] dark:bg-[#0b1120]">
+				<Loader2 className="animate-spin text-black dark:text-white" />
+			</div>
+		);
+	}
+
 	return (
-		<div className="min-h-screen flex items-center justify-center bg-black text-white px-4">
-			<div className="w-full max-w-md bg-zinc-900 rounded-2xl p-6 border border-zinc-800">
-				<h1 className="text-3xl font-bold mb-6">
+		<div className="min-h-screen flex items-center justify-center bg-[#dbffe9] dark:bg-[#0b1120] px-4 transition-colors duration-300">
+			<div className="w-full max-w-md bg-white dark:bg-zinc-900 rounded-2xl p-6 border border-zinc-200 dark:border-zinc-800 shadow-xl">
+				<h1 className="text-3xl font-bold mb-6 text-black dark:text-white">
 					Change Password
 				</h1>
 
 				{error && (
-					<div className="bg-red-500/20 border border-red-500 text-red-400 p-3 rounded-lg mb-4">
+					<div className="bg-red-500/20 border border-red-500 text-red-500 p-3 rounded-lg mb-4">
 						{error}
 					</div>
 				)}
 
 				{success && (
-					<div className="bg-green-500/20 border border-green-500 text-green-400 p-3 rounded-lg mb-4">
+					<div className="bg-green-500/20 border border-green-500 text-green-600 dark:text-green-400 p-3 rounded-lg mb-4">
 						{success}
 					</div>
 				)}
@@ -211,7 +246,10 @@ export default function ChangePasswordPage() {
 						onChange={handleChange}
 						show={show.old}
 						setShow={() =>
-							setShow({ ...show, old: !show.old })
+							setShow({
+								...show,
+								old: !show.old,
+							})
 						}
 					/>
 
@@ -222,11 +260,14 @@ export default function ChangePasswordPage() {
 						onChange={handleChange}
 						show={show.new}
 						setShow={() =>
-							setShow({ ...show, new: !show.new })
+							setShow({
+								...show,
+								new: !show.new,
+							})
 						}
 					/>
 
-					<div className="text-sm">
+					<div className="text-sm text-black dark:text-white">
 						Strength:{" "}
 						<span className="font-semibold">
 							{getStrength(formData.newPassword)}
@@ -249,7 +290,7 @@ export default function ChangePasswordPage() {
 
 					{otpSent && (
 						<div>
-							<label className="block mb-2 text-sm">
+							<label className="block mb-2 text-sm text-black dark:text-white">
 								OTP
 							</label>
 
@@ -260,7 +301,7 @@ export default function ChangePasswordPage() {
 								onChange={(e) =>
 									setOtp(e.target.value)
 								}
-								className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 outline-none"
+								className="w-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg px-4 py-3 outline-none text-black dark:text-white"
 								placeholder="Enter OTP"
 							/>
 						</div>
@@ -270,7 +311,7 @@ export default function ChangePasswordPage() {
 						<button
 							onClick={requestOTP}
 							disabled={loading}
-							className="w-full bg-white text-black font-semibold py-3 rounded-lg disabled:opacity-50 flex items-center justify-center"
+							className="w-full bg-black dark:bg-white text-white dark:text-black font-semibold py-3 rounded-lg disabled:opacity-50 flex items-center justify-center"
 						>
 							{loading ? (
 								<Loader2 className="animate-spin" />
@@ -283,7 +324,7 @@ export default function ChangePasswordPage() {
 							<button
 								onClick={verifyOTP}
 								disabled={loading}
-								className="w-full bg-white text-black font-semibold py-3 rounded-lg disabled:opacity-50 flex items-center justify-center"
+								className="w-full bg-black dark:bg-white text-white dark:text-black font-semibold py-3 rounded-lg disabled:opacity-50 flex items-center justify-center"
 							>
 								{loading ? (
 									<Loader2 className="animate-spin" />
@@ -294,8 +335,10 @@ export default function ChangePasswordPage() {
 
 							<button
 								onClick={requestOTP}
-								disabled={cooldown > 0 || loading}
-								className="w-full bg-zinc-800 border border-zinc-700 py-3 rounded-lg disabled:opacity-50"
+								disabled={
+									cooldown > 0 || loading
+								}
+								className="w-full bg-zinc-200 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 py-3 rounded-lg disabled:opacity-50 text-black dark:text-white"
 							>
 								{cooldown > 0
 									? `Resend in ${cooldown}s`
@@ -319,7 +362,9 @@ function PasswordInput({
 }) {
 	return (
 		<div>
-			<label className="block mb-2 text-sm">{label}</label>
+			<label className="block mb-2 text-sm text-black dark:text-white">
+				{label}
+			</label>
 
 			<div className="relative">
 				<input
@@ -327,15 +372,19 @@ function PasswordInput({
 					name={name}
 					value={value}
 					onChange={onChange}
-					className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 outline-none pr-12"
+					className="w-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg px-4 py-3 outline-none pr-12 text-black dark:text-white"
 				/>
 
 				<button
 					type="button"
 					onClick={setShow}
-					className="absolute right-3 top-1/2 -translate-y-1/2"
+					className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-600 dark:text-zinc-300"
 				>
-					{show ? <EyeOff size={20} /> : <Eye size={20} />}
+					{show ? (
+						<EyeOff size={20} />
+					) : (
+						<Eye size={20} />
+					)}
 				</button>
 			</div>
 		</div>
