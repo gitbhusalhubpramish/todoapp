@@ -76,10 +76,11 @@ export async function POST(req, {params}){
 			subject: "Account Deletion OTP",
 			text: `Your account deletion OTP is: ${otp}. It expires in 5 minutes.`,
 		});
+		console.log(otp)
 	
 		return Response.json({
-				message: "OTP sent to your email",
-			});
+			message: "OTP sent to your email",
+		});
 	}
 	catch (err) {
 		console.error("DELETE REQUEST ERROR:", err);
