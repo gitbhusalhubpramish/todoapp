@@ -72,7 +72,7 @@ export async function POST(req) {
       password: hashedPassword,
       createdAt: new Date(),
     });
-    const usrdtares = await usrdata.insertOne({
+    const usrdtares = await usrdta.insertOne({
 		username,
 		profilepic: "/profile.svg",
 		projects: [],
