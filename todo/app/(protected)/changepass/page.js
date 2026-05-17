@@ -301,7 +301,7 @@ export default function ChangePasswordPage() {
 								onChange={(e) =>
 									setOtp(e.target.value)
 								}
-								className="w-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg px-4 py-3 outline-none text-black dark:text-white"
+								className="w-full bg-[#ecfff4] dark:bg-[#182235] border border-[#b7ebcb] dark:border-[#263248] rounded-lg px-4 py-3 outline-none text-black dark:text-white placeholder:text-zinc-500 dark:placeholder:text-zinc-400"
 								placeholder="Enter OTP"
 							/>
 						</div>
@@ -372,7 +372,8 @@ function PasswordInput({
 					name={name}
 					value={value}
 					onChange={onChange}
-					className="w-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg px-4 py-3 outline-none pr-12 text-black dark:text-white"
+					className="w-full bg-[#ecfff4] dark:bg-[#182235] border border-[#b7ebcb] dark:border-[#263248] rounded-lg px-4 py-3 outline-none pr-12 text-black dark:text-white placeholder:text-zinc-500 dark:placeholder:text-zinc-400"
+
 				/>
 
 				<button
