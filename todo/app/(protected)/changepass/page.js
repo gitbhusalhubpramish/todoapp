@@ -221,7 +221,7 @@ export default function ChangePasswordPage() {
 
 	return (
 		<div className="min-h-screen flex items-center justify-center bg-[#dbffe9] dark:bg-[#0b1120] px-4 transition-colors duration-300">
-			<div className="w-full max-w-md bg-white dark:bg-zinc-900 rounded-2xl p-6 border border-zinc-200 dark:border-zinc-800 shadow-xl">
+			<div className="w-full max-w-md bg-[#f4fff8] dark:bg-[#111827] rounded-2xl p-6 border border-[#c9f7db] dark:border-[#1f2937] shadow-xl">
 				<h1 className="text-3xl font-bold mb-6 text-black dark:text-white">
 					Change Password
 				</h1>
