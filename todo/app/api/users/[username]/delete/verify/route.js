@@ -1,5 +1,6 @@
 import clientPromise from "@/lib/mongodb";
 import bcrypt from "bcrypt";
+import { cookies } from "next/headers";
 import crypto from "crypto";
 import { redis } from "@/lib/redis";
 import { getCurrentUser } from "@/lib/auth";
