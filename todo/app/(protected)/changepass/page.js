@@ -1,23 +1,343 @@
 "use client";
 
-import { useEffect, useState, use } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { redirect } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
-export default function changepass(){
-	const [session, setSessionUser] = useState(null);
+export default function ChangePasswordPage() {
+	const router = useRouter();
+
+	const [formData, setFormData] = useState({
+		oldPassword: "",
+		newPassword: "",
+		confirmPassword: "",
+	});
+
+	const [otp, setOtp] = useState("");
+	const [show, setShow] = useState({
+		old: false,
+		new: false,
+		confirm: false,
+	});
+
+	const [otpSent, setOtpSent] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [cooldown, setCooldown] = useState(0);
+	const [error, setError] = useState("");
+	const [success, setSuccess] = useState("");
+
 	useEffect(() => {
-		async function loadSession() {
-			const res = await fetch("/api/me/auth");
-			const data = await res.json();
-			console.log("session raw data ",data)
-			setSessionUser(data.user);
+		if (cooldown <= 0) return;
+
+		const timer = setInterval(() => {
+			setCooldown((prev) => prev - 1);
+		}, 1000);
+
+		return () => clearInterval(timer);
+	}, [cooldown]);
+
+	function handleChange(e) {
+		setFormData({
+			...formData,
+			[e.target.name]: e.target.value,
+		});
+	}
+
+	function validatePasswords() {
+		const { oldPassword, newPassword, confirmPassword } = formData;
+
+		if (
+			!oldPassword.trim() ||
+			!newPassword.trim() ||
+			!confirmPassword.trim()
+		) {
+			return "All fields are required";
 		}
 
-		loadSession();
-	}, []);
+		if (newPassword.length < 8) {
+			return "Password must be at least 8 characters";
+		}
+
+		if (newPassword !== confirmPassword) {
+			return "Passwords do not match";
+		}
+
+		if (oldPassword === newPassword) {
+			return "New password must be different";
+		}
+
+		if (
+			!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/.test(newPassword)
+		) {
+			return "Weak password";
+		}
+
+		return null;
+	}
+
+	async function requestOTP() {
+		setError("");
+		setSuccess("");
+
+		const validationError = validatePasswords();
+
+		if (validationError) {
+			setError(validationError);
+			return;
+		}
+
+		try {
+			setLoading(true);
+
+			const res = await fetch(
+				"/api/users/pramish/changepass/request",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(formData),
+				}
+			);
+
+			const data = await res.json();
+
+			if (!res.ok) {
+				setError(data.error || "Something went wrong");
+				return;
+			}
+
+			setOtpSent(true);
+			setCooldown(60);
+			setSuccess("OTP sent to your email");
+		} catch (err) {
+			setError("Network error");
+		} finally {
+			setLoading(false);
+		}
+	}
+
+	async function verifyOTP() {
+		setError("");
+		setSuccess("");
+
+		if (!otp.trim()) {
+			setError("OTP required");
+			return;
+		}
+
+		try {
+			setLoading(true);
+
+			const res = await fetch(
+				"/api/users/pramish/changepass/verify",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						otp,
+						newPassword: formData.newPassword,
+					}),
+				}
+			);
+
+			const data = await res.json();
+
+			if (!res.ok) {
+				setError(data.error || "Invalid OTP");
+				return;
+			}
+
+			setSuccess("Password changed successfully");
+
+			setFormData({
+				oldPassword: "",
+				newPassword: "",
+				confirmPassword: "",
+			});
+
+			setOtp("");
+
+			setTimeout(() => {
+				router.push("/login");
+			}, 1500);
+		} catch (err) {
+			setError("Network error");
+		} finally {
+			setLoading(false);
+		}
+	}
+
+	function getStrength(password) {
+		let score = 0;
+
+		if (password.length >= 8) score++;
+		if (/[A-Z]/.test(password)) score++;
+		if (/[a-z]/.test(password)) score++;
+		if (/\d/.test(password)) score++;
+		if (/[^A-Za-z0-9]/.test(password)) score++;
+
+		if (score <= 2) return "Weak";
+		if (score <= 4) return "Medium";
+		return "Strong";
+	}
+
 	return (
-	
-	)
+		<div className="min-h-screen flex items-center justify-center bg-black text-white px-4">
+			<div className="w-full max-w-md bg-zinc-900 rounded-2xl p-6 border border-zinc-800">
+				<h1 className="text-3xl font-bold mb-6">
+					Change Password
+				</h1>
+
+				{error && (
+					<div className="bg-red-500/20 border border-red-500 text-red-400 p-3 rounded-lg mb-4">
+						{error}
+					</div>
+				)}
+
+				{success && (
+					<div className="bg-green-500/20 border border-green-500 text-green-400 p-3 rounded-lg mb-4">
+						{success}
+					</div>
+				)}
+
+				<div className="space-y-4">
+					<PasswordInput
+						label="Old Password"
+						name="oldPassword"
+						value={formData.oldPassword}
+						onChange={handleChange}
+						show={show.old}
+						setShow={() =>
+							setShow({ ...show, old: !show.old })
+						}
+					/>
+
+					<PasswordInput
+						label="New Password"
+						name="newPassword"
+						value={formData.newPassword}
+						onChange={handleChange}
+						show={show.new}
+						setShow={() =>
+							setShow({ ...show, new: !show.new })
+						}
+					/>
+
+					<div className="text-sm">
+						Strength:{" "}
+						<span className="font-semibold">
+							{getStrength(formData.newPassword)}
+						</span>
+					</div>
+
+					<PasswordInput
+						label="Confirm Password"
+						name="confirmPassword"
+						value={formData.confirmPassword}
+						onChange={handleChange}
+						show={show.confirm}
+						setShow={() =>
+							setShow({
+								...show,
+								confirm: !show.confirm,
+							})
+						}
+					/>
+
+					{otpSent && (
+						<div>
+							<label className="block mb-2 text-sm">
+								OTP
+							</label>
+
+							<input
+								type="text"
+								maxLength={6}
+								value={otp}
+								onChange={(e) =>
+									setOtp(e.target.value)
+								}
+								className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 outline-none"
+								placeholder="Enter OTP"
+							/>
+						</div>
+					)}
+
+					{!otpSent ? (
+						<button
+							onClick={requestOTP}
+							disabled={loading}
+							className="w-full bg-white text-black font-semibold py-3 rounded-lg disabled:opacity-50 flex items-center justify-center"
+						>
+							{loading ? (
+								<Loader2 className="animate-spin" />
+							) : (
+								"Send OTP"
+							)}
+						</button>
+					) : (
+						<div className="space-y-3">
+							<button
+								onClick={verifyOTP}
+								disabled={loading}
+								className="w-full bg-white text-black font-semibold py-3 rounded-lg disabled:opacity-50 flex items-center justify-center"
+							>
+								{loading ? (
+									<Loader2 className="animate-spin" />
+								) : (
+									"Verify OTP"
+								)}
+							</button>
+
+							<button
+								onClick={requestOTP}
+								disabled={cooldown > 0 || loading}
+								className="w-full bg-zinc-800 border border-zinc-700 py-3 rounded-lg disabled:opacity-50"
+							>
+								{cooldown > 0
+									? `Resend in ${cooldown}s`
+									: "Resend OTP"}
+							</button>
+						</div>
+					)}
+				</div>
+			</div>
+		</div>
+	);
+}
+
+function PasswordInput({
+	label,
+	name,
+	value,
+	onChange,
+	show,
+	setShow,
+}) {
+	return (
+		<div>
+			<label className="block mb-2 text-sm">{label}</label>
+
+			<div className="relative">
+				<input
+					type={show ? "text" : "password"}
+					name={name}
+					value={value}
+					onChange={onChange}
+					className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 outline-none pr-12"
+				/>
+
+				<button
+					type="button"
+					onClick={setShow}
+					className="absolute right-3 top-1/2 -translate-y-1/2"
+				>
+					{show ? <EyeOff size={20} /> : <Eye size={20} />}
+				</button>
+			</div>
+		</div>
+	);
 }
