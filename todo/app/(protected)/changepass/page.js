@@ -222,7 +222,7 @@ export default function ChangePasswordPage() {
 	return (
 		<div className="min-h-screen flex items-center justify-center bg-[#dbffe9] dark:bg-[#0b1120] px-4 transition-colors duration-300">
 			<div className="w-full max-w-md bg-[#f4fff8] dark:bg-[#111827] rounded-2xl p-6 border border-[#c9f7db] dark:border-[#1f2937] shadow-xl">
-				<h1 className="text-3xl font-bold mb-6 text-black dark:text-white">
+				<h1 className="text-3xl font-bold mb-6 text-[#14532d] dark:text-white">
 					Change Password
 				</h1>
 
@@ -267,7 +267,7 @@ export default function ChangePasswordPage() {
 						}
 					/>
 
-					<div className="text-sm text-black dark:text-white">
+					<div className="text-sm text-[#15803d] dark:text-[#bbf7d0]">
 						Strength:{" "}
 						<span className="font-semibold">
 							{getStrength(formData.newPassword)}
@@ -311,7 +311,7 @@ export default function ChangePasswordPage() {
 						<button
 							onClick={requestOTP}
 							disabled={loading}
-							className="w-full bg-black dark:bg-white text-white dark:text-black font-semibold py-3 rounded-lg disabled:opacity-50 flex items-center justify-center"
+							className="w-full bg-[#166534] hover:bg-[#14532d] dark:bg-[#86efac] dark:hover:bg-[#4ade80] text-white dark:text-[#052e16] font-semibold py-3 rounded-lg disabled:opacity-50 flex items-center justify-center transition-colors"
 						>
 							{loading ? (
 								<Loader2 className="animate-spin" />
@@ -324,7 +324,7 @@ export default function ChangePasswordPage() {
 							<button
 								onClick={verifyOTP}
 								disabled={loading}
-								className="w-full bg-black dark:bg-white text-white dark:text-black font-semibold py-3 rounded-lg disabled:opacity-50 flex items-center justify-center"
+								className="w-full bg-[#166534] hover:bg-[#14532d] dark:bg-[#86efac] dark:hover:bg-[#4ade80] text-white dark:text-[#052e16] font-semibold py-3 rounded-lg disabled:opacity-50 flex items-center justify-center transition-colors"
 							>
 								{loading ? (
 									<Loader2 className="animate-spin" />
@@ -338,7 +338,7 @@ export default function ChangePasswordPage() {
 								disabled={
 									cooldown > 0 || loading
 								}
-								className="w-full bg-zinc-200 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 py-3 rounded-lg disabled:opacity-50 text-black dark:text-white"
+								className="w-full bg-[#f0fdf4] dark:bg-[#182235] border border-[#bbf7d0] dark:border-[#263248] py-3 rounded-lg disabled:opacity-50 text-[#166534] dark:text-[#d1fae5] hover:bg-[#dcfce7] dark:hover:bg-[#1d2940] transition-colors"
 							>
 								{cooldown > 0
 									? `Resend in ${cooldown}s`
@@ -362,7 +362,7 @@ function PasswordInput({
 }) {
 	return (
 		<div>
-			<label className="block mb-2 text-sm text-black dark:text-white">
+			<label className="block mb-2 text-sm font-medium text-[#166534] dark:text-[#bbf7d0]">
 				{label}
 			</label>
 
