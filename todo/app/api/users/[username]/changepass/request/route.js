@@ -29,6 +29,7 @@ export async function POST(req, {params}){
 		if (newPassword.length < 8) {
 		return Response.json({error:"Password must be at least 8 characters"},{status:401}
 	}
+
 	if (newPassword !== confirmPassword) {
 		return Response.json({error:"Passwords do not match"},{status:401})
 	}
@@ -44,4 +45,39 @@ export async function POST(req, {params}){
 	) {
 		return Response.json({error:"Weak password"},{status:401})
 	}
+	
+	const rateKey = `change_req_rate:${username}`;
+	const existing = await redis.get(rateKey);
+	if (existing) {
+		return Response.json(
+			{ error: "Please wait before requesting another OTP" },
+			{ status: 429 }
+		);
+	}
+	
+	await redis.set(rateKey, "1", { ex: 30 });
+	
+	const otp = generateOTP();
+		const hashed = hashOTP(otp);
+
+	// store in Redis (5 min expiry)
+	await redis.set(
+		`change_otp:${username}`,
+		JSON.stringify({
+			hash: hashed,
+			attempts: 0,
+			createdAt: Date.now(),
+		}),
+		{ ex: 300 }
+	);
+	
+	await sendResetEmail({
+		to: user.email,
+		subject: "Account Deletion OTP",
+		text: `Your account deletion OTP is: ${otp}. It expires in 5 minutes.`,
+	});
+	console.log(otp)
+	return Response.json({
+		message: "OTP sent to your email",
+	});
 }

@@ -165,7 +165,7 @@ export default function ChangePasswordPage() {
 					},
 					body: JSON.stringify({
 						otp,
-						newPassword: formData.newPassword,
+						body: JSON.stringify(formData),
 					}),
 				}
 			);
