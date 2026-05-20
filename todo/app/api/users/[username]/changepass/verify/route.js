@@ -113,5 +113,12 @@ export async function POST(req, {params}){
 				{ status: 401 }
 			);
 		}
+	}catch (err) {
+		console.error(err);
+
+		return Response.json(
+			{ error: "Internal server error" },
+			{ status: 500 }
+		);
 	}
 }
