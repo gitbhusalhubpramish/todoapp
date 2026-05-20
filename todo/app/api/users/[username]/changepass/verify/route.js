@@ -113,6 +113,7 @@ export async function POST(req, {params}){
 				{ status: 401 }
 			);
 		}
+		return Response.json({message: "password successfully changed"}, {status: 200})
 	}catch (err) {
 		console.error(err);
 
