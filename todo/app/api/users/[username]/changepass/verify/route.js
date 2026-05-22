@@ -5,6 +5,13 @@ import { redis } from "@/lib/redis";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 
+function hashOTP(otp) {
+	return crypto
+		.createHash("sha256")
+		.update(otp)
+		.digest("hex");
+}
+
 export async function POST(req, {params}){
 	try {
 		const body = await req.json();
@@ -31,7 +38,13 @@ export async function POST(req, {params}){
 		
 		const valotphash = red.hash
 		
+		const otphash = hashOTP(otp)
 		
+		const isMatchedotp = valotphash === otphash
+		
+		if (!isMatchedotp){
+			return Response.json({ error: "OTP incorrect or expired" }, { status: 400 });
+		}
 
 		const client = await clientPromise;
 		const db = client.db("projectdata");
@@ -44,21 +57,6 @@ export async function POST(req, {params}){
 			return Response.json(
 				{ error: "User not found" },
 				{ status: 404 }
-			);
-		}
-
-		const isMatched = await bcrypt.compare(
-			oldPassword,
-			user.password
-		);
-
-		if (!isMatched) {
-			return Response.json(
-				{
-					error:
-						"Old password is incorrect",
-				},
-				{ status: 401 }
 			);
 		}
 		return Response.json({message: "password successfully changed"}, {status: 200})
