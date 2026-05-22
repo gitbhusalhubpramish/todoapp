@@ -20,70 +20,18 @@ export async function POST(req, {params}){
 			);
 		}
 
-		const {
-			oldPassword,
-			newPassword,
-			confirmPassword,
-		} = body;
-
-		if (
-			!oldPassword ||
-			!newPassword ||
-			!confirmPassword
-		) {
-			return Response.json(
-				{ error: "All fields are required" },
-				{ status: 400 }
-			);
+		const {otp} = body;
+		
+		const red = await redis.get(`change_otp:${username}`)
+		console.log(red)
+		
+		if(!red){
+			return Response.json({ error: "OTP incorrect or expired" }, { status: 400 });
 		}
-
-		if (
-			!oldPassword.trim() ||
-			!newPassword.trim() ||
-			!confirmPassword.trim()
-		) {
-			return Response.json(
-				{ error: "All fields are required" },
-				{ status: 400 }
-			);
-		}
-
-		if (newPassword.length < 8) {
-			return Response.json(
-				{
-					error: "Password must be at least 8 characters",
-				},
-				{ status: 400 }
-			);
-		}
-
-		if (newPassword !== confirmPassword) {
-			return Response.json(
-				{ error: "Passwords do not match" },
-				{ status: 400 }
-			);
-		}
-
-		if (oldPassword === newPassword) {
-			return Response.json(
-				{
-					error:
-						"New password must be different",
-				},
-				{ status: 400 }
-			);
-		}
-
-		if (
-			!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/.test(
-				newPassword
-			)
-		) {
-			return Response.json(
-				{ error: "Weak password" },
-				{ status: 400 }
-			);
-		}
+		
+		const valotphash = red.hash
+		
+		
 
 		const client = await clientPromise;
 		const db = client.db("projectdata");
