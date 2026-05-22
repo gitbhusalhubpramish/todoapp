@@ -42,6 +42,8 @@ export async function POST(req, {params}){
 		
 		const isMatchedotp = valotphash === otphash
 		
+		await redis.del(`change_otp:${username}`)
+		
 		if (!isMatchedotp){
 			return Response.json({ error: "OTP incorrect or expired" }, { status: 400 });
 		}
@@ -59,6 +61,9 @@ export async function POST(req, {params}){
 				{ status: 404 }
 			);
 		}
+		
+		await db.collection(users).updateOne({username}, {$set:{password: otp.newpass}})
+		
 		return Response.json({message: "password successfully changed"}, {status: 200})
 	}catch (err) {
 		console.error(err);
