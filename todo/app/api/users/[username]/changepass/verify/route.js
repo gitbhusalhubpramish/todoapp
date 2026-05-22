@@ -64,6 +64,16 @@ export async function POST(req, {params}){
 		
 		await db.collection(users).updateOne({username}, {$set:{password: otp.newpass}})
 		
+		const sessions = db.collection("sessions");
+
+		await sessions.deleteMany({ username });
+		
+		cookieStore.set("sessionId", "", {
+			httpOnly: true,
+			expires: new Date(0),
+			path: "/",
+		});
+		
 		return Response.json({message: "password successfully changed"}, {status: 200})
 	}catch (err) {
 		console.error(err);
