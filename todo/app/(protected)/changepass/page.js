@@ -165,7 +165,6 @@ export default function ChangePasswordPage() {
 					},
 					body: JSON.stringify({
 						otp,
-						body: JSON.stringify(formData),
 					}),
 				}
 			);
@@ -239,6 +238,8 @@ export default function ChangePasswordPage() {
 				)}
 
 				<div className="space-y-4">
+					{!otpSent && (
+						<>
 					<PasswordInput
 						label="Old Password"
 						name="oldPassword"
@@ -287,6 +288,8 @@ export default function ChangePasswordPage() {
 							})
 						}
 					/>
+					</>
+					)}
 
 					{otpSent && (
 						<div>

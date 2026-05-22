@@ -147,7 +147,7 @@ export async function POST(req, { params }) {
 
 		const hashed = hashOTP(otp);
 		
-		const hashedpass = await bcrypt.hash(password, 10);
+		const hashedpass = await bcrypt.hash(newPassword, 10);
 
 		await redis.set(
 			`change_otp:${username}`,
