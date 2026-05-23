@@ -1,5 +1,5 @@
 import UsrNav from "./usrnav.js"
-import Search form "./search.js"
+import Search from "./search.js"
 export default function Navbar(){
 	
 	return (
