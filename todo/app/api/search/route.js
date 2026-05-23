@@ -21,9 +21,17 @@ export async function GET(req) {
 			.limit(20)
 			.toArray();
 		console.log(users)
+		
+		const projects = await db.collection("projects").find({
+			"content.title": {
+				$regex: q,
+				$options: "i",
+			},
+		}).toArray()
 
-		return Response.json(users);
+		return Response.json({users, projects});
 	} catch (err) {
+		console.log(err)
 		return Response.json(
 			{ error: "Server error" },
 			{ status: 500 }
