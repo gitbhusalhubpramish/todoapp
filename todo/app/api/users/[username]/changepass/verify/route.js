@@ -4,6 +4,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { redis } from "@/lib/redis";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
+import { cookies } from "next/headers";
 
 function hashOTP(otp) {
 	return crypto
@@ -14,6 +15,8 @@ function hashOTP(otp) {
 
 export async function POST(req, {params}){
 	try {
+		const cookieStore = await cookies();
+		
 		const body = await req.json();
 
 		const { username } = await params;
@@ -42,9 +45,10 @@ export async function POST(req, {params}){
 		
 		const isMatchedotp = valotphash === otphash
 		
-		await redis.del(`change_otp:${username}`)
+		
 		
 		if (!isMatchedotp){
+			await redis.del(`change_otp:${username}`)
 			return Response.json({ error: "OTP incorrect or expired" }, { status: 400 });
 		}
 
@@ -62,7 +66,7 @@ export async function POST(req, {params}){
 			);
 		}
 		
-		await db.collection(users).updateOne({username}, {$set:{password: otp.newpass}})
+		await db.collection("users").updateOne({username}, {$set:{password: red.newpass}})
 		
 		const sessions = db.collection("sessions");
 
@@ -73,6 +77,7 @@ export async function POST(req, {params}){
 			expires: new Date(0),
 			path: "/",
 		});
+		await redis.del(`change_otp:${username}`)
 		
 		return Response.json({message: "password successfully changed"}, {status: 200})
 	}catch (err) {
