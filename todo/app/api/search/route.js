@@ -97,10 +97,19 @@ export async function GET(req) {
 			owner: project.owner,
 			profilepic: ownerMap[project.owner] || null,
 		}));
+		
+		const query = [
+			...new Set([
+				...rawProjects.map((p) => p.content.title),
+				...users.map((u) => u.username),
+			]),
+		];
+		
 
 		return Response.json({
 			users,
 			projects,
+			query,
 		});
 	} catch (err) {
 		console.error(err);
