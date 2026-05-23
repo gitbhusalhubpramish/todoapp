@@ -29,8 +29,7 @@ export default function Search() {
 	}, [query]);
 
 	return (
-		<div className="relative flex-1 flex ">
-			<div className="flex w-full items-center">
+		<div className="relative flex-1 flex items-center">
 				<input
 					type="text"
 					placeholder="Search..."
@@ -55,11 +54,11 @@ export default function Search() {
 						d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"
 					/>
 				</svg>
-			</div>
 
 			{/* Dropdown */}
+			
 			{open && results.length > 0 && (
-				<div className="absolute top-full mt-2 w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 overflow-hidden">
+				<div className="absolute top-3/4 mt-2 w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 overflow-hidden">
 					{results.map((item, idx) => (
 						<div
 							key={idx}
@@ -67,7 +66,7 @@ export default function Search() {
 								setQuery(item);
 								setOpen(false);
 							}}
-							className="px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 text-sm"
+							className="px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 text-sm dark:text-white"
 						>
 							{item}
 						</div>
