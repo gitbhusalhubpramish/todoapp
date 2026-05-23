@@ -57,20 +57,27 @@ export default function Search() {
 
 			{/* Dropdown */}
 			
-			{open && results.length > 0 && (
+			{open && (
 				<div className="absolute top-3/4 mt-2 w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 overflow-hidden">
-					{results.map((item, idx) => (
-						<div
-							key={idx}
-							onMouseDown={() => {
-								setQuery(item);
-								setOpen(false);
-							}}
-							className="px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 text-sm dark:text-white"
-						>
-							{item}
+		
+					{results.length > 0 ? (
+						results.map((item, idx) => (
+							<div
+								key={idx}
+								onMouseDown={() => {
+									setQuery(item);
+									setOpen(false);
+								}}
+								className="px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 text-sm dark:text-white"
+							>
+								{item}
+							</div>
+						))
+					) : (
+						<div className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
+							No results found
 						</div>
-					))}
+					)}
 				</div>
 			)}
 		</div>
