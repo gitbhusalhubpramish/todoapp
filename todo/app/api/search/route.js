@@ -11,7 +11,7 @@ export async function GET(req) {
 		const db = client.db("projectdata");
 
 		const users = await db
-			.collection("users")
+			.collection("usrdata")
 			.find({
 				username: {
 					$regex: q,
