@@ -292,88 +292,88 @@ export default function ChangePasswordPage() {
 					)}
 
 					{otpSent && (
-	<div>
-		<label className="block mb-3 text-sm text-black dark:text-white">
-			OTP
-		</label>
+						<div>
+							<label className="block mb-3 text-sm text-black dark:text-white">
+								OTP
+							</label>
 
-		<div className="flex gap-2 justify-between">
-			{Array.from({ length: 6 }).map((_, index) => (
-				<input
-					key={index}
-					type="text"
-					inputMode="numeric"
-					maxLength={1}
-					value={otp[index] || ""}
-					onChange={(e) => {
-						const value = e.target.value.replace(
-							/\D/g,
-							""
-						);
+							<div className="flex gap-2 justify-between">
+								{Array.from({ length: 6 }).map((_, index) => (
+									<input
+										key={index}
+										type="text"
+										inputMode="numeric"
+										maxLength={1}
+										value={otp[index] || ""}
+										onChange={(e) => {
+											const value = e.target.value.replace(
+												/\D/g,
+												""
+											);
 
-						if (!value) return;
+											if (!value) return;
 
-						const newOtp =
-							otp.split("");
+											const newOtp =
+												otp.split("");
 
-						newOtp[index] = value;
+											newOtp[index] = value;
 
-						setOtp(
-							newOtp.join("").slice(0, 6)
-						);
+											setOtp(
+												newOtp.join("").slice(0, 6)
+											);
 
-						if (
-							index < 5 &&
-							e.target.nextSibling
-						) {
-							e.target.nextSibling.focus();
-						}
-					}}
-					onKeyDown={(e) => {
-						if (
-							e.key === "Backspace"
-						) {
-							const newOtp =
-								otp.split("");
+											if (
+												index < 5 &&
+												e.target.nextSibling
+											) {
+												e.target.nextSibling.focus();
+											}
+										}}
+										onKeyDown={(e) => {
+											if (
+												e.key === "Backspace"
+											) {
+												const newOtp =
+													otp.split("");
 
-							if (otp[index]) {
-								newOtp[index] = "";
-								setOtp(
-									newOtp.join("")
-								);
-							} else if (
-								index > 0
-							) {
-								e.target
-									.previousSibling
-									.focus();
+												if (otp[index]) {
+													newOtp[index] = "";
+													setOtp(
+														newOtp.join("")
+													);
+												} else if (
+													index > 0
+												) {
+													e.target
+													.previousSibling
+													.focus();
+	
+													newOtp[
+														index - 1
+													] = "";
 
-								newOtp[
-									index - 1
-								] = "";
+													setOtp(
+														newOtp.join("")
+													);
+												}
+											}
+										}}
+										className="w-12 h-14 text-center text-xl font-semibold bg-[#ecfff4] dark:bg-[#182235] border border-[#b7ebcb] dark:border-[#263248] rounded-lg outline-none text-black dark:text-white"
+										onPaste={(e) => {
+											e.preventDefault();
 
-								setOtp(
-									newOtp.join("")
-								);
-							}
-						}
-					}}
-					className="w-12 h-14 text-center text-xl font-semibold bg-[#ecfff4] dark:bg-[#182235] border border-[#b7ebcb] dark:border-[#263248] rounded-lg outline-none text-black dark:text-white"
-					onPaste={(e) => {
-	e.preventDefault();
+											const pasted = e.clipboardData
+												.getData("text")
+												.replace(/\D/g, "")
+												.slice(0, 6);
 
-	const pasted = e.clipboardData
-		.getData("text")
-		.replace(/\D/g, "")
-		.slice(0, 6);
-
-	setOtp(pasted);
-}}
-				/>
-			))}
-		</div>
-	</div>
-)}
+											setOtp(pasted);
+										}}
+									/>
+								))}
+							</div>
+						</div>
+					)}
 
 					{!otpSent ? (
 						<button
