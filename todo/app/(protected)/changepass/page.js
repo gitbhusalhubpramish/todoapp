@@ -359,6 +359,16 @@ export default function ChangePasswordPage() {
 						}
 					}}
 					className="w-12 h-14 text-center text-xl font-semibold bg-[#ecfff4] dark:bg-[#182235] border border-[#b7ebcb] dark:border-[#263248] rounded-lg outline-none text-black dark:text-white"
+					onPaste={(e) => {
+	e.preventDefault();
+
+	const pasted = e.clipboardData
+		.getData("text")
+		.replace(/\D/g, "")
+		.slice(0, 6);
+
+	setOtp(pasted);
+}}
 				/>
 			))}
 		</div>
