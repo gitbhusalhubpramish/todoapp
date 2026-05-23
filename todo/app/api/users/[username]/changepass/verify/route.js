@@ -66,7 +66,7 @@ export async function POST(req, {params}){
 			);
 		}
 		
-		await db.collection("users").updateOne({username}, {$set:{password: red.newpass}})
+		await db.collection("users").updateOne({username}, {$set:{password: red.hashedpass}})
 		
 		const sessions = db.collection("sessions");
 
