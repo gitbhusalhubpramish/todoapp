@@ -153,7 +153,9 @@ export default function ProfilePage({ params }) {
 					<Followbtn/>
 				</div>
 			</div>
-			<p>{user?.bio}</p>
+			<div className="flex justify-center">
+				<p className="w-1/2 text-center text-neutral-700 dark:text-neutral-300">{user?.bio}</p>
+			</div>
 			<div className="max-w-2xl mx-auto my-30 border-t border-gray-500 pt-4">
 			
 				{/* Tabs */}
