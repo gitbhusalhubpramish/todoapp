@@ -45,7 +45,8 @@ export default function SearchPage() {
 	const Skeleton = ({ className }) => (
 		<div className={`animate-pulse bg-gray-600/50 rounded ${className}`} />
 	);
-
+	
+	console.log(results)
 	return (
 		<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] text-black dark:text-white p-6">
 			<div className="max-w-2xl mx-auto my-30 border-t border-gray-500 pt-4">
@@ -88,9 +89,17 @@ export default function SearchPage() {
 									className="block p-3 rounded-lg border border-gray-300 dark:border-gray-700 cursor-pointer bg-white/60 dark:bg-gray-900/40 hover:bg-white dark:hover:bg-gray-800 hover:shadow-md transition-all duration-200"
 								>
 									<div className="flex justify-between items-start gap-3">
+									<Image
+												src={p.profilepic || "/profile.svg"}
+												alt={p.content.title}
+												width={50}
+												height={50}
+												className="rounded-full object-cover"
+											/>
 										<div className="flex-1">
-											<h3 className="text-gray-900 dark:text-gray-100 font-medium tracking-wide">
-												{p.content.title}
+											
+											<h3 className="text-gray-900 dark:text-gray-100 font-medium tracking-wide underline">
+												{p.owner}/{p.content.title}
 											</h3>
 
 											<p className="border-l-1 border-gray-600 pl-1 text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
