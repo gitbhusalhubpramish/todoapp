@@ -6,6 +6,8 @@ export default function Search() {
 	const [query, setQuery] = useState("");
 	const [results, setResults] = useState([]);
 	const [open, setOpen] = useState(false);
+	const [selectedIndex, setSelectedIndex] = useState(-1);
+
 
 	useEffect(() => {
 		const timeout = setTimeout(async () => {
@@ -27,6 +29,41 @@ export default function Search() {
 
 		return () => clearTimeout(timeout);
 	}, [query]);
+	function handleKeyDown(e) {
+		if (!open) return;
+
+		switch (e.key) {
+			case "ArrowDown":
+				e.preventDefault();
+
+				setSelectedIndex((prev) =>
+					prev < results.length - 1 ? prev + 1 : 0
+				);
+				break;
+
+			case "ArrowUp":
+				e.preventDefault();
+
+				setSelectedIndex((prev) =>
+					prev > 0 ? prev - 1 : results.length - 1
+				);
+				break;
+
+			case "Enter":
+				e.preventDefault();
+
+				if (selectedIndex >= 0) {
+					setQuery(results[selectedIndex]);
+					setOpen(false);
+				}
+				break;
+
+			case "Escape":
+				setOpen(false);
+				break;
+		}
+	}
+
 
 	return (
 		<div className="relative flex-1 flex items-center">
@@ -35,8 +72,17 @@ export default function Search() {
 					placeholder="Search..."
 					value={query}
 					onChange={(e) => setQuery(e.target.value)}
-					onFocus={() => results.length && setOpen(true)}
-					onBlur={() => setTimeout(() => setOpen(false), 150)}
+					onFocus={() => {
+						if (results.length) {
+							setOpen(true);
+							setSelectedIndex(-1);
+						}
+					}}
+					onKeyDown={handleKeyDown}
+					onBlur={() => {
+						setTimeout(() => setOpen(false), 150);
+						setSelectedIndex(-1);
+					}}
 					className="w-full pl-3 pr-10 py-2 border rounded-lg border-gray-300 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:focus:ring-blue-400"
 				/>
 
@@ -68,7 +114,11 @@ export default function Search() {
 									setQuery(item);
 									setOpen(false);
 								}}
-								className="px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 text-sm dark:text-white"
+								className={`px-4 py-2 cursor-pointer ${
+								selectedIndex === idx
+									? "bg-gray-200 dark:bg-gray-700"
+									: "hover:bg-gray-100 dark:hover:bg-gray-800"
+							} text-sm dark:text-white`}
 							>
 								{item}
 							</div>
