@@ -2,11 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation"
 
 export default function Search() {
 	const router = useRouter();
 	
-	const [query, setQuery] = useState("");
+	
+	const searchParams = useSearchParams();
+	const q = searchParams.get("q") || "";
+	
+	const [query, setQuery] = useState(q);
 	const [results, setResults] = useState([]);
 	const [open, setOpen] = useState(false);
 	const [selectedIndex, setSelectedIndex] = useState(-1);
