@@ -1,8 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Search() {
+	const router = useRouter();
+	
 	const [query, setQuery] = useState("");
 	const [results, setResults] = useState([]);
 	const [open, setOpen] = useState(false);
@@ -55,7 +58,10 @@ export default function Search() {
 				if (selectedIndex >= 0) {
 					setQuery(results[selectedIndex]);
 					setOpen(false);
+					setSelectedIndex(-1);
+					break
 				}
+				router.push(`/search?q=${encodeURIComponent(query)}`);
 				break;
 
 			case "Escape":
