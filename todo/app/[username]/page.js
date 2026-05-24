@@ -212,7 +212,7 @@ export default function ProfilePage({ params }) {
 							user?.likedprojects?.map((p, i) => (
 								<Link
 									key={i}
-									href={`/${p}`}
+									href={`/${p.owner}/${p.content.title}`}
 									className="block p-3 rounded-lg border border-gray-300 dark:border-gray-700 cursor-pointer bg-white/60 dark:bg-gray-900/40 hover:bg-white dark:hover:bg-gray-800 hover:shadow-md transition-all duration-200"
 								>
 									<div className="flex justify-between items-start gap-3">
