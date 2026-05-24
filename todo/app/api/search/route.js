@@ -92,7 +92,7 @@ export async function GET(req) {
 		const projects = rawProjects.map((project) => ({
 			content: {
 				title: project.content?.title,
-				des: project.content?.des,
+				description: project.content?.description,
 			},
 			owner: project.owner,
 			profilepic: ownerMap[project.owner] || null,
