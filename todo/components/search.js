@@ -1,12 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation"
 
 export default function Search() {
-	const [query, setQuery] = useState("");
+	const router = useRouter();
+	
+	
+	const searchParams = useSearchParams();
+	const q = searchParams.get("q") || "";
+	
+	const [query, setQuery] = useState(q);
 	const [results, setResults] = useState([]);
 	const [open, setOpen] = useState(false);
 	const [selectedIndex, setSelectedIndex] = useState(-1);
+	const [activeTab, setActiveTab] = useState("projects");
 
 
 	useEffect(() => {
@@ -55,7 +64,10 @@ export default function Search() {
 				if (selectedIndex >= 0) {
 					setQuery(results[selectedIndex]);
 					setOpen(false);
+					setSelectedIndex(-1);
+					break
 				}
+				router.push(`/search?q=${encodeURIComponent(query)}`);
 				break;
 
 			case "Escape":
