@@ -15,6 +15,7 @@ export default function Search() {
 	const [results, setResults] = useState([]);
 	const [open, setOpen] = useState(false);
 	const [selectedIndex, setSelectedIndex] = useState(-1);
+	const [activeTab, setActiveTab] = useState("projects");
 
 
 	useEffect(() => {
