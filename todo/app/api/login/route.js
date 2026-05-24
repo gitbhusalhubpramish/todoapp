@@ -52,7 +52,7 @@ export async function POST(req) {
 });
 
 	if (!user && action !== "verify") {
-		console.log(action, username, email, code)
+		console.log(action, username, code)
 	  return Response.json(
 		{ error: "Password or username incorrect" },
 		{ status: 401 }
