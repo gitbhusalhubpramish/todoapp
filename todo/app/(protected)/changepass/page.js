@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
+import ReCAPTCHA from "react-google-recaptcha";
 import { useRouter } from "next/navigation";
 
 export default function ChangePasswordPage() {
@@ -28,6 +29,7 @@ export default function ChangePasswordPage() {
 	const [cooldown, setCooldown] = useState(0);
 	const [error, setError] = useState("");
 	const [success, setSuccess] = useState("");
+	const [captchaToken, setCaptchaToken] = useState(null);
 
 	useEffect(() => {
 		async function loadSession() {
