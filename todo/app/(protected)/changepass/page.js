@@ -192,9 +192,11 @@ export default function ChangePasswordPage() {
 					},
 					body: JSON.stringify({
 						otp,
+						captchaToken,
 					}),
 				}
 			);
+			setCaptchaToken(null);
 
 			const data = await res.json();
 
