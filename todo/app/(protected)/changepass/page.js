@@ -30,6 +30,8 @@ export default function ChangePasswordPage() {
 	const [error, setError] = useState("");
 	const [success, setSuccess] = useState("");
 	const [captchaToken, setCaptchaToken] = useState(null);
+	const recaptchaRefvotp = useRef(null);
+	const recaptchaRefsotp = useRef(null);
 
 	useEffect(() => {
 		async function loadSession() {
@@ -118,6 +120,18 @@ export default function ChangePasswordPage() {
 		try {
 			setLoading(true);
 
+			if (!recaptchaRefsotp.current) return;
+			recaptchaRefsotp.current.execute();
+		} catch (err) {
+			setError("Network error");
+		} finally {
+			setLoading(false);
+		}
+	}
+	
+	const handleCaptchaVerifysotp = async (token) => {
+		try {
+			setCaptchaToken(token);
 			const res = await fetch(
 				`/api/users/${session.username}/changepass/request`,
 				{
@@ -139,12 +153,11 @@ export default function ChangePasswordPage() {
 			setOtpSent(true);
 			setCooldown(60);
 			setSuccess("OTP sent to your email");
-		} catch (err) {
-			setError("Network error");
-		} finally {
-			setLoading(false);
+		} catch(err){
+			setError("something went wrong")
 		}
 	}
+	
 
 	async function verifyOTP() {
 		setError("");
@@ -157,8 +170,8 @@ export default function ChangePasswordPage() {
 
 		try {
 			setLoading(true);
-			if (!recaptchaRef.current) return;
-			recaptchaRef.current.execute();
+			if (!recaptchaRefvotp.current) return;
+			recaptchaRefvotp.current.execute();
 
 		} catch (err) {
 			setError("Network error");
@@ -393,9 +406,9 @@ export default function ChangePasswordPage() {
 					{!otpSent ? (
 						{/* CAPTCHA */}
 				<ReCAPTCHA
-				ref={recaptchaRef}
+				ref={recaptchaRefsotp}
 					sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
-					onChange={handleCaptchaVerify}
+					onChange={handleCaptchaVerifysotp}
 					size="invisible"
 				/>
 						<button
@@ -413,7 +426,7 @@ export default function ChangePasswordPage() {
 						<div className="space-y-3">
 							{/* CAPTCHA */}
 							<ReCAPTCHA
-								ref={recaptchaRef}
+								ref={recaptchaRefvotp}
 								sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
 								onChange={handleCaptchaVerifyvotp}
 								size="invisible"
