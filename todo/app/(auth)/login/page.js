@@ -62,23 +62,7 @@ const handleKeyDownOTP = (e, index) => {
 		inputsRef.current[index - 1]?.focus();
 	}
 };
-	const getCaptchaToken = () => {
-  return new Promise((resolve) => {
-    if (!window.grecaptcha) {
-      console.error("reCAPTCHA not loaded");
-      return;
-    }
 
-    window.grecaptcha.ready(() => {
-      window.grecaptcha
-        .execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY, {
-          action: "login",
-        })
-        .then(resolve);
-    });
-  });
-
-};
 const handlePasteOTP = (e) => {
 	e.preventDefault();
 

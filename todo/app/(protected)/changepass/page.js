@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
+import ReCAPTCHA from "react-google-recaptcha";
 import { useRouter } from "next/navigation";
 
 export default function ChangePasswordPage() {
@@ -28,6 +29,7 @@ export default function ChangePasswordPage() {
 	const [cooldown, setCooldown] = useState(0);
 	const [error, setError] = useState("");
 	const [success, setSuccess] = useState("");
+	const [captchaToken, setCaptchaToken] = useState(null);
 
 	useEffect(() => {
 		async function loadSession() {
@@ -155,7 +157,32 @@ export default function ChangePasswordPage() {
 
 		try {
 			setLoading(true);
+			if (!recaptchaRef.current) return;
+			recaptchaRef.current.execute();
 
+		} catch (err) {
+			setError("Network error");
+		} finally {
+			setLoading(false);
+		}
+	}
+
+	function getStrength(password) {
+		let score = 0;
+
+		if (password.length >= 8) score++;
+		if (/[A-Z]/.test(password)) score++;
+		if (/[a-z]/.test(password)) score++;
+		if (/\d/.test(password)) score++;
+		if (/[^A-Za-z0-9]/.test(password)) score++;
+
+		if (score <= 2) return "Weak";
+		if (score <= 4) return "Medium";
+		return "Strong";
+	}
+	const handleCaptchaVerifyvotp = async (token) => {
+		try {
+			setCaptchaToken(token);
 			const res = await fetch(
 				`/api/users/${session.username}/changepass/verify`,
 				{
@@ -165,9 +192,11 @@ export default function ChangePasswordPage() {
 					},
 					body: JSON.stringify({
 						otp,
+						captchaToken,
 					}),
 				}
 			);
+			setCaptchaToken(null);
 
 			const data = await res.json();
 
@@ -189,27 +218,13 @@ export default function ChangePasswordPage() {
 			setTimeout(() => {
 				router.push("/login");
 			}, 1500);
-		} catch (err) {
-			setError("Network error");
-		} finally {
-			setLoading(false);
+
+		}
+		catch(err){
+			console.log(err)
+			setError("something went worng")
 		}
 	}
-
-	function getStrength(password) {
-		let score = 0;
-
-		if (password.length >= 8) score++;
-		if (/[A-Z]/.test(password)) score++;
-		if (/[a-z]/.test(password)) score++;
-		if (/\d/.test(password)) score++;
-		if (/[^A-Za-z0-9]/.test(password)) score++;
-
-		if (score <= 2) return "Weak";
-		if (score <= 4) return "Medium";
-		return "Strong";
-	}
-
 	if (!session) {
 		return (
 			<div className="min-h-screen flex items-center justify-center bg-[#dbffe9] dark:bg-[#0b1120]">
@@ -376,6 +391,13 @@ export default function ChangePasswordPage() {
 					)}
 
 					{!otpSent ? (
+						{/* CAPTCHA */}
+				<ReCAPTCHA
+				ref={recaptchaRef}
+					sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+					onChange={handleCaptchaVerify}
+					size="invisible"
+				/>
 						<button
 							onClick={requestOTP}
 							disabled={loading}
@@ -389,6 +411,13 @@ export default function ChangePasswordPage() {
 						</button>
 					) : (
 						<div className="space-y-3">
+							{/* CAPTCHA */}
+							<ReCAPTCHA
+								ref={recaptchaRef}
+								sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+								onChange={handleCaptchaVerifyvotp}
+								size="invisible"
+							/>
 							<button
 								onClick={verifyOTP}
 								disabled={loading}
