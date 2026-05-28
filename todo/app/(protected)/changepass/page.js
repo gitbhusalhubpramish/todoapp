@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useRouter } from "next/navigation";
@@ -404,13 +404,14 @@ export default function ChangePasswordPage() {
 					)}
 
 					{!otpSent ? (
+						<>
 						{/* CAPTCHA */}
-				<ReCAPTCHA
-				ref={recaptchaRefsotp}
-					sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
-					onChange={handleCaptchaVerifysotp}
-					size="invisible"
-				/>
+						<ReCAPTCHA
+							ref={recaptchaRefsotp}
+							sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+							onChange={handleCaptchaVerifysotp}
+							size="invisible"
+						/>
 						<button
 							onClick={requestOTP}
 							disabled={loading}
@@ -422,7 +423,9 @@ export default function ChangePasswordPage() {
 								"Send OTP"
 							)}
 						</button>
+						</>
 					) : (
+						<>
 						<div className="space-y-3">
 							{/* CAPTCHA */}
 							<ReCAPTCHA
@@ -455,6 +458,7 @@ export default function ChangePasswordPage() {
 									: "Resend OTP"}
 							</button>
 						</div>
+						</>
 					)}
 				</div>
 			</div>
