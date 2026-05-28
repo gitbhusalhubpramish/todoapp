@@ -126,6 +126,8 @@ export default function ChangePasswordPage() {
 			setError("Network error");
 		} finally {
 			setLoading(false);
+			recaptchaRef.current.reset();
+			setCaptchaToken(null)
 		}
 	}
 	
@@ -183,6 +185,8 @@ export default function ChangePasswordPage() {
 			setError("Network error");
 		} finally {
 			setLoading(false);
+			recaptchaRef.current.reset();
+			setCaptchaToken(null)
 		}
 	}
 
