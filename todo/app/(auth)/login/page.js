@@ -156,6 +156,8 @@ const handleCaptchaVerify = async (token) => {
 		})
     } catch (err) {
       console.error(err);
+      recaptchaRef.current?.reset();
+      setCaptchaToken(null);
     }
   };
 	

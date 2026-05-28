@@ -119,6 +119,7 @@ export default function ChangePasswordPage() {
 
 		try {
 			setLoading(true);
+			recaptchaRefsotp.current.reset();
 
 			if (!recaptchaRefsotp.current) return;
 			recaptchaRefsotp.current.execute();
@@ -126,8 +127,6 @@ export default function ChangePasswordPage() {
 			setError("Network error");
 		} finally {
 			setLoading(false);
-			recaptchaRef.current.reset();
-			setCaptchaToken(null)
 		}
 	}
 	
@@ -155,11 +154,13 @@ export default function ChangePasswordPage() {
 
 			if (!res.ok) {
 				setError(data.error || "Something went wrong");
+				recaptchaRefsotp.current.reset();
 				return;
 			}
 
 			setOtpSent(true);
 			setCooldown(60);
+			recaptchaRefsotp.current.reset();
 			setSuccess("OTP sent to your email");
 		} catch(err){
 			setError("something went wrong")
@@ -177,6 +178,7 @@ export default function ChangePasswordPage() {
 		}
 
 		try {
+			recaptchaRefvotp.current.reset();
 			setLoading(true);
 			if (!recaptchaRefvotp.current) return;
 			recaptchaRefvotp.current.execute();
@@ -185,8 +187,6 @@ export default function ChangePasswordPage() {
 			setError("Network error");
 		} finally {
 			setLoading(false);
-			recaptchaRef.current.reset();
-			setCaptchaToken(null)
 		}
 	}
 
@@ -205,6 +205,7 @@ export default function ChangePasswordPage() {
 	}
 	const handleCaptchaVerifyvotp = async (token) => {
 		try {
+			
 			setCaptchaToken(token);
 			const res = await fetch(
 				`/api/users/${session.username}/changepass/verify`,
@@ -225,6 +226,7 @@ export default function ChangePasswordPage() {
 
 			if (!res.ok) {
 				setError(data.error || "Invalid OTP");
+				recaptchaRefvotp.current.reset();
 				return;
 			}
 
@@ -237,6 +239,7 @@ export default function ChangePasswordPage() {
 			});
 
 			setOtp("");
+			recaptchaRefvotp.current.reset();
 
 			setTimeout(() => {
 				router.push("/login");
