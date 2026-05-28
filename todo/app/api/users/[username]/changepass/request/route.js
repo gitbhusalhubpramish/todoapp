@@ -30,6 +30,7 @@ export async function POST(req, { params }) {
 				{ status: 401 }
 			);
 		}
+		
 
 		const {
 			oldPassword,
@@ -37,6 +38,9 @@ export async function POST(req, { params }) {
 			confirmPassword,
 			captchaToken,
 		} = body;
+		
+		console.log(captchaToken)
+		
 		
 		const verifyRes = await fetch(
 			"https://www.google.com/recaptcha/api/siteverify",

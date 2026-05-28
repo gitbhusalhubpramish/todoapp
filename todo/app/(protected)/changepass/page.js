@@ -139,7 +139,12 @@ export default function ChangePasswordPage() {
 					headers: {
 						"Content-Type": "application/json",
 					},
-					body: JSON.stringify(formData),
+					body: JSON.stringify({
+						oldPassword: formData.oldPassword,
+						newPassword: formData.newPassword,
+						confirmPassword: formData.confirmPassword,
+						captchaToken,
+					}),
 				}
 			);
 
