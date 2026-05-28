@@ -113,7 +113,6 @@ export async function POST(req, {params}){
 	
 		await db.collection("projects").deleteMany({
 			owner: username,
-			"content.title": {$in: projects},
 		});
 		}
 		
