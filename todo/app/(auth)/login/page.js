@@ -62,22 +62,34 @@ const handleKeyDownOTP = (e, index) => {
 		inputsRef.current[index - 1]?.focus();
 	}
 };
-	const getCaptchaToken = () => {
-  return new Promise((resolve) => {
-    if (!window.grecaptcha) {
-      console.error("reCAPTCHA not loaded");
-      return;
-    }
 
-    window.grecaptcha.ready(() => {
-      window.grecaptcha
-        .execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY, {
-          action: "login",
-        })
-        .then(resolve);
-    });
-  });
+const handlePasteOTP = (e) => {
+	e.preventDefault();
 
+	const pastedData = e.clipboardData
+		.getData("text")
+		.replace(/\D/g, "")
+		.slice(0, 6);
+
+	if (!pastedData) return;
+
+	const newCode = [...form.code];
+
+	pastedData.split("").forEach((digit, index) => {
+		newCode[index] = digit;
+	});
+
+	setForm((prev) => ({
+		...prev,
+		code: newCode,
+	}));
+
+	const lastIndex = Math.min(
+		pastedData.length - 1,
+		5
+	);
+
+	inputsRef.current[lastIndex]?.focus();
 };
 
 const handleSubmit = async (e) => {
@@ -144,6 +156,8 @@ const handleCaptchaVerify = async (token) => {
 		})
     } catch (err) {
       console.error(err);
+      recaptchaRef.current?.reset();
+      setCaptchaToken(null);
     }
   };
 	
@@ -211,6 +225,7 @@ const handleCaptchaVerify = async (token) => {
 					value={digit}
 					onChange={(e) => handleChangeOTP(e.target.value, i)}
 					onKeyDown={(e) => handleKeyDownOTP(e, i)}
+					onPaste={handlePasteOTP}
 					className="w-10 h-12 text-center text-lg p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-gray-600 dark:text-gray-300 placeholder:text-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#00bf00]"
 				/>
 			))}

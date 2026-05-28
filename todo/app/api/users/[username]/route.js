@@ -31,6 +31,45 @@ export async function GET(req, { params }) {
 		);
 	}
 	user.projects = formattedProjects
+	
+	const liked = user.likedprojects.map((item) => {
+		const [owner, project] = item.split("/");
+		return { owner, project };
+	});
+	
+	console.log(liked)
+	
+	const likedpro = await db.collection("projects").find({
+		"content.title": { $in: liked.map(p => p.project) },
+		owner: { $in: liked.map(p => p.owner) }
+	}).toArray()
+	
+	console.log(likedpro)
+	
+	const users = await db.collection("usrdata").find({
+		username: { $in: likedpro.map(p => p.owner) }
+	}).toArray()
+
+	console.log(users)
+	
+	const userMap = Object.fromEntries(
+		users.map(u => [u.username, u.profilepic])
+	);
+	
+	console.log(userMap)
+	
+	const result = likedpro.map(p => ({
+		owner: p.owner,
+		profilepic: userMap[p.owner],
+		content: {
+			title: p.content.title,
+			description: p.content.description
+		}
+	}));
+	
+	console.log(result)
+	
+	user.likedprojects = result
 
 	return Response.json({ user });
 }
