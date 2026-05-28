@@ -34,10 +34,10 @@ export async function POST(req, {params}){
 			}
 		);
 
-		const data = await verifyRes.json();
+		const verdata = await verifyRes.json();
 
-		if (!data.success || (data.score && data.score < 0.5)) {
-			console.log(data.success, data.score);
+		if (!verdata.success || (verdata.score && verdata.score < 0.5)) {
+			console.log(verdata.success, verdata.score);
 			return Response.json({ error: "Bot detected" }, { status: 403 });
 		}
 		
