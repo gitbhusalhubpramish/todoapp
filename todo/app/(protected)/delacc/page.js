@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Loader2, ShieldAlert, Trash2 } from "lucide-react";
+import ReCAPTCHA from "react-google-recaptcha";
 
 export default function DeleteAccountPage() {
 	const [sessionUser, setSessionUser] = useState(null);
@@ -14,6 +15,7 @@ export default function DeleteAccountPage() {
 
 	const [message, setMessage] = useState(null);
 	const [error, setError] = useState(null);
+	const recaptchaRef = useRef(null);
 
 	useEffect(() => {
 		async function loadSession() {
@@ -81,12 +83,24 @@ export default function DeleteAccountPage() {
 			setLoading(true);
 			setError(null);
 			setMessage(null);
+			if (otp.length !== 6) {
+				throw new Error("Invalid OTP");
+			}
 
 			// extra frontend session verification
 			if (!sessionUser) {
 				throw new Error("Unauthorized");
 			}
-
+			
+			if (!recaptchaRef.current) return;
+			recaptchaRef.current.execute();
+			
+		} catch (err) {
+			setError(err.message);
+		} 
+	}
+	const handleCaptchaVerify = async (token) => {
+		try {
 			const res = await fetch(
 				`/api/users/${sessionUser.username}/delete/verify`,
 				{
@@ -94,13 +108,14 @@ export default function DeleteAccountPage() {
 					headers: {
 						"Content-Type": "application/json",
 					},
-					body: JSON.stringify({ otp }),
+					body: JSON.stringify({ otp, captchaToken: token }),
 				}
 			);
 
 			const data = await res.json();
 
 			if (!res.ok) {
+				recaptchaRef.current.reset();
 				throw new Error(data?.error || "Deletion failed");
 			}
 
@@ -109,13 +124,14 @@ export default function DeleteAccountPage() {
 			// clear client storage
 			localStorage.clear();
 			sessionStorage.clear();
+			recaptchaRefs.current.reset();
 
 			// redirect after deletion
 			setTimeout(() => {
 				window.location.href = "/";
 			}, 2000);
-		} catch (err) {
-			setError(err.message);
+		}catch (err) {
+			setError(err.message || "Something went wrong");
 		} finally {
 			setLoading(false);
 		}
@@ -228,6 +244,16 @@ export default function DeleteAccountPage() {
 						<p className="text-xs text-zinc-500">
 							The verification code expires in 5 minutes.
 						</p>
+						
+						<ReCAPTCHA
+							ref={recaptchaRef}
+							sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+							onChange={handleCaptchaVerify}
+							size="invisible"
+							onExpired={() => {
+								setError("Captcha expired. Try again.");
+							}}
+						/>
 
 						<button
 							onClick={verifyAndDelete}
