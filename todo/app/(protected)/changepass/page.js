@@ -119,15 +119,12 @@ export default function ChangePasswordPage() {
 
 		try {
 			setLoading(true);
-			recaptchaRefsotp.current.reset();
 
 			if (!recaptchaRefsotp.current) return;
 			recaptchaRefsotp.current.execute();
 		} catch (err) {
 			setError("Network error");
-		} finally {
-			setLoading(false);
-		}
+		} 
 	}
 	
 	const handleCaptchaVerifysotp = async (token) => {
@@ -164,6 +161,8 @@ export default function ChangePasswordPage() {
 			setSuccess("OTP sent to your email");
 		} catch(err){
 			setError("something went wrong")
+		}finally {
+			setLoading(false);
 		}
 	}
 	
@@ -178,16 +177,13 @@ export default function ChangePasswordPage() {
 		}
 
 		try {
-			recaptchaRefvotp.current.reset();
 			setLoading(true);
 			if (!recaptchaRefvotp.current) return;
 			recaptchaRefvotp.current.execute();
 
 		} catch (err) {
 			setError("Network error");
-		} finally {
-			setLoading(false);
-		}
+		} 
 	}
 
 	function getStrength(password) {
@@ -249,6 +245,8 @@ export default function ChangePasswordPage() {
 		catch(err){
 			console.log(err)
 			setError("something went worng")
+		}finally {
+			setLoading(false);
 		}
 	}
 	if (!session) {
@@ -424,6 +422,9 @@ export default function ChangePasswordPage() {
 							sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
 							onChange={handleCaptchaVerifysotp}
 							size="invisible"
+							onExpired={() => {
+								setError("Captcha expired. Try again.");
+							}}
 						/>
 						<button
 							onClick={requestOTP}
@@ -446,6 +447,9 @@ export default function ChangePasswordPage() {
 								sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
 								onChange={handleCaptchaVerifyvotp}
 								size="invisible"
+								onExpired={() => {
+									setError("Captcha expired. Try again.");
+								}}
 							/>
 							<button
 								onClick={verifyOTP}
