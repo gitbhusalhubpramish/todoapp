@@ -143,10 +143,11 @@ export default function ChangePasswordPage() {
 						oldPassword: formData.oldPassword,
 						newPassword: formData.newPassword,
 						confirmPassword: formData.confirmPassword,
-						captchaToken,
+						captchaToken:token,
 					}),
 				}
 			);
+			setCaptchaToken(null)
 
 			const data = await res.json();
 
@@ -210,7 +211,7 @@ export default function ChangePasswordPage() {
 					},
 					body: JSON.stringify({
 						otp,
-						captchaToken,
+						captchaToken:token,
 					}),
 				}
 			);
