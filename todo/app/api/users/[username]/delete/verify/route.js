@@ -12,12 +12,33 @@ function hashOTP(otp) {
 export async function POST(req, {params}){
 	try {
 		const {username} = await params;
-		const { otp } = await req.json();
+		const { otp, captchaToken } = await req.json();
 	
 		//user auth
 		const session = await getCurrentUser();
 		if (session?.username !== username) {
 			return Response.json({ error: "Unauthorized" }, { status: 401 });
+		}
+		
+		const verifyRes = await fetch(
+			"https://www.google.com/recaptcha/api/siteverify",
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/x-www-form-urlencoded",
+				},
+				body: new URLSearchParams({
+					secret: process.env.RECAPTCHA_SECRET_KEY,
+					response: captchaToken,
+				}),
+			}
+		);
+
+		const data = await verifyRes.json();
+
+		if (!data.success || (data.score && data.score < 0.5)) {
+			console.log(data.success, data.score);
+			return Response.json({ error: "Bot detected" }, { status: 403 });
 		}
 		
 		
