@@ -30,12 +30,38 @@ export async function POST(req, { params }) {
 				{ status: 401 }
 			);
 		}
+		
 
 		const {
 			oldPassword,
 			newPassword,
 			confirmPassword,
+			captchaToken,
 		} = body;
+		
+		console.log(captchaToken)
+		
+		
+		const verifyRes = await fetch(
+			"https://www.google.com/recaptcha/api/siteverify",
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/x-www-form-urlencoded",
+				},
+				body: new URLSearchParams({
+					secret: process.env.RECAPTCHA_SECRET_KEY,
+					response: captchaToken,
+				}),
+			}
+		);
+
+		const data = await verifyRes.json();
+
+		if (!data.success || (data.score && data.score < 0.5)) {
+			console.log(data.success, data.score);
+			return Response.json({ error: "Bot detected" }, { status: 403 });
+		}
 
 		if (
 			!oldPassword ||

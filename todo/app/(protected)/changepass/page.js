@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useRouter } from "next/navigation";
@@ -124,9 +124,7 @@ export default function ChangePasswordPage() {
 			recaptchaRefsotp.current.execute();
 		} catch (err) {
 			setError("Network error");
-		} finally {
-			setLoading(false);
-		}
+		} 
 	}
 	
 	const handleCaptchaVerifysotp = async (token) => {
@@ -139,22 +137,32 @@ export default function ChangePasswordPage() {
 					headers: {
 						"Content-Type": "application/json",
 					},
-					body: JSON.stringify(formData),
+					body: JSON.stringify({
+						oldPassword: formData.oldPassword,
+						newPassword: formData.newPassword,
+						confirmPassword: formData.confirmPassword,
+						captchaToken:token,
+					}),
 				}
 			);
+			setCaptchaToken(null)
 
 			const data = await res.json();
 
 			if (!res.ok) {
 				setError(data.error || "Something went wrong");
+				recaptchaRefsotp.current.reset();
 				return;
 			}
 
 			setOtpSent(true);
 			setCooldown(60);
+			recaptchaRefsotp.current.reset();
 			setSuccess("OTP sent to your email");
 		} catch(err){
 			setError("something went wrong")
+		}finally {
+			setLoading(false);
 		}
 	}
 	
@@ -175,9 +183,7 @@ export default function ChangePasswordPage() {
 
 		} catch (err) {
 			setError("Network error");
-		} finally {
-			setLoading(false);
-		}
+		} 
 	}
 
 	function getStrength(password) {
@@ -195,6 +201,7 @@ export default function ChangePasswordPage() {
 	}
 	const handleCaptchaVerifyvotp = async (token) => {
 		try {
+			
 			setCaptchaToken(token);
 			const res = await fetch(
 				`/api/users/${session.username}/changepass/verify`,
@@ -205,7 +212,7 @@ export default function ChangePasswordPage() {
 					},
 					body: JSON.stringify({
 						otp,
-						captchaToken,
+						captchaToken:token,
 					}),
 				}
 			);
@@ -215,6 +222,7 @@ export default function ChangePasswordPage() {
 
 			if (!res.ok) {
 				setError(data.error || "Invalid OTP");
+				recaptchaRefvotp.current.reset();
 				return;
 			}
 
@@ -227,6 +235,7 @@ export default function ChangePasswordPage() {
 			});
 
 			setOtp("");
+			recaptchaRefvotp.current.reset();
 
 			setTimeout(() => {
 				router.push("/login");
@@ -236,6 +245,8 @@ export default function ChangePasswordPage() {
 		catch(err){
 			console.log(err)
 			setError("something went worng")
+		}finally {
+			setLoading(false);
 		}
 	}
 	if (!session) {
@@ -404,13 +415,17 @@ export default function ChangePasswordPage() {
 					)}
 
 					{!otpSent ? (
+						<>
 						{/* CAPTCHA */}
-				<ReCAPTCHA
-				ref={recaptchaRefsotp}
-					sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
-					onChange={handleCaptchaVerifysotp}
-					size="invisible"
-				/>
+						<ReCAPTCHA
+							ref={recaptchaRefsotp}
+							sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+							onChange={handleCaptchaVerifysotp}
+							size="invisible"
+							onExpired={() => {
+								setError("Captcha expired. Try again.");
+							}}
+						/>
 						<button
 							onClick={requestOTP}
 							disabled={loading}
@@ -422,7 +437,9 @@ export default function ChangePasswordPage() {
 								"Send OTP"
 							)}
 						</button>
+						</>
 					) : (
+						<>
 						<div className="space-y-3">
 							{/* CAPTCHA */}
 							<ReCAPTCHA
@@ -430,6 +447,9 @@ export default function ChangePasswordPage() {
 								sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
 								onChange={handleCaptchaVerifyvotp}
 								size="invisible"
+								onExpired={() => {
+									setError("Captcha expired. Try again.");
+								}}
 							/>
 							<button
 								onClick={verifyOTP}
@@ -455,6 +475,7 @@ export default function ChangePasswordPage() {
 									: "Resend OTP"}
 							</button>
 						</div>
+						</>
 					)}
 				</div>
 			</div>
