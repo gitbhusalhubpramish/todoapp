@@ -124,7 +124,7 @@ export default function DeleteAccountPage() {
 			// clear client storage
 			localStorage.clear();
 			sessionStorage.clear();
-			recaptchaRefs.current.reset();
+			recaptchaRef.current.reset();
 
 			// redirect after deletion
 			setTimeout(() => {
