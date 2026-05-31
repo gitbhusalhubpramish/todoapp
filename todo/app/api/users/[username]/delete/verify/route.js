@@ -82,25 +82,27 @@ export async function POST(req, {params}){
 		const client = await clientPromise;
 		const db = client.db("projectdata");
 
-		// 7.1 Delete user
-		await db.collection("users").deleteOne({ username });
 		
 		const usr = await db.collection("usrdata").findOne({username})
 		if (!usr){
 			return Response.json({error: "user is null in usrdata database collections"}, {status: 404})
 		}
+		console.log(usr)
 		const projects = usr.projects
 		console.log(projects)
-		if (projects.lenght>0){
+		console.log(projects.length)
+		if (projects.length>0){
 			console.log(projects)
+			
+			const projecttitl = projects.map(p=> p.title)
 		
-		const projectDocs = await db.collection("projects").find({
-			owner: username,
-			"content.title": {$in: projects},
-		}).toArray()
-		if (projectDocs.length === 0){
-			return Response.json({error:"project not found in database collections"},{status:404})
-		}
+			const projectDocs = await db.collection("projects").find({
+				owner: username,
+				"content.title": {$in: projecttitl},
+			}).toArray()
+			if (projectDocs.length === 0){
+				return Response.json({error:"project not found in database collections"},{status:404})
+			}
 		const likedusers = projectDocs.flatMap(p => p.likes || []);
 	
 		const formatpro = projects.map(p => `${username}/${p}`)
@@ -139,10 +141,13 @@ export async function POST(req, {params}){
 		const cookieStore = await cookies();
 
 		cookieStore.set("sessionId", "", {
-    httpOnly: true,
-    expires: new Date(0),
-    path: "/",
-  });
+			httpOnly: true,
+			expires: new Date(0),
+			path: "/",
+		});
+		
+		//7.1 Delete user
+		await db.collection("users").deleteOne({ username });
 		
 		return Response.json({
 			message: "Account deleted successfully",
