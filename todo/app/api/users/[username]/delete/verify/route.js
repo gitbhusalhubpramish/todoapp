@@ -90,8 +90,9 @@ export async function POST(req, {params}){
 			return Response.json({error: "user is null in usrdata database collections"}, {status: 404})
 		}
 		const projects = usr.projects
-		
+		console.log(projects)
 		if (projects.lenght>0){
+			console.log(projects)
 		
 		const projectDocs = await db.collection("projects").find({
 			owner: username,
@@ -137,10 +138,11 @@ export async function POST(req, {params}){
 		
 		const cookieStore = await cookies();
 
-		cookieStore.set("token", "", {
-			maxAge: 0,
-			path: "/",
-		});
+		cookieStore.set("sessionId", "", {
+    httpOnly: true,
+    expires: new Date(0),
+    path: "/",
+  });
 		
 		return Response.json({
 			message: "Account deleted successfully",
