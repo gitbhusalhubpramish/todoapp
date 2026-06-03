@@ -116,8 +116,11 @@ export async function POST(req) {
 			console.log(usrotp)
 			
 			if (otp.expiresAt < new Date()) {
-				return Response.json({ error: "OTP incorrect or expired" }, { status: 400 });
+				
 				await forgetcode.deleteOne({ _id: otp._id });
+
+				return Response.json({ error: "OTP incorrect or expired" }, { status: 400 });
+
 			}
 			
 			if (otp.code === usrotp){
