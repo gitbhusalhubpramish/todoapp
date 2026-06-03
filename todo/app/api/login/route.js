@@ -52,14 +52,11 @@ export async function POST(req) {
 		});
 
 		if (!user && action !== "verify") {
-			console.log(action, username, code)
 			return Response.json(
 				{ error: "Password or username incorrect" },
 				{ status: 401 }
 			);
 		}
-		console.log(user)
-	
 	
 		if (action === "forget"){
 			
@@ -68,7 +65,6 @@ export async function POST(req) {
 			}
 			
 			const forgetcode = db.collection("forgetcode");
-			console.log("forget ",action)
 			
 			const hashedPassword = await bcrypt.hash(password, 10);
 			const resetCode = crypto.randomInt(100000, 999999).toString(); // 6-digit OTP
