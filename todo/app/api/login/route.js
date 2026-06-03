@@ -62,13 +62,17 @@ export async function POST(req) {
 	
 	
 		if (action === "forget"){
+			
 			if (!password || password.length < 6) {
 				return Response.json({ error: "Password too short" }, { status: 400 });
 			}
+			
 			const forgetcode = db.collection("forgetcode");
 			console.log("forget ",action)
+			
 			const hashedPassword = await bcrypt.hash(password, 10);
 			const resetCode = crypto.randomInt(100000, 999999).toString(); // 6-digit OTP
+			
 			const lastRequest = await forgetcode.findOne(
 				{ userId: user._id },
 				{ sort: { createdAt: -1 } }
@@ -80,8 +84,10 @@ export async function POST(req) {
 					{ status: 429 }
 				);
 			}
+			
 			await sendResetEmail(user.email, resetCode);
 			const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 min
+			
 			await forgetcode.insertOne({
 				userId: user._id,
 				code: resetCode,
@@ -90,25 +96,34 @@ export async function POST(req) {
 				used: false,
 				createdAt: new Date(),
 			});
+			
 			console.log(resetCode)
+			
 			return Response.json({ message: "Reset code sent" });
 		}
+		
 		if (action === "verify"){
+			
 			const forgetcode = db.collection("forgetcode");
 			const otp = await forgetcode.findOne(
 				{ userId: user._id },
 				{ sort: { createdAt: -1 } }
 			);
+			
 			console.log(otp)
+			
 			const usrotp = code.join("")
 			console.log(usrotp)
+			
 			if (otp.expiresAt < new Date()) {
 				return Response.json({ error: "OTP incorrect or expired" }, { status: 400 });
 				await forgetcode.deleteOne({ _id: otp._id });
 			}
+			
 			if (otp.code === usrotp){
 			
 				console.log("otp is correct")
+				
 				await users.updateOne({_id: user._id}, {$set:{password: otp.newpass}})
 				console.log(otp.newpass)
 			
@@ -131,6 +146,7 @@ export async function POST(req) {
 					path: "/",
 					maxAge: 60 * 60 * 24,
 				});
+				
 				await forgetcode.deleteOne({ _id: otp._id });
 
 				return Response.json(
@@ -139,20 +155,19 @@ export async function POST(req) {
 				);
 			}
 		
-		
 			await forgetcode.deleteOne({ _id: otp._id });
+			
 			return Response.json({ error: "OTP incorrect or expired" }, { status: 400 });
 		}
-	
 
 		const isMatched = await bcrypt.compare(password, user.password);
+		
 		if(!isMatched){
 			return Response.json(
 				{ error: "Password or username incorrect" },
 				{ status: 401 }
 			);
 		}
-
 
 		const sessionId = randomUUID();
 
@@ -180,7 +195,9 @@ export async function POST(req) {
 		);
 
 	} catch (err) {
+
 		console.log(err);
+
 		return Response.json(
 			{ error: "Server error" },
 			{ status: 500 }
