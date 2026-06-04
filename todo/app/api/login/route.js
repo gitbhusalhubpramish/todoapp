@@ -120,8 +120,6 @@ export async function POST(req) {
 			}
 			
 			if (otp.code === usrotp){
-			
-				console.log("otp is correct")
 				
 				await users.updateOne({_id: user._id}, {$set:{password: otp.newpass}})
 				console.log(otp.newpass)
@@ -190,7 +188,7 @@ export async function POST(req) {
 
 		return Response.json(
 			{ message: "Log in successful" },
-			{ status: 201 }
+			{ status: 200 }
 		);
 
 	} catch (err) {
