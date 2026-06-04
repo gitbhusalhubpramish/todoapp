@@ -8,7 +8,7 @@ export async function POST() {
 
 	if (sessionId) {
 		const client = await clientPromise;
-		const db = client.db("projectdata"); // change if needed
+		const db = client.db("projectdata"); 
 
 		const sessions = db.collection("sessions");
 
