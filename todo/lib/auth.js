@@ -16,15 +16,16 @@ export async function getCurrentUser() {
 		sessionId,
 	});
 
-	/*if (!session) {
-		cookieStore.set("session", "", {
-			maxAge: 0,
+	if (!session) {
+		//delete sessionid form client cookies storage
+		cookieStore.set("sessionId", "", {
+			httpOnly: true,
+			expires: new Date(0),
 			path: "/",
 		});
+		
+		return false
+	}
 
-		return null;
-	}*/
-	console.log(session)
-
-	return session ? session : false;
+	return sessions;
 }
