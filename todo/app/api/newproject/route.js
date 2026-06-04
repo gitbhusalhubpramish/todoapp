@@ -13,7 +13,7 @@ export async function POST(req) {
 	const db = client.db("projectdata");
 	
 	const sessions = db.collection("sessions");
-    const usrdta = db.collection("usrdata");
+	const usrdta = db.collection("usrdata");
 	const session = await sessions.findOne({
 		sessionId,
 	});
@@ -47,15 +47,15 @@ export async function POST(req) {
 	
 	await projects.insertOne(project)
 	await usrdta.updateOne(
-    { username: project.owner },
-    {
-        $push: {
-            projects: {
-                projectId: project._id,
-                title: project.content.title
-            }
-        }
-    }
+	{ username: project.owner },
+	{
+		$push: {
+			projects: {
+				projectId: project._id,
+				title: project.content.title
+			}
+		}
+	}
 );
 	//console.log(projects)
 	return Response.json({ ok: true });
