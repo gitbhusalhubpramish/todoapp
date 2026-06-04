@@ -9,14 +9,18 @@ export async function getCurrentUser() {
 	
 	if (!sessionId) return false;
 
+	//connect to database
 	const client = await clientPromise;
-    const db = client.db("projectdata");
+	const db = client.db("projectdata");
+
+	//get session form collection
 	const sessions = db.collection("sessions");
 	const session = await sessions.findOne({
 		sessionId,
 	});
 
 	if (!session) {
+		
 		//delete sessionid form client cookies storage
 		cookieStore.set("sessionId", "", {
 			httpOnly: true,
