@@ -56,6 +56,8 @@ export async function POST(req) {
 	
 	//add project
 	await projects.insertOne(project)
+	
+	//add porject to usrdata collections
 	await usrdta.updateOne(
 		{ username: project.owner },
 		{
