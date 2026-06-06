@@ -81,7 +81,7 @@ export async function POST(req) {
 		const hashedPassword = await bcrypt.hash(password, 10);
 		
 		// insert user to users db collection
-		const result = await users.insertOne({
+		await users.insertOne({
 			normalizedEmail,
 			username,
 			password: hashedPassword,
@@ -89,7 +89,7 @@ export async function POST(req) {
 		});
 		
 		//insert user to usrdata colleciton
-		const usrdtares = await usrdta.insertOne({
+		await usrdta.insertOne({
 				username,
 				profilepic: "/profile.svg",
 				projects: [],
@@ -99,7 +99,6 @@ export async function POST(req) {
 				following: [],
 				bio: "",
 		})
-		console.log(usrdtares)
 
 		//create sessionid
 		const sessionId = randomUUID();
