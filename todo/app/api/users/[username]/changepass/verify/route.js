@@ -62,7 +62,6 @@ export async function POST(req, {params}){
 		
 		//get redis key
 		const red = await redis.get(`change_otp:${username}`)
-		console.log(red)
 		
 		//otp expire validation
 		if(!red){
