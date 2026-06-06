@@ -32,7 +32,7 @@ export async function POST(req) {
 		}
 
 		const usernameRegex = /^[a-zA-Z0-9_-]{3,20}$/;
-		const emailRegex = /^[a-zA-Z0-9_@.\-]+$/;
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 		if (!usernameRegex.test(username)) {
 			return Response.json({ error: "Invalid username" }, { status: 400 });
