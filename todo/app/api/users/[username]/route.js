@@ -64,7 +64,6 @@ export async function GET(req, { params }) {
 		users.map(u => [u.username, u.profilepic])
 	);
 	
-	console.log(userMap)
 	
 	//add profile pic too
 	const result = likedpro.map(p => ({
@@ -76,7 +75,6 @@ export async function GET(req, { params }) {
 		}
 	}));
 	
-	console.log(result)
 	
 	//set changes
 	user.likedprojects = result
