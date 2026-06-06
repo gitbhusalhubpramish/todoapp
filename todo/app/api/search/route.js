@@ -3,6 +3,7 @@ import { ObjectId } from "mongodb";
 
 export async function GET(req) {
 	try {
+		// get querry
 		const { searchParams } = new URL(req.url);
 		const q = searchParams.get("q")?.trim() || "";
 
@@ -13,12 +14,14 @@ export async function GET(req) {
 			});
 		}
 		
+		//sanitize querry
 		function escapeRegex(str) {
 			return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 		}
 
 		const safeQuery = escapeRegex(q);
 
+		//connect to database
 		const client = await clientPromise;
 		const db = client.db("projectdata");
 
@@ -104,6 +107,7 @@ export async function GET(req) {
 			profilepic: ownerMap[project.owner] || null,
 		}));
 		
+		// core query 
 		const query = [
 			...new Set([
 				...rawProjects.map((p) => p.content.title),
