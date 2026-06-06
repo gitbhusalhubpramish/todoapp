@@ -33,12 +33,14 @@ export async function POST(req) {
 
 		const usernameRegex = /^[a-zA-Z0-9_-]{3,20}$/;
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		
+		const normalizedEmail = email.trim().toLowerCase();
 
 		if (!usernameRegex.test(username)) {
 			return Response.json({ error: "Invalid username" }, { status: 400 });
 		}
 
-		if (!emailRegex.test(email)) {
+		if (!emailRegex.test(normalizedEmail)) {
 			return Response.json({ error: "Invalid email" }, { status: 400 });
 		}
 
@@ -54,7 +56,7 @@ export async function POST(req) {
 		const usrdta = db.collection("usrdata");
 
 		const existing = await users.findOne({
-			$or: [{ email }, { username }],
+			$or: [{ normalizedEmail }, { username }],
 		});
 
 		if (existing) {
@@ -67,7 +69,7 @@ export async function POST(req) {
 		const hashedPassword = await bcrypt.hash(password, 10);
 
 		const result = await users.insertOne({
-			email,
+			normalizedEmail,
 			username,
 			password: hashedPassword,
 			createdAt: new Date(),
