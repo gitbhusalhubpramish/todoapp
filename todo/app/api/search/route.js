@@ -12,6 +12,12 @@ export async function GET(req) {
 				projects: [],
 			});
 		}
+		
+		function escapeRegex(str) {
+			return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+		}
+
+		const safeQuery = escapeRegex(q);
 
 		const client = await clientPromise;
 		const db = client.db("projectdata");
@@ -22,7 +28,7 @@ export async function GET(req) {
 			.find(
 				{
 					username: {
-						$regex: q,
+						$regex: safeQuery,
 						$options: "i",
 					},
 				},
@@ -44,7 +50,7 @@ export async function GET(req) {
 			.find(
 				{
 					"content.title": {
-						$regex: q,
+						$regex: safeQuery,
 						$options: "i",
 					},
 				},
