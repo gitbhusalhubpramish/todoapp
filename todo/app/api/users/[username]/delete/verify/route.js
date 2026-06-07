@@ -11,7 +11,10 @@ function hashOTP(otp) {
 
 export async function POST(req, {params}){
 	try {
+		//get params username 
 		const {username} = await params;
+		
+		//get otp and captcha token form client
 		const { otp, captchaToken } = await req.json();
 	
 		//user auth
@@ -20,6 +23,7 @@ export async function POST(req, {params}){
 			return Response.json({ error: "Unauthorized" }, { status: 401 });
 		}
 		
+		//verify captcha
 		const verifyRes = await fetch(
 			"https://www.google.com/recaptcha/api/siteverify",
 			{
@@ -50,9 +54,11 @@ export async function POST(req, {params}){
 			);
 		}
 		
+		//redis key initilization
 		const key = `delete_otp:${username}`;
 		const raw = await redis.get(key);
 
+		//checking for existing key
 		if (!raw) {
 			return Response.json(
 				{ error: "OTP expired or not found" },
@@ -62,10 +68,12 @@ export async function POST(req, {params}){
 		
 		const data = raw;
 
+		//hash user otp to sha256
 		const hashedInput = hashOTP(otp);
 
+		//otp validation
 		if (hashedInput !== data.hash) {
-
+			//delete otp
 			await redis.del(key);
 
 			return Response.json(
@@ -74,6 +82,7 @@ export async function POST(req, {params}){
 			);
 		}
 		
+		//delete redis
 		await redis.del(key);
 		
 		// -----------------------------
@@ -82,18 +91,24 @@ export async function POST(req, {params}){
 		const client = await clientPromise;
 		const db = client.db("projectdata");
 
-		
+		//search for user in database collections
 		const usr = await db.collection("usrdata").findOne({username})
+		
+		//user validation
 		if (!usr){
 			return Response.json({error: "user is null in usrdata database collections"}, {status: 404})
 		}
 		console.log(usr)
+		
+		//get userproject
 		const projects = usr.projects
 		console.log(projects)
 		console.log(projects.length)
+		
+		//delete project if exist
 		if (projects.length>0){
 			console.log(projects)
-			
+			//get project title
 			const projecttitl = projects.map(p=> p.title)
 		
 			const projectDocs = await db.collection("projects").find({
