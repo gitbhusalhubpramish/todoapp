@@ -57,9 +57,8 @@ export async function PATCH(req, { params }) {
 
 	//connect to database collection
 	const client = await clientPromise;
-	const db = client.db("projectdata");
-	console.log(username, project)
-
+	const db = client.db("projectdata");]
+	
 	//get project form database collection
 	const doc = await db.collection("projects").findOne({
 		owner: username,
