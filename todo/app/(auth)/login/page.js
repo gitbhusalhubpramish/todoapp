@@ -24,7 +24,6 @@ export default function Signup() {
 			action: "forget",
 			forget: true,
 		}))
-		console.log(form)
 	}
 
 	//if (!mounted) return null;
@@ -116,7 +115,6 @@ export default function Signup() {
 			});
 			
 			const data = await res.json();
-			console.log(data);
       
 			recaptchaRef.current?.reset();
 			setCaptchaToken(null);
@@ -138,7 +136,6 @@ export default function Signup() {
 					password: "",
 					code:Array(6).fill(""),
 				}));
-				console.log(form)
 				return
 			}
 			setForm({
