@@ -118,20 +118,20 @@ export async function POST(req, {params}){
 			if (projectDocs.length === 0){
 				return Response.json({error:"project not found in database collections"},{status:404})
 			}
-		const likedusers = projectDocs.flatMap(p => p.likes || []);
+			const likedusers = projectDocs.flatMap(p => p.likes || []);
 	
-		const formatpro = projects.map(p => `${username}/${p}`)
+			const formatpro = projects.map(p => `${username}/${p}`)
 	
-		await db.collection("usrdata").updateMany(
-			{ username: { $in: likedusers } },
-			{
-				$pull:{likedprojects: {$in: formatpro}}
-			}
-		)
+			await db.collection("usrdata").updateMany(
+				{ username: { $in: likedusers } },
+				{
+					$pull:{likedprojects: {$in: formatpro}}
+				}
+			)
 	
-		await db.collection("projects").deleteMany({
-			owner: username,
-		});
+			await db.collection("projects").deleteMany({
+				owner: username,
+			});
 		}
 		
 		await db.collection("projects").updateMany(
