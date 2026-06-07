@@ -4,12 +4,15 @@ import ReCAPTCHA from "react-google-recaptcha";
 import Link from "next/link";
 
 export default function Signup() {
+	//refs
 	const recaptchaRef = useRef(null);
+	const inputsRef = useRef([]);
+	
+	//state
 	const [mounted, setMounted] = useState(false);
 	const [captchaToken, setCaptchaToken] = useState(null);
 	const [error, setError] = useState("")
 	const [conformpass, setConformpass] = useState("")
-	const inputsRef = useRef([]);
 	
 	const [form, setForm] = useState({
 		action:"",
@@ -25,7 +28,8 @@ export default function Signup() {
 			forget: true,
 		}))
 	}
-
+	
+	//handel changes in input box
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 
@@ -34,6 +38,8 @@ export default function Signup() {
 			[name]: value,
 		}));
 	};
+	
+	//handel changes while entering otp code for forget password
 	const handleChangeOTP = (value, index) => {
 		if (!/^\d?$/.test(value)) return;
 
@@ -50,12 +56,14 @@ export default function Signup() {
 		}
 	};
 
+	//handelling keys in otp in forget password
 	const handleKeyDownOTP = (e, index) => {
 		if (e.key === "Backspace" && !form.code[index] && index > 0) {
 			inputsRef.current[index - 1]?.focus();
 		}
 	};
 
+	//past copied code to all input box
 	const handlePasteOTP = (e) => {
 		e.preventDefault();
 
@@ -85,6 +93,7 @@ export default function Signup() {
 		inputsRef.current[lastIndex]?.focus();
 	};
 
+	//submit the form to api endpoint accoriding to action with validation
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setError("")
@@ -100,6 +109,8 @@ export default function Signup() {
 		if (!recaptchaRef.current) return;
 		recaptchaRef.current.execute();
 	};
+	
+	//verify captcha and send request
 	const handleCaptchaVerify = async (token) => {
 		try {
 			setCaptchaToken(token);
@@ -117,6 +128,7 @@ export default function Signup() {
       
 			recaptchaRef.current?.reset();
 			setCaptchaToken(null);
+			
 			if (res.status === 201){
 				alert("login success");
 				window.location.reload()
@@ -135,6 +147,7 @@ export default function Signup() {
 				}));
 				return
 			}
+			
 			setForm({
 				action:"",
 				username: "",
