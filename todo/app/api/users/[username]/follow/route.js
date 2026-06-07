@@ -4,11 +4,13 @@ import { getCurrentUser } from "@/lib/auth";
 // FOLLOW USER
 export async function POST(req, { params }) {
 	try {
+		//user auth
 		const session = await getCurrentUser();
 		if (!session) {
 			return Response.json({ error: "Unauthorized" }, { status: 401 });
 		}
 
+		//get user to follow
 		const { username } = await params;
 
 		if (session.username === username) {
@@ -18,6 +20,7 @@ export async function POST(req, { params }) {
 			);
 		}
 
+		//connect to database
 		const client = await clientPromise;
 		const db = client.db("projectdata");
 
@@ -136,25 +139,32 @@ export async function POST(req, { params }) {
 // UNFOLLOW USER
 export async function DELETE(req, { params }) {
 	try {
+		//user auth
 		const session = await getCurrentUser();
 		if (!session) {
 			return Response.json({ error: "Unauthorized" }, { status: 401 });
 		}
 
+		//get target user to unfollow
 		const { username } = await params;
+		
+		//connect to database collection
 		const client = await clientPromise;
 		const db = client.db("projectdata");
 
+		//get target user form database collection
 		const targetUser = await db.collection("usrdata").findOne({ username });
 
 		if (!targetUser) {
 			return Response.json({ error: "User not found" }, { status: 404 });
 		}
 
+		//get current user in the database collection
 		const currentUser = await db.collection("usrdata").findOne({
 			username: session.username,
 		});
 
+		//check if current user follows target user
 		if (!currentUser?.following?.includes(username)) {
 			return Response.json(
 				{ error: "Not following this user" },
