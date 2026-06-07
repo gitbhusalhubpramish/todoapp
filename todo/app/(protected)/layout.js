@@ -4,13 +4,10 @@ import { redirect } from "next/navigation";
 import {getCurrentUser} from "@/lib/auth"
 
 export default async function ProtectedLayout({ children }) {
-  const sessionId = getCurrentUser()
+	const sessionId = getCurrentUser()
 
-  if (!sessionId) {
-    redirect("/login");
-  }
-
-  
-
-  return (<>{children}</>)
+	if (!sessionId) {
+		redirect("/login");
+	}
+	return (<>{children}</>)
 }
