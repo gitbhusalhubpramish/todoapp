@@ -9,9 +9,7 @@ export default function Signup() {
 	const [captchaToken, setCaptchaToken] = useState(null);
 	const [error, setError] = useState("")
 	
-	/*useEffect(() => {
-	setMounted(true);
-}, []);*/
+	
 
 
 	const [form, setForm] = useState({
@@ -21,7 +19,6 @@ export default function Signup() {
 		confirmPassword: "",
 	});
 
-	//if (!mounted) return null;
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 
@@ -84,10 +81,8 @@ const handleCaptchaVerify = async (token) => {
       alert("Signup success");}
       else{
 			setError(data.error)
-			//alert("Error: " + data.error);
 		}
 
-      //if (!recaptchaRef.current) return;
       recaptchaRef.current?.reset();
       setCaptchaToken(null);
       setForm({
