@@ -17,16 +17,20 @@ function hashOTP(otp) {
 
 export async function POST(req, {params}){
 	try {
+		//get params
 		const {username} = await params;
 	
+		//user cookies authorization
 		const session = await getCurrentUser();
 		if (session?.username !== username) {
 			return Response.json({ error: "Unauthorized" }, { status: 401 });
 		}
 	
+		//connect to db
 		const client = await clientPromise;
 		const db = client.db("projectdata");
 
+		//search for user in the database collection
 		const user = await db.collection("users").findOne({ username });
 		if (!user) {
 			return Response.json(
