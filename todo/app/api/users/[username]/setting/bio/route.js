@@ -15,8 +15,6 @@ export async function POST(req, {params}){
 	const body = await req.json();
 	const { bio } = body;
 	
-	console.log(bio)
-	
 	//req validation
 	if (bio.length>150){
 		return Response.josn({error:"bio must be less than 150 character"}, {status: 400})

@@ -15,8 +15,6 @@ export async function POST(req, {params}){
 	const body = await req.json();
 	const { projects } = body;
 	
-	console.log(projects)
-	
 	//connect to database
 	const client = await clientPromise;
 	const db = client.db("projectdata");
