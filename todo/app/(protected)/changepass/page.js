@@ -39,8 +39,6 @@ export default function ChangePasswordPage() {
 				const res = await fetch("/api/me/auth");
 				const data = await res.json();
 
-				console.log("session raw data ", data);
-
 				setSessionUser(data.user);
 
 				if (!data.user) {
