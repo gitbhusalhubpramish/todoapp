@@ -9,9 +9,6 @@ export default function Signup() {
 	const [captchaToken, setCaptchaToken] = useState(null);
 	const [error, setError] = useState("")
 	
-	
-
-
 	const [form, setForm] = useState({
 		email: "",
 		username: "",
@@ -27,74 +24,57 @@ export default function Signup() {
 			[name]: value,
 		}));
 	};
-	const getCaptchaToken = () => {
-  return new Promise((resolve) => {
-    if (!window.grecaptcha) {
-      console.error("reCAPTCHA not loaded");
-      return;
-    }
-
-    window.grecaptcha.ready(() => {
-      window.grecaptcha
-        .execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY, {
-          action: "signup",
-        })
-        .then(resolve);
-    });
-  });
-
-};
 
 const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("")
-    if (!e.target.checkValidity()) {
+		e.preventDefault();
+		setError("")
+		if (!e.target.checkValidity()) {
 		e.target.reportValidity();
 		return;
 	}
 
-    if (form.password !== form.confirmPassword) {
-      alert("Passwords do not match");
-      return;
-    }
+		if (form.password !== form.confirmPassword) {
+			alert("Passwords do not match");
+			return;
+		}
 
-    // 👉 trigger invisible captcha
-    if (!recaptchaRef.current) return;
+		// 👉 trigger invisible captcha
+		if (!recaptchaRef.current) return;
 	recaptchaRef.current.execute();
-  };
+	};
 const handleCaptchaVerify = async (token) => {
-    try {
-      setCaptchaToken(token);
+		try {
+			setCaptchaToken(token);
 
-      const res = await fetch("/api/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...form,
-          captchaToken: token,
-        }),
-      });
+			const res = await fetch("/api/signup", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					...form,
+					captchaToken: token,
+				}),
+			});
 
-      const data = await res.json();
-      console.log(data);
+			const data = await res.json();
+			console.log(data);
 		if (res.status === 201){
-      alert("Signup success");}
-      else{
+			alert("Signup success");}
+			else{
 			setError(data.error)
 		}
 
-      recaptchaRef.current?.reset();
-      setCaptchaToken(null);
-      setForm({
+			recaptchaRef.current?.reset();
+			setCaptchaToken(null);
+			setForm({
 		email: "",
 		username: "",
 		password: "",
 		confirmPassword: "",
 	})
-    } catch (err) {
-      console.error(err);
-    }
-  };
+		} catch (err) {
+			console.error(err);
+		}
+	};
 	
 
 	return (
@@ -107,10 +87,10 @@ const handleCaptchaVerify = async (token) => {
 					Sign Up
 				</h1>
 				{error && (
-    <p className="text-red-500 text-sm font-medium text-center">
-      {error}
-    </p>
-  )}
+		<p className="text-red-500 text-sm font-medium text-center">
+			{error}
+		</p>
+	)}
 
 				{/* Email */}
 				<input
