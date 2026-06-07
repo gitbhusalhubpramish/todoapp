@@ -4,11 +4,14 @@ import ReCAPTCHA from "react-google-recaptcha";
 import Link from "next/link";
 
 export default function Signup() {
+	
+	//ref
 	const recaptchaRef = useRef(null);
+	
+	//state
 	const [mounted, setMounted] = useState(false);
 	const [captchaToken, setCaptchaToken] = useState(null);
 	const [error, setError] = useState("")
-	
 	const [form, setForm] = useState({
 		email: "",
 		username: "",
@@ -16,6 +19,7 @@ export default function Signup() {
 		confirmPassword: "",
 	});
 
+	//handel changes in input box
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 
@@ -25,6 +29,7 @@ export default function Signup() {
 		}));
 	};
 
+	//handel submission of signup form
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setError("")
@@ -43,6 +48,7 @@ export default function Signup() {
 		recaptchaRef.current.execute();
 	};
 	
+	//handel recaptcha verification and submit form
 	const handleCaptchaVerify = async (token) => {
 		try {
 			setCaptchaToken(token);
