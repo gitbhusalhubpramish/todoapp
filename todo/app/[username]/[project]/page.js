@@ -44,7 +44,6 @@ export default function project({ params }) {
 
 			const data = await res.json();
 			setProject(data.project);
-			console.log(data)
 			setLiked(data.project?.likes?.includes(session?.username) || false);
 			setLoading(false);
 		}
@@ -65,7 +64,6 @@ export default function project({ params }) {
 	
 	//toggel isdone
 	const handleTaskToggle = async (taskIndex) => {
-		console.log("clicked")
 		try {
 			const res = await fetch(
 				`/api/users/${username}/${project}`,
@@ -81,7 +79,6 @@ export default function project({ params }) {
 			if (!res.ok) return;
 	
 			const data = await res.json();
-			console.log(data)
 
 			// update local state (important)
 			setProject((prev) => ({
@@ -93,7 +90,6 @@ export default function project({ params }) {
 					tasks: data.updatedTasks,
 				},
 			}));
-			console.log(projects)
 		} catch (err) {
 			console.error(err);
 		}
@@ -160,7 +156,6 @@ export default function project({ params }) {
 		const data = await res.json();
 
 		if (!res.ok) {
-			console.log(data.error);
 			return;
 		}
 
