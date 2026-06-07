@@ -116,11 +116,13 @@ export async function POST(req, {params}){
 			
 			//projectdocs validation
 			if (projectDocs.length !== 0){
-			
+				//get username of user who liked the project
 				const likedusers = projectDocs.flatMap(p => p.likes || []);
 	
+				//format the username adn project
 				const formatpro = projects.map(p => `${username}/${p}`)
 	
+				//delete deleted project form every user liked collection
 				await db.collection("usrdata").updateMany(
 					{ username: { $in: likedusers } },
 					{
@@ -128,12 +130,14 @@ export async function POST(req, {params}){
 					}
 				)
 	
+				//delete all project of that user
 				await db.collection("projects").deleteMany({
 					owner: username,
 				});
 			}
 		}
 		
+		//unlike all project the user has liked ever
 		await db.collection("projects").updateMany(
 			{},
 			{
@@ -141,6 +145,7 @@ export async function POST(req, {params}){
 			}
 		)
 		
+		//remove user form follower and following list
 		await db.collection("usrdata").updateMany(
 			{},
 			{
@@ -151,17 +156,20 @@ export async function POST(req, {params}){
 			}
 		);
 		
+		//delete user from usrdata database collection
 		await db.collection("usrdata").deleteOne({username: username})
 		
+		//init cookies
 		const cookieStore = await cookies();
 
+		//delete sessionid
 		cookieStore.set("sessionId", "", {
 			httpOnly: true,
 			expires: new Date(0),
 			path: "/",
 		});
 		
-		//7.1 Delete user
+		//Delete user
 		await db.collection("users").deleteOne({ username });
 		
 		return Response.json({
