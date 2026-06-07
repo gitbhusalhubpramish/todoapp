@@ -28,7 +28,6 @@ export async function POST(req, {params}){
 		const db = client.db("projectdata");
 
 		const user = await db.collection("users").findOne({ username });
-		console.log("PARAM USERNAME:", username);
 		if (!user) {
 			return Response.json(
 				{ error: "User not found" },
