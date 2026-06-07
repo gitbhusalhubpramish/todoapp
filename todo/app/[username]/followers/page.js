@@ -31,7 +31,6 @@ export default function followers({ params }){
 			const data = await res.json();
 			setFollowers(data.followers);
 			setUser(data.user)
-			console.log(data)
 			setLoading(false);
 		}
 
