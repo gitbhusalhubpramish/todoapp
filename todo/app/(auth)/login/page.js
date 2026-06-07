@@ -26,7 +26,6 @@ export default function Signup() {
 		}))
 	}
 
-	//if (!mounted) return null;
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 
@@ -127,8 +126,6 @@ export default function Signup() {
 				return
 			}
 			
-
-      //if (!recaptchaRef.current) return;
 			if (form.action === "forget"){
 				setForm((prev)=>({
 					...prev,
