@@ -57,8 +57,6 @@ export async function POST(req, {params}){
 		.end(buffer);
 	});
 	
-	console.log(uploaded)
-	
 	//connect to database
 	const client = await clientPromise;
 	const db = client.db("projectdata");
