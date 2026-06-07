@@ -8,14 +8,17 @@ import { Folder, Heart } from "lucide-react";
 import { redirect } from "next/navigation";
 
 export default function ProfilePage({ params }) {
+	//get target username
 	const { username } = use(params)
 
+	//initilize states
 	const [user, setUser] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const [notFoundState, setNotFoundState] = useState(false);
 	const [session, setSessionUser] = useState(null);
 	const [activeTab, setActiveTab] = useState("projects");
 
+	//fetch for authrization
 	useEffect(() => {
 		async function loadSession() {
 			const res = await fetch("/api/me/auth");
@@ -27,6 +30,7 @@ export default function ProfilePage({ params }) {
 		loadSession();
 	}, []);
 
+	//fetch to get target user data
 	useEffect(() => {
 		async function loadUser() {
 			setLoading(true);
@@ -48,12 +52,17 @@ export default function ProfilePage({ params }) {
 		loadUser();
 	}, [username]);
 
+	//dispaly notfound page if user wasn't found
 	if (notFoundState) {
 		return notFound();
 	}
+	
+	//loading skeleten
 	const Skeleton = ({ className }) => (
 		<div className={`animate-pulse bg-gray-600/50 rounded ${className}`} />
 	)
+	
+	//handel to follow target user
 	const handelFollow = async () => {
 		if (!session){
 			redirect("/login");
@@ -85,6 +94,8 @@ export default function ProfilePage({ params }) {
 			};
 		});
 	};
+	
+	//follow button structre and style
 	const Followbtn = () => {
 		console.log("session ", session)
 		console.log("user ", user)
