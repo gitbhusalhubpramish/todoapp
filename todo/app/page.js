@@ -14,16 +14,21 @@ export default function Home() {
 				<div className="flex-1 ">
 					<div className="h-2/3 sm:flex justify-center items-center w-full flex-col">
 						<div className="m-15 aspect-square size-50 border-30 rounded-3xl border-[#00bf00] flex">
+						
 							<div className="h-11/10 w-4/10 bg-[#00bf00] -rotate-30 rounded-full border-10 border-[#dbffe9] dark:border-[#0b1120]"/>
+							
 							<div className="h-2/1 w-4/10 relative rotate-50 bottom-24 left-16 rounded-full flex items-end bg-[#dbffe9] dark:bg-[#0b1120]">
 								<div className="bg-[#00bf00] w-8/10 h-9/10 relative rounded-full"/>
 							</div>
+							
 						</div>
+						
 						<div className="items-end flex">
 							<p className="dark:text-white text-gray-500">
 								Get started by <Link href="/login" className="text-blue-500 underline">logging in</Link> or <Link href="signup" className="text-blue-500 underline">signing up</Link>
-								</p>
+							</p>
 						</div>
+						
 					</div>
 				</div>
 			</div>
