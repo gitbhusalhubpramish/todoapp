@@ -25,13 +25,13 @@ export default function Signup() {
 		}));
 	};
 
-const handleSubmit = async (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setError("")
 		if (!e.target.checkValidity()) {
-		e.target.reportValidity();
-		return;
-	}
+			e.target.reportValidity();
+			return;
+		}
 
 		if (form.password !== form.confirmPassword) {
 			alert("Passwords do not match");
@@ -40,9 +40,10 @@ const handleSubmit = async (e) => {
 
 		// 👉 trigger invisible captcha
 		if (!recaptchaRef.current) return;
-	recaptchaRef.current.execute();
+		recaptchaRef.current.execute();
 	};
-const handleCaptchaVerify = async (token) => {
+	
+	const handleCaptchaVerify = async (token) => {
 		try {
 			setCaptchaToken(token);
 
@@ -57,20 +58,20 @@ const handleCaptchaVerify = async (token) => {
 
 			const data = await res.json();
 			console.log(data);
-		if (res.status === 201){
-			alert("Signup success");}
+			if (res.status === 201){
+				alert("Signup success");}
 			else{
-			setError(data.error)
-		}
+				setError(data.error)
+			}
 
 			recaptchaRef.current?.reset();
 			setCaptchaToken(null);
 			setForm({
-		email: "",
-		username: "",
-		password: "",
-		confirmPassword: "",
-	})
+				email: "",
+				username: "",
+				password: "",
+				confirmPassword: "",
+			})
 		} catch (err) {
 			console.error(err);
 		}
@@ -87,10 +88,10 @@ const handleCaptchaVerify = async (token) => {
 					Sign Up
 				</h1>
 				{error && (
-		<p className="text-red-500 text-sm font-medium text-center">
-			{error}
-		</p>
-	)}
+					<p className="text-red-500 text-sm font-medium text-center">
+						{error}
+					</p>
+				)}
 
 				{/* Email */}
 				<input
@@ -140,7 +141,7 @@ const handleCaptchaVerify = async (token) => {
 
 				{/* CAPTCHA */}
 				<ReCAPTCHA
-				ref={recaptchaRef}
+					ref={recaptchaRef}
 					sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
 					onChange={handleCaptchaVerify}
 					size="invisible"
@@ -153,10 +154,10 @@ const handleCaptchaVerify = async (token) => {
 				>
 					Create Account
 				</button>
+				
 				<p className="dark:text-white text-center">Already have an account? <Link className="text-blue-500 underline" href="/login">Login</Link></p>
+				
 			</form>
-			
 		</div>
-		
 	);
 }
