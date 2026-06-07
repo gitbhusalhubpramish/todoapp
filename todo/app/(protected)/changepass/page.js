@@ -6,24 +6,12 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { useRouter } from "next/navigation";
 
 export default function ChangePasswordPage() {
+	//initlize louter
 	const router = useRouter();
 
+	//initlize state
 	const [session, setSessionUser] = useState(null);
-
-	const [formData, setFormData] = useState({
-		oldPassword: "",
-		newPassword: "",
-		confirmPassword: "",
-	});
-
 	const [otp, setOtp] = useState("");
-
-	const [show, setShow] = useState({
-		old: false,
-		new: false,
-		confirm: false,
-	});
-
 	const [otpSent, setOtpSent] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [cooldown, setCooldown] = useState(0);
@@ -32,7 +20,19 @@ export default function ChangePasswordPage() {
 	const [captchaToken, setCaptchaToken] = useState(null);
 	const recaptchaRefvotp = useRef(null);
 	const recaptchaRefsotp = useRef(null);
+	
+	const [formData, setFormData] = useState({
+		oldPassword: "",
+		newPassword: "",
+		confirmPassword: "",
+	});
+	const [show, setShow] = useState({
+		old: false,
+		new: false,
+		confirm: false,
+	});
 
+	//fetch user auth
 	useEffect(() => {
 		async function loadSession() {
 			try {
@@ -54,6 +54,7 @@ export default function ChangePasswordPage() {
 		loadSession();
 	}, [router]);
 
+	//cooldown
 	useEffect(() => {
 		if (cooldown <= 0) return;
 
@@ -64,6 +65,7 @@ export default function ChangePasswordPage() {
 		return () => clearInterval(timer);
 	}, [cooldown]);
 
+	//handel changes in input box
 	function handleChange(e) {
 		setFormData({
 			...formData,
@@ -71,6 +73,7 @@ export default function ChangePasswordPage() {
 		});
 	}
 
+	//check for password validation
 	function validatePasswords() {
 		const { oldPassword, newPassword, confirmPassword } =
 			formData;
@@ -106,6 +109,7 @@ export default function ChangePasswordPage() {
 		return null;
 	}
 
+	//send request to server for otp
 	async function requestOTP() {
 		setError("");
 		setSuccess("");
@@ -127,6 +131,7 @@ export default function ChangePasswordPage() {
 		} 
 	}
 	
+	//handel captcha for requesting otp
 	const handleCaptchaVerifysotp = async (token) => {
 		try {
 			setCaptchaToken(token);
@@ -166,7 +171,7 @@ export default function ChangePasswordPage() {
 		}
 	}
 	
-
+	//verify submitted otp
 	async function verifyOTP() {
 		setError("");
 		setSuccess("");
@@ -186,6 +191,7 @@ export default function ChangePasswordPage() {
 		} 
 	}
 
+	//check the strength of password
 	function getStrength(password) {
 		let score = 0;
 
@@ -199,6 +205,8 @@ export default function ChangePasswordPage() {
 		if (score <= 4) return "Medium";
 		return "Strong";
 	}
+	
+	//handel captcha for verify opt and send verification request to server
 	const handleCaptchaVerifyvotp = async (token) => {
 		try {
 			
@@ -249,6 +257,8 @@ export default function ChangePasswordPage() {
 			setLoading(false);
 		}
 	}
+	
+	//loading
 	if (!session) {
 		return (
 			<div className="min-h-screen flex items-center justify-center bg-[#dbffe9] dark:bg-[#0b1120]">
@@ -483,6 +493,7 @@ export default function ChangePasswordPage() {
 	);
 }
 
+//password input box
 function PasswordInput({
 	label,
 	name,
