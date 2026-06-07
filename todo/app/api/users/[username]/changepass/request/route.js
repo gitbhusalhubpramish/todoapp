@@ -18,12 +18,16 @@ function hashOTP(otp) {
 
 export async function POST(req, { params }) {
 	try {
+		// get request body
 		const body = await req.json();
 
+		//get params
 		const { username } = await params;
 
+		//check for session validation
 		const session = await getCurrentUser();
 
+		// verify authorization
 		if (session?.username !== username) {
 			return Response.json(
 				{ error: "Unauthorized" },
@@ -31,7 +35,7 @@ export async function POST(req, { params }) {
 			);
 		}
 		
-
+		//get argunment
 		const {
 			oldPassword,
 			newPassword,
@@ -39,9 +43,7 @@ export async function POST(req, { params }) {
 			captchaToken,
 		} = body;
 		
-		console.log(captchaToken)
-		
-		
+		//bot detiection
 		const verifyRes = await fetch(
 			"https://www.google.com/recaptcha/api/siteverify",
 			{
@@ -59,10 +61,10 @@ export async function POST(req, { params }) {
 		const data = await verifyRes.json();
 
 		if (!data.success || (data.score && data.score < 0.5)) {
-			console.log(data.success, data.score);
 			return Response.json({ error: "Bot detected" }, { status: 403 });
 		}
 
+		//check for fields layer 1
 		if (
 			!oldPassword ||
 			!newPassword ||
@@ -74,6 +76,7 @@ export async function POST(req, { params }) {
 			);
 		}
 
+		// check for fields layer 2
 		if (
 			!oldPassword.trim() ||
 			!newPassword.trim() ||
@@ -85,6 +88,7 @@ export async function POST(req, { params }) {
 			);
 		}
 
+		//check for length
 		if (newPassword.length < 8) {
 			return Response.json(
 				{
@@ -94,6 +98,7 @@ export async function POST(req, { params }) {
 			);
 		}
 
+		//confirmpass verification
 		if (newPassword !== confirmPassword) {
 			return Response.json(
 				{ error: "Passwords do not match" },
@@ -101,6 +106,7 @@ export async function POST(req, { params }) {
 			);
 		}
 
+		//password must be different
 		if (oldPassword === newPassword) {
 			return Response.json(
 				{
@@ -111,6 +117,7 @@ export async function POST(req, { params }) {
 			);
 		}
 
+		//password strenght
 		if (
 			!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/.test(
 				newPassword
@@ -122,13 +129,16 @@ export async function POST(req, { params }) {
 			);
 		}
 
+		//connect to database c
 		const client = await clientPromise;
 		const db = client.db("projectdata");
 
+		//search for user in database collection
 		const user = await db
 			.collection("users")
 			.findOne({ username });
 
+		//validation
 		if (!user) {
 			return Response.json(
 				{ error: "User not found" },
@@ -136,11 +146,13 @@ export async function POST(req, { params }) {
 			);
 		}
 
+		// verify oldpassword
 		const isMatched = await bcrypt.compare(
 			oldPassword,
 			user.password
 		);
 
+		//error
 		if (!isMatched) {
 			return Response.json(
 				{
@@ -151,10 +163,13 @@ export async function POST(req, { params }) {
 			);
 		}
 
+		//redis ratekey
 		const rateKey = `change_req_rate:${username}`;
-
+		
+		//check for existing redis key
 		const existing = await redis.get(rateKey);
 
+		//validation: user can't request another otp untill first expires
 		if (existing) {
 			return Response.json(
 				{
@@ -165,16 +180,21 @@ export async function POST(req, { params }) {
 			);
 		}
 
+		//cooldown
 		await redis.set(rateKey, "1", {
 			ex: 30,
 		});
 
+		//generate otp
 		const otp = generateOTP();
 
+		//hash otp in sha256
 		const hashed = hashOTP(otp);
 		
+		//hash newpassword
 		const hashedpass = await bcrypt.hash(newPassword, 10);
 
+		//set redis with newpassword and otp
 		await redis.set(
 			`change_otp:${username}`,
 			JSON.stringify({
@@ -186,6 +206,7 @@ export async function POST(req, { params }) {
 			{ ex: 300 }
 		);
 
+		//send email to user
 		await sendResetEmail({
 			to: user.email,
 			subject: "Password Change OTP",

@@ -11,7 +11,10 @@ function hashOTP(otp) {
 
 export async function POST(req, {params}){
 	try {
+		//get params username 
 		const {username} = await params;
+		
+		//get otp and captcha token form client
 		const { otp, captchaToken } = await req.json();
 	
 		//user auth
@@ -20,6 +23,7 @@ export async function POST(req, {params}){
 			return Response.json({ error: "Unauthorized" }, { status: 401 });
 		}
 		
+		//verify captcha
 		const verifyRes = await fetch(
 			"https://www.google.com/recaptcha/api/siteverify",
 			{
@@ -50,9 +54,11 @@ export async function POST(req, {params}){
 			);
 		}
 		
+		//redis key initilization
 		const key = `delete_otp:${username}`;
 		const raw = await redis.get(key);
 
+		//checking for existing key
 		if (!raw) {
 			return Response.json(
 				{ error: "OTP expired or not found" },
@@ -62,10 +68,12 @@ export async function POST(req, {params}){
 		
 		const data = raw;
 
+		//hash user otp to sha256
 		const hashedInput = hashOTP(otp);
 
+		//otp validation
 		if (hashedInput !== data.hash) {
-
+			//delete otp
 			await redis.del(key);
 
 			return Response.json(
@@ -74,6 +82,7 @@ export async function POST(req, {params}){
 			);
 		}
 		
+		//delete redis
 		await redis.del(key);
 		
 		// -----------------------------
@@ -82,43 +91,53 @@ export async function POST(req, {params}){
 		const client = await clientPromise;
 		const db = client.db("projectdata");
 
-		
+		//search for user in database collections
 		const usr = await db.collection("usrdata").findOne({username})
+		
+		//user validation
 		if (!usr){
 			return Response.json({error: "user is null in usrdata database collections"}, {status: 404})
 		}
 		console.log(usr)
+		
+		//get userproject
 		const projects = usr.projects
-		console.log(projects)
-		console.log(projects.length)
+		
+		//delete project if exist
 		if (projects.length>0){
-			console.log(projects)
-			
+			//get project title
 			const projecttitl = projects.map(p=> p.title)
 		
+			//find user project
 			const projectDocs = await db.collection("projects").find({
 				owner: username,
 				"content.title": {$in: projecttitl},
 			}).toArray()
-			if (projectDocs.length === 0){
-				return Response.json({error:"project not found in database collections"},{status:404})
+			
+			//projectdocs validation
+			if (projectDocs.length !== 0){
+				//get username of user who liked the project
+				const likedusers = projectDocs.flatMap(p => p.likes || []);
+	
+				//format the username adn project
+				const formatpro = projects.map(p => `${username}/${p}`)
+	
+				//delete deleted project form every user liked collection
+				await db.collection("usrdata").updateMany(
+					{ username: { $in: likedusers } },
+					{
+						$pull:{likedprojects: {$in: formatpro}}
+					}
+				)
+	
+				//delete all project of that user
+				await db.collection("projects").deleteMany({
+					owner: username,
+				});
 			}
-		const likedusers = projectDocs.flatMap(p => p.likes || []);
-	
-		const formatpro = projects.map(p => `${username}/${p}`)
-	
-		await db.collection("usrdata").updateMany(
-			{ username: { $in: likedusers } },
-			{
-				$pull:{likedprojects: {$in: formatpro}}
-			}
-		)
-	
-		await db.collection("projects").deleteMany({
-			owner: username,
-		});
 		}
 		
+		//unlike all project the user has liked ever
 		await db.collection("projects").updateMany(
 			{},
 			{
@@ -126,6 +145,7 @@ export async function POST(req, {params}){
 			}
 		)
 		
+		//remove user form follower and following list
 		await db.collection("usrdata").updateMany(
 			{},
 			{
@@ -136,17 +156,20 @@ export async function POST(req, {params}){
 			}
 		);
 		
+		//delete user from usrdata database collection
 		await db.collection("usrdata").deleteOne({username: username})
 		
+		//init cookies
 		const cookieStore = await cookies();
 
+		//delete sessionid
 		cookieStore.set("sessionId", "", {
 			httpOnly: true,
 			expires: new Date(0),
 			path: "/",
 		});
 		
-		//7.1 Delete user
+		//Delete user
 		await db.collection("users").deleteOne({ username });
 		
 		return Response.json({

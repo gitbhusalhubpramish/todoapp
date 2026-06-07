@@ -3,23 +3,28 @@ import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 
 export async function POST() {
-  const cookieStore = await cookies();
-  const sessionId = await cookieStore.get("sessionId")?.value;
+	//get cookie/sessionID
+	const cookieStore = await cookies();
+	const sessionId = await cookieStore.get("sessionId")?.value;
 
-  if (sessionId) {
-    const client = await clientPromise;
-    const db = client.db("projectdata"); // change if needed
+	if (sessionId) {
+		//connect to database
+		const client = await clientPromise;
+		const db = client.db("projectdata"); 
 
-    const sessions = db.collection("sessions");
+		//connect to collection
+		const sessions = db.collection("sessions");
 
-    await sessions.deleteOne({ sessionId });
-  }
+		//delete sessionID from collection
+		await sessions.deleteOne({ sessionId });
+	}
 
-  cookieStore.set("sessionId", "", {
-    httpOnly: true,
-    expires: new Date(0),
-    path: "/",
-  });
+	//delete sessionid form client cookies storage
+	cookieStore.set("sessionId", "", {
+		httpOnly: true,
+		expires: new Date(0),
+		path: "/",
+	});
 
-  return NextResponse.json({ success: true });
+	return NextResponse.json({ success: true });
 }
