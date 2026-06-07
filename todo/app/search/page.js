@@ -50,7 +50,6 @@ export default function SearchPage() {
 		<div className={`animate-pulse bg-gray-600/50 rounded ${className}`} />
 	);
 	
-	console.log(results)
 	return (
 		<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] text-black dark:text-white p-6">
 			<div className="max-w-2xl mx-auto my-30 border-t border-gray-500 pt-4">
