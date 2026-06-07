@@ -1,6 +1,7 @@
 import clientPromise from "@/lib/mongodb";
 import { getCurrentUser } from "@/lib/auth.js";
 
+//like
 export async function POST(req, { params }) {
 	const { username, project } = await params;
 
@@ -121,11 +122,15 @@ export async function POST(req, { params }) {
 	);
 }
 
+//unlike
 export async function DELETE(req, { params }) {
+	//get target notification adn project
 	const { username, project } = await params;
 
+	//get session
 	const session = await getCurrentUser();
 
+	//user auth
 	if (!session) {
 		return Response.json({ error: "Unauthorized" }, { status: 401 });
 	}
@@ -134,17 +139,21 @@ export async function DELETE(req, { params }) {
 		return Response.json({ error: "Forbidden" }, { status: 403 });
 	}
 
+	//connect to db
 	const client = await clientPromise;
 	const db = client.db("projectdata");
 
+	//find target user in database collection
 	const user = await db.collection("usrdata").findOne({
 		username: session.username,
 	});
 
+	//validation
 	if (!user) {
 		return Response.json({ error: "User not found" }, { status: 404 });
 	}
 
+	//find project
 	const doc = await db.collection("projects").findOne({
 		owner: username,
 		"content.title": project,
@@ -154,6 +163,7 @@ export async function DELETE(req, { params }) {
 		return Response.json({ error: "Project not found" }, { status: 404 });
 	}
 
+	//check for if user liked project
 	if (!doc.likes?.includes(session.username)) {
 		return Response.json(
 			{ error: "Project not liked yet" },
@@ -161,6 +171,7 @@ export async function DELETE(req, { params }) {
 		);
 	}
 
+	//unlike
 	await db.collection("projects").updateOne(
 		{ _id: doc._id },
 		{
@@ -168,6 +179,7 @@ export async function DELETE(req, { params }) {
 		}
 	);
 
+	//remove form users likedproject collection
 	await db.collection("usrdata").updateOne(
 		{ username: session.username },
 		{
