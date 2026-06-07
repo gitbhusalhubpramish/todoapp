@@ -6,11 +6,14 @@ import Link from "next/link";
 import Image from "next/image";
 
 export default function SearchPage() {
+	//initilization
 	const searchParams = useSearchParams();
 	const router = useRouter();
-
+	
+	//get querry form url
 	const query = searchParams.get("q") || "";
 
+	//state
 	const [results, setResults] = useState({ projects: [], users: [] });
 	const [activeTab, setActiveTab] = useState("projects");
 
@@ -42,6 +45,7 @@ export default function SearchPage() {
 		return () => clearTimeout(timeout);
 	}, [query]);
 
+	//skeleton load
 	const Skeleton = ({ className }) => (
 		<div className={`animate-pulse bg-gray-600/50 rounded ${className}`} />
 	);
