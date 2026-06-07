@@ -2,8 +2,10 @@
 import { useRouter } from "next/navigation";
 
 export default function LogoutButton() {
+	//initlize router
 	const router = useRouter();
 
+	//request to logout in server
 	const logout = async () => {
 		await fetch("/api/logout", { method: "POST" });
 		router.push("/");
