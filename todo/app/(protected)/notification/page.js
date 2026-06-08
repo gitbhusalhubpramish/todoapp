@@ -34,7 +34,12 @@ export default function NotificationsPage() {
 		async function loadSession() {
 			const res = await fetch("/api/me/auth");
 			const data = await res.json();
-			console.log("session raw data ",data)
+			
+			if (!res.ok || !data?.user) {
+				router.push("/login")
+				return;
+			}
+
 			setSessionUser(data.user);
 		}
 
@@ -46,7 +51,7 @@ export default function NotificationsPage() {
 	useEffect(() => { 
 		const fetchNotifications = async () => { 
 			try { 
-				const res = await fetch( `/api/users/${username}/notification`, { 
+				const res = await fetch( `/api/users/${session?.username}/notification`, { 
 					method: "POST", 
 				} ); 
 				const data = await res.json(); 
@@ -62,8 +67,8 @@ export default function NotificationsPage() {
 				setLoading(false); 
 			} 
 		}; 
-		if (username) fetchNotifications(); 
-	}, [username]);
+		if (session?.username) fetchNotifications(); 
+	}, [session]);
 	
 	//return null
 	if (!loading && (!notifications || notifications.length === 0)) { 
