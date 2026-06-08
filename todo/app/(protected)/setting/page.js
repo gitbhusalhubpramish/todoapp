@@ -36,6 +36,7 @@ export default function Setting(){
 			} catch (err) {
 				console.log(err);
 				router.push("/login");
+				return
 			}
 		}
 
