@@ -121,7 +121,7 @@ export default function NotificationsPage() {
 									{users.slice(0, 2).map((u, i) => (
 										<Image
 											key={i}
-											src={u.profilepic}
+											src={u.profilepic || "/profile.svg"}
 											alt="pfp"
 											width={32}
 											height={32}
