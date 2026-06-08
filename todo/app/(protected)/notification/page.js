@@ -4,9 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-
-
-
+//get formated time
 function timeAgo(date) {
 	const seconds = Math.floor((new Date() - new Date(date)) / 1000);
 	const intervals = [
@@ -25,10 +23,13 @@ function timeAgo(date) {
 }
 
 export default function NotificationsPage() {
+	
+	//initlize session
 	const [notifications, setNotifications] = useState(null); 
 	const [loading, setLoading] = useState(true); 
 	const [session, setSessionUser] = useState(null);
 	
+	//user auth
 	useEffect(() => {
 		async function loadSession() {
 			const res = await fetch("/api/me/auth");
@@ -41,6 +42,7 @@ export default function NotificationsPage() {
 	}, []);
 	const username= session?.username
 	
+	//fetch notification form server
 	useEffect(() => { 
 		const fetchNotifications = async () => { 
 			try { 
@@ -62,12 +64,17 @@ export default function NotificationsPage() {
 		}; 
 		if (username) fetchNotifications(); 
 	}, [username]);
+	
+	//return null
 	if (!loading && (!notifications || notifications.length === 0)) { 
 		return ( <div className="p-4 text-center text-sm text-zinc-500"> No notifications </div> ); 
 	}
+	
+	//loading skeleton
 	const Skeleton = ({ className }) => (
 		<div className={`animate-pulse bg-gray-600/50 rounded ${className}`} />
 	)
+	
 	return (
 		<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] dark:text-white">
 			<div className="max-w-2xl mx-auto p-4">
