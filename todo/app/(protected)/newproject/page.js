@@ -15,14 +15,15 @@ export default function NewProjectPage() {
 	//initlize router
 	const router = useRouter();
 	
+	//state
 	const [projectTitle, setProjectTitle] = useState("");
 	const [projectDesc, setProjectDesc] = useState("");
-	const [tasks, setTasks] = useState([
-		{ name: "", description: "" },
-	]);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
 	const [sessionUser, setSessionUser] = useState(null);
+	const [tasks, setTasks] = useState([
+		{ name: "", description: "" },
+	]);
 	
 	//user auth
 	useEffect(() => {
@@ -50,17 +51,20 @@ export default function NewProjectPage() {
 		loadSession();
 	}, []);
 
+	//handel changes to input box for task
 	const handleTaskChange = (index, field, value) => {
 		const updated = [...tasks];
 		updated[index][field] = value;
 		setTasks(updated);
 	};
 
+	//add new task to project
 	const addTask = () => {
 		setError("")
 		setTasks([...tasks, { name: "", description: "" }]);
 	};
 
+	//deleted created task
 	const deleteTask = (index) => {
 		if (tasks.length === 1){
 			setError("You must add at least one task")
@@ -71,6 +75,7 @@ export default function NewProjectPage() {
 		setTasks(updated);
 	};
 
+	//submit project or create project
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setLoading(true);
