@@ -14,7 +14,7 @@ export async function sendResetEmail(to, code, text, subject) {
 				<h2>${text}</h2>
 				<p>Your verification code is:</p>
 				<h1 style="letter-spacing: 4px">${code}</h1>
-				<p>This code expires in 10 minutes.</p>
+				<p>This code expires in 5 minutes.</p>
 			</div>
 		`,
 	});
