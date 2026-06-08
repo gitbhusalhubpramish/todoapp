@@ -45,7 +45,6 @@ export default function NotificationsPage() {
 
 		loadSession();
 	}, []);
-	const username= session?.username
 	
 	//fetch notification form server
 	useEffect(() => { 
