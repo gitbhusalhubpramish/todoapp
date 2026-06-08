@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 //get formated time
 function timeAgo(date) {
@@ -23,6 +24,8 @@ function timeAgo(date) {
 }
 
 export default function NotificationsPage() {
+	//initlize router
+	const router = useRouter();
 	
 	//initlize session
 	const [notifications, setNotifications] = useState(null); 
