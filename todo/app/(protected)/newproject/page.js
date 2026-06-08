@@ -32,8 +32,6 @@ export default function NewProjectPage() {
 				const res = await fetch("/api/me/auth");
 				const data = await res.json();
 
-				console.log("session raw data ", data);
-
 				if (!res.ok || !data?.user) {
 					router.push("/login")
 					return;
