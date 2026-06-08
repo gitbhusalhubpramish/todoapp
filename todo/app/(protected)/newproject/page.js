@@ -35,14 +35,14 @@ export default function NewProjectPage() {
 				console.log("session raw data ", data);
 
 				if (!res.ok || !data?.user) {
-					window.location.href = "/login";
+					router.push("/login")
 					return;
 				}
 
 				setSessionUser(data.user);
 			} catch (err) {
 				console.log(err);
-				window.location.href = "/login";
+				router.push("/login");
 			} finally {
 				setCheckingSession(false);
 			}
