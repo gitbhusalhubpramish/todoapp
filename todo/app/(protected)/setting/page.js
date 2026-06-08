@@ -43,6 +43,7 @@ export default function Setting(){
 		loadSession();
 	}, []);
 
+	//fetch result
 	useEffect(() => {
 		if (!session?.username) return;
 
@@ -81,12 +82,14 @@ export default function Setting(){
 
 	const MAX_CHARS = 150;
 
+	//handel changes in bio input box
 	const handelbiochange = (val) => {
 		if (val.length <= MAX_CHARS) {
 			setBio(val);
 		}
 	};
 
+	//handle deleting project action
 	const handleDeleteProject = (title) => {
 		setDeletedProjects((prev) => [...prev, title]);
 		setUser((prev) => ({
@@ -95,6 +98,7 @@ export default function Setting(){
 		}));
 	};
 
+	//send request to changed feild related endpoint
 	const handleSave = async () => {
 		const username = session?.username;
 		if (!username) return;
@@ -137,6 +141,7 @@ export default function Setting(){
 		}
 	};
 
+	//reset all
 	const handleCancel = () => {
 		setBio(user?.bio || "");
 		setPpFile(null);
@@ -144,6 +149,7 @@ export default function Setting(){
 		setEditingBio(false);
 	};
 
+	//loading skeletion
 	const Skeleton = ({ className }) => (
 		<div className={`animate-pulse bg-gray-600/50 rounded ${className}`} />
 	);
