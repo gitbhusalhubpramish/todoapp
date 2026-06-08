@@ -8,8 +8,10 @@ import { Settings, Heart } from "lucide-react";
 import { redirect } from "next/navigation";
 
 export default function project({ params }) {
+	//get target username
 	const { username, project } = use(params);
 
+	//initlize state
 	const [projects, setProject] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const [notFoundState, setNotFoundState] = useState(false);
@@ -17,6 +19,7 @@ export default function project({ params }) {
 	const [owner, setOwner] = useState(false)
 	const [liked, setLiked] = useState(false)
 
+	//fetch user auth
 	useEffect(() => {
 		async function loadSession() {
 			const res = await fetch("/api/me/auth");
@@ -26,6 +29,7 @@ export default function project({ params }) {
 		loadSession();
 	}, []);
 
+	//fetch project data
 	useEffect(() => {
 		if (!username || !project) return;
 		setLoading(true);
@@ -40,7 +44,6 @@ export default function project({ params }) {
 
 			const data = await res.json();
 			setProject(data.project);
-			console.log(data)
 			setLiked(data.project?.likes?.includes(session?.username) || false);
 			setLoading(false);
 		}
@@ -48,7 +51,10 @@ export default function project({ params }) {
 		loadProject();
 	}, [username, project]);
 
+	//handel project not found
 	if (notFoundState) return notFound();
+	
+	//check for like and ownership
 	useEffect(() => {
 		if (session?.username && projects?.owner) {
 			setOwner(session.username === projects.owner);
@@ -56,9 +62,8 @@ export default function project({ params }) {
 		}
 	}, [session, projects]);
 	
-	
+	//toggel isdone
 	const handleTaskToggle = async (taskIndex) => {
-		console.log("clicked")
 		try {
 			const res = await fetch(
 				`/api/users/${username}/${project}`,
@@ -74,7 +79,6 @@ export default function project({ params }) {
 			if (!res.ok) return;
 	
 			const data = await res.json();
-			console.log(data)
 
 			// update local state (important)
 			setProject((prev) => ({
@@ -86,14 +90,17 @@ export default function project({ params }) {
 					tasks: data.updatedTasks,
 				},
 			}));
-			console.log(projects)
 		} catch (err) {
 			console.error(err);
 		}
 	};
+	
+	//loading animation skeleton
 	const Skeleton = ({ className }) => (
 		<div className={`animate-pulse bg-gray-600/50 rounded ${className}`} />
 	)
+	
+	//formated created time
 	function formatTimeAgo(dateString) {
 		const now = new Date();
 		const past = new Date(dateString);
@@ -124,6 +131,8 @@ export default function project({ params }) {
 	
 		return `${diffYear} year${diffYear > 1 ? "s" : ""}`;
 	}
+	
+	//handel user like action
 	const handelLike = async () => {
 		console.log("clicked");
 		if (!session?.username){
@@ -147,7 +156,6 @@ export default function project({ params }) {
 		const data = await res.json();
 
 		if (!res.ok) {
-			console.log(data.error);
 			return;
 		}
 

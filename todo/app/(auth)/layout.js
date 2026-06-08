@@ -3,12 +3,11 @@ import { redirect } from "next/navigation";
 import {getCurrentUser} from "@/lib/auth.js"
 
 export default async function AuthLayout({ children }) {
-  const session = await getCurrentUser()
-  console.log(session)
+	const session = await getCurrentUser()
 
-  if (session) {
-    redirect("/");
-  }
+	if (session) {
+		redirect("/");
+	}
 
-  return <>{children}</>;
+	return <>{children}</>;
 }

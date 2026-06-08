@@ -5,18 +5,17 @@ import { Loader2, ShieldAlert, Trash2 } from "lucide-react";
 import ReCAPTCHA from "react-google-recaptcha";
 
 export default function DeleteAccountPage() {
+	//state init
 	const [sessionUser, setSessionUser] = useState(null);
 	const [checkingSession, setCheckingSession] = useState(true);
-
 	const [step, setStep] = useState("confirm");
 	const [otp, setOtp] = useState("");
-
 	const [loading, setLoading] = useState(false);
-
 	const [message, setMessage] = useState(null);
 	const [error, setError] = useState(null);
 	const recaptchaRef = useRef(null);
 
+	//user auth
 	useEffect(() => {
 		async function loadSession() {
 			try {
@@ -42,6 +41,7 @@ export default function DeleteAccountPage() {
 		loadSession();
 	}, []);
 
+	//request to delete account
 	async function requestDeletion() {
 		try {
 			setLoading(true);
@@ -78,6 +78,7 @@ export default function DeleteAccountPage() {
 		}
 	}
 
+	//verify otp and request to delete
 	async function verifyAndDelete() {
 		try {
 			setLoading(true);
@@ -99,6 +100,8 @@ export default function DeleteAccountPage() {
 			setError(err.message);
 		} 
 	}
+	
+	//handel captcha to verify otp and verify deletion
 	const handleCaptchaVerify = async (token) => {
 		try {
 			const res = await fetch(
@@ -137,6 +140,7 @@ export default function DeleteAccountPage() {
 		}
 	}
 
+	//loading
 	if (checkingSession) {
 		return (
 			<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] flex items-center justify-center">

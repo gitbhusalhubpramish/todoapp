@@ -9,6 +9,7 @@ import { redirect } from "next/navigation";
 
 export default function Setting(){
 
+	//initlize state
 	const [user, setUser] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const [notFoundState, setNotFoundState] = useState(false);
@@ -20,17 +21,29 @@ export default function Setting(){
 	const [ppFile, setPpFile] = useState(null);
 	const [deletedProjects, setDeletedProjects] = useState([]);
 
+	//user auth
 	useEffect(() => {
 		async function loadSession() {
-			const res = await fetch("/api/me/auth");
-			const data = await res.json();
-			console.log("session raw data ",data)
-			setSessionUser(data.user);
+			try {
+				const res = await fetch("/api/me/auth");
+				const data = await res.json();
+
+				if (!res.ok || !data?.user) {
+					router.push("/login")
+					return;
+				}
+				setSessionUser(data.user);
+			} catch (err) {
+				console.log(err);
+				router.push("/login");
+				return
+			}
 		}
 
 		loadSession();
 	}, []);
 
+	//fetch result
 	useEffect(() => {
 		if (!session?.username) return;
 
@@ -52,9 +65,7 @@ export default function Setting(){
 				}
 
 				const data = await res.json();
-
-				console.log(data);
-
+				
 				setUser(data);
 				setBio(data?.bio || "");
 			} catch (err) {
@@ -69,12 +80,14 @@ export default function Setting(){
 
 	const MAX_CHARS = 150;
 
+	//handel changes in bio input box
 	const handelbiochange = (val) => {
 		if (val.length <= MAX_CHARS) {
 			setBio(val);
 		}
 	};
 
+	//handle deleting project action
 	const handleDeleteProject = (title) => {
 		setDeletedProjects((prev) => [...prev, title]);
 		setUser((prev) => ({
@@ -83,6 +96,7 @@ export default function Setting(){
 		}));
 	};
 
+	//send request to changed feild related endpoint
 	const handleSave = async () => {
 		const username = session?.username;
 		if (!username) return;
@@ -125,6 +139,7 @@ export default function Setting(){
 		}
 	};
 
+	//reset all
 	const handleCancel = () => {
 		setBio(user?.bio || "");
 		setPpFile(null);
@@ -132,11 +147,10 @@ export default function Setting(){
 		setEditingBio(false);
 	};
 
+	//loading skeletion
 	const Skeleton = ({ className }) => (
 		<div className={`animate-pulse bg-gray-600/50 rounded ${className}`} />
 	);
-
-	console.log("user state ", user)
 
 	return (
 		<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] text-black dark:text-white p-6 ">

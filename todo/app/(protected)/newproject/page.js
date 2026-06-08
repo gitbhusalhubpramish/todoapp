@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import {  useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
+//sanitize input
 function sanitizeInput(value) {
 	return value
 		.replace(/</g, "&lt;")
@@ -10,25 +12,56 @@ function sanitizeInput(value) {
 }
 
 export default function NewProjectPage() {
+	//initlize router
+	const router = useRouter();
+	
+	//state
 	const [projectTitle, setProjectTitle] = useState("");
 	const [projectDesc, setProjectDesc] = useState("");
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState("");
+	const [sessionUser, setSessionUser] = useState(null);
 	const [tasks, setTasks] = useState([
 		{ name: "", description: "" },
 	]);
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState("");
+	
+	//user auth
+	useEffect(() => {
+		async function loadSession() {
+			try {
+				const res = await fetch("/api/me/auth");
+				const data = await res.json();
 
+				if (!res.ok || !data?.user) {
+					router.push("/login")
+					return;
+				}
+				setSessionUser(data.user);
+			} catch (err) {
+				console.log(err);
+				router.push("/login");
+			} finally {
+				setCheckingSession(false);
+			}
+		}
+
+		loadSession();
+	}, []);
+
+	//handel changes to input box for task
 	const handleTaskChange = (index, field, value) => {
 		const updated = [...tasks];
 		updated[index][field] = value;
 		setTasks(updated);
 	};
 
+	//add new task to project
 	const addTask = () => {
 		setError("")
 		setTasks([...tasks, { name: "", description: "" }]);
 	};
 
+	//deleted created task
 	const deleteTask = (index) => {
 		if (tasks.length === 1){
 			setError("You must add at least one task")
@@ -39,6 +72,7 @@ export default function NewProjectPage() {
 		setTasks(updated);
 	};
 
+	//submit project or create project
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setLoading(true);
@@ -55,7 +89,6 @@ export default function NewProjectPage() {
 					isdone: false,
 				})),
 			};
-			console.log(payload)
 
 			const res = await fetch("/api/newproject", {
 				method: "POST",
@@ -71,10 +104,9 @@ export default function NewProjectPage() {
 				throw new Error(data.error || "Failed to create project");
 			}
 
-			// reset
-			setProjectTitle("");
-			setProjectDesc("");
-			setTasks([{ name: "", description: "" }]);
+			
+			router.push(`/${sessionUser.username}/${sanitizeInput(projectTitle)}`);
+			
 		} catch (err) {
 			setError(err.message);
 		} finally {

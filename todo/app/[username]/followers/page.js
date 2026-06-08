@@ -6,13 +6,16 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { redirect } from "next/navigation";
 export default function followers({ params }){
+	//get target username
 	const {username} = use(params)
 	
+	//state initlization
 	const [followers, setFollowers] = useState(null)
 	const [user, setUser] = useState(null)
 	const [loading, setLoading] = useState(true);
 	const [notFoundState, setNotFoundState] = useState(false);
 	
+	//fetch follower data
 	useEffect(() => {
 		if (!username) return;
 		setLoading(true);
@@ -28,13 +31,13 @@ export default function followers({ params }){
 			const data = await res.json();
 			setFollowers(data.followers);
 			setUser(data.user)
-			console.log(data)
 			setLoading(false);
 		}
 
 		loadProject();
 	}, [username]);
 	
+	//loading skeleton
 	const Skeleton = ({ className }) => (
 		<div className={`animate-pulse bg-gray-600/50 rounded ${className}`} />
 	)

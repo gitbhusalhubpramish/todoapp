@@ -3,10 +3,9 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
-
-
-
+//get formated time
 function timeAgo(date) {
 	const seconds = Math.floor((new Date() - new Date(date)) / 1000);
 	const intervals = [
@@ -25,26 +24,42 @@ function timeAgo(date) {
 }
 
 export default function NotificationsPage() {
+	//initlize router
+	const router = useRouter();
+	
+	//initlize session
 	const [notifications, setNotifications] = useState(null); 
 	const [loading, setLoading] = useState(true); 
 	const [session, setSessionUser] = useState(null);
 	
+	//user auth
 	useEffect(() => {
 		async function loadSession() {
-			const res = await fetch("/api/me/auth");
-			const data = await res.json();
-			console.log("session raw data ",data)
-			setSessionUser(data.user);
+			try {
+				const res = await fetch("/api/me/auth");
+				const data = await res.json();
+
+				if (!res.ok || !data?.user) {
+					router.push("/login")
+					return;
+				}
+				setSessionUser(data.user);
+			} catch (err) {
+				console.log(err);
+				router.push("/login");
+			} finally {
+				setLoading(false);
+			}
 		}
 
 		loadSession();
 	}, []);
-	const username= session?.username
 	
+	//fetch notification form server
 	useEffect(() => { 
 		const fetchNotifications = async () => { 
 			try { 
-				const res = await fetch( `/api/users/${username}/notification`, { 
+				const res = await fetch( `/api/users/${session?.username}/notification`, { 
 					method: "POST", 
 				} ); 
 				const data = await res.json(); 
@@ -53,21 +68,25 @@ export default function NotificationsPage() {
 					return; 
 				} 
 				setNotifications(data.updatedNotifications || []); 
-				console.log(data.updatedNotifications)
 			} catch (err) { 
 				console.error(err); 
 			} finally { 
 				setLoading(false); 
 			} 
 		}; 
-		if (username) fetchNotifications(); 
-	}, [username]);
+		if (session?.username) fetchNotifications(); 
+	}, [session?.username]]);
+	
+	//return null
 	if (!loading && (!notifications || notifications.length === 0)) { 
 		return ( <div className="p-4 text-center text-sm text-zinc-500"> No notifications </div> ); 
 	}
+	
+	//loading skeleton
 	const Skeleton = ({ className }) => (
 		<div className={`animate-pulse bg-gray-600/50 rounded ${className}`} />
 	)
+	
 	return (
 		<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] dark:text-white">
 			<div className="max-w-2xl mx-auto p-4">
@@ -102,7 +121,7 @@ export default function NotificationsPage() {
 									{users.slice(0, 2).map((u, i) => (
 										<Image
 											key={i}
-											src={u.profilepic}
+											src={u.profilepic || "/profile.svg"}
 											alt="pfp"
 											width={32}
 											height={32}
