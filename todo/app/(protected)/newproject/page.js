@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import {  useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
+//sanitize input
 function sanitizeInput(value) {
 	return value
 		.replace(/</g, "&lt;")
@@ -10,6 +12,9 @@ function sanitizeInput(value) {
 }
 
 export default function NewProjectPage() {
+	//initlize router
+	const router = useRouter();
+	
 	const [projectTitle, setProjectTitle] = useState("");
 	const [projectDesc, setProjectDesc] = useState("");
 	const [tasks, setTasks] = useState([
@@ -17,6 +22,33 @@ export default function NewProjectPage() {
 	]);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
+	const [sessionUser, setSessionUser] = useState(null);
+	
+	//user auth
+	useEffect(() => {
+		async function loadSession() {
+			try {
+				const res = await fetch("/api/me/auth");
+				const data = await res.json();
+
+				console.log("session raw data ", data);
+
+				if (!res.ok || !data?.user) {
+					window.location.href = "/login";
+					return;
+				}
+
+				setSessionUser(data.user);
+			} catch (err) {
+				console.log(err);
+				window.location.href = "/login";
+			} finally {
+				setCheckingSession(false);
+			}
+		}
+
+		loadSession();
+	}, []);
 
 	const handleTaskChange = (index, field, value) => {
 		const updated = [...tasks];
@@ -71,10 +103,9 @@ export default function NewProjectPage() {
 				throw new Error(data.error || "Failed to create project");
 			}
 
-			// reset
-			setProjectTitle("");
-			setProjectDesc("");
-			setTasks([{ name: "", description: "" }]);
+			
+			router.push(`/${sessionUser.username}/${sanitizeInput(projectTitle)}`);
+			
 		} catch (err) {
 			setError(err.message);
 		} finally {
