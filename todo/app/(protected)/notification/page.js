@@ -35,15 +35,23 @@ export default function NotificationsPage() {
 	//user auth
 	useEffect(() => {
 		async function loadSession() {
-			const res = await fetch("/api/me/auth");
-			const data = await res.json();
-			
-			if (!res.ok || !data?.user) {
-				router.push("/login")
-				return;
-			}
+			try {
+				const res = await fetch("/api/me/auth");
+				const data = await res.json();
 
-			setSessionUser(data.user);
+				console.log("session raw data ", data);
+
+				if (!res.ok || !data?.user) {
+					router.push("/login")
+					return;
+				}
+				setSessionUser(data.user);
+			} catch (err) {
+				console.log(err);
+				router.push("/login");
+			} finally {
+				setCheckingSession(false);
+			}
 		}
 
 		loadSession();
