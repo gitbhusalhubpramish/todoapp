@@ -9,6 +9,7 @@ import { redirect } from "next/navigation";
 
 export default function Setting(){
 
+	//initlize state
 	const [user, setUser] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const [notFoundState, setNotFoundState] = useState(false);
@@ -20,12 +21,26 @@ export default function Setting(){
 	const [ppFile, setPpFile] = useState(null);
 	const [deletedProjects, setDeletedProjects] = useState([]);
 
+	//user auth
 	useEffect(() => {
 		async function loadSession() {
-			const res = await fetch("/api/me/auth");
-			const data = await res.json();
-			console.log("session raw data ",data)
-			setSessionUser(data.user);
+			try {
+				const res = await fetch("/api/me/auth");
+				const data = await res.json();
+
+				console.log("session raw data ", data);
+
+				if (!res.ok || !data?.user) {
+					router.push("/login")
+					return;
+				}
+				setSessionUser(data.user);
+			} catch (err) {
+				console.log(err);
+				router.push("/login");
+			} finally {
+				setCheckingSession(false);
+			}
 		}
 
 		loadSession();
