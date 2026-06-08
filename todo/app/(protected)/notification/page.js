@@ -39,8 +39,6 @@ export default function NotificationsPage() {
 				const res = await fetch("/api/me/auth");
 				const data = await res.json();
 
-				console.log("session raw data ", data);
-
 				if (!res.ok || !data?.user) {
 					router.push("/login")
 					return;
@@ -50,7 +48,7 @@ export default function NotificationsPage() {
 				console.log(err);
 				router.push("/login");
 			} finally {
-				setCheckingSession(false);
+				setLoading(false);
 			}
 		}
 
