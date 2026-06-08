@@ -75,7 +75,7 @@ export default function NotificationsPage() {
 			} 
 		}; 
 		if (session?.username) fetchNotifications(); 
-	}, [session]);
+	}, [session?.username]]);
 	
 	//return null
 	if (!loading && (!notifications || notifications.length === 0)) { 
