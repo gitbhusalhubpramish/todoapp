@@ -3,8 +3,10 @@ import { cookies } from "next/headers";
 import clientPromise from "@/lib/mongodb";
 
 export async function getCurrentUser() {
+	//cookies initlization
 	const cookieStore = await cookies();
 
+	//fetch sessionid
 	const sessionId = cookieStore.get("sessionId")?.value;
 	
 	if (!sessionId) return false;
