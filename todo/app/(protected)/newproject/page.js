@@ -38,7 +38,6 @@ export default function NewProjectPage() {
 					router.push("/login")
 					return;
 				}
-
 				setSessionUser(data.user);
 			} catch (err) {
 				console.log(err);
@@ -92,7 +91,6 @@ export default function NewProjectPage() {
 					isdone: false,
 				})),
 			};
-			console.log(payload)
 
 			const res = await fetch("/api/newproject", {
 				method: "POST",
