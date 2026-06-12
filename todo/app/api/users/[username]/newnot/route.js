@@ -1,14 +1,13 @@
 import clientPromise from "@/lib/mongodb";
 import { getCurrentUser } from "@/lib/auth.js";
 
-export async function GET(){
-	//get params
+export async function GET(req, { params }) {
+	// get params
 	const { username } = await params;
 
-	//get cookies
+	// auth
 	const session = await getCurrentUser();
 
-	//permitinon validation
 	if (!session) {
 		return Response.json({ error: "Unauthorized" }, { status: 401 });
 	}
@@ -16,16 +15,22 @@ export async function GET(){
 	if (session.username !== username) {
 		return Response.json({ error: "Forbidden" }, { status: 403 });
 	}
-	
-	//connect to database
+
+	// db
 	const client = await clientPromise;
 	const db = client.db("projectdata");
-	
-	//search user in database collection
+
 	const user = await db.collection("usrdata").findOne(
 		{ username },
-		{ projection: { notifications: 1} }
+		{ projection: { notifications: 1 } }
 	);
-	
-	return Response.json(user.notifications[-1].isRead)
+
+	if (!user || !user.notifications || user.notifications.length === 0) {
+		return Response.json(false);
+	}
+
+	// last notification
+	const lastNotification = user.notifications[user.notifications.length - 1];
+
+	return Response.json(lastNotification.isRead);
 }
