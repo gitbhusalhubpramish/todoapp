@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 
 export default function ThemeToggle() {
 	
+	//initlize state for theme
 	const [isDark, setIsDark] = useState(false);
 	
-
+	//check theme in the local storage
 	useEffect(() => {
 		const saved = localStorage.getItem("theme");
 		if (saved === "dark") {
@@ -15,6 +16,7 @@ export default function ThemeToggle() {
 		}
 	}, []);
 
+	//toggel theme when button is clicked
 	const toggleTheme = () => {
 		if (isDark) {
 			document.documentElement.classList.remove("dark");
