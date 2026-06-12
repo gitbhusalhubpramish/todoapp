@@ -69,7 +69,10 @@ export default function UsrNav(){
 					className="h-10 flex items-center w-15 dark:bg-[#131d37] rounded-md bg-[#73aa89] cursor-pointer relative z-20"
 				>
 					<div className="size-10 rounded-full">
-						{pp ? <img className="size-10 rounded-full" src={pp} alt="profile pic" /> : fallbackSVG}
+						<div className="">
+							{pp ? <img className="size-10 rounded-full" src={pp} alt="profile pic" /> : fallbackSVG}
+						</div>
+						<div className="bg-blue-500 w-4 h-4 rounded-full z-2 border-2 border absolute bottom-7/10 -left-1/10"/>
 					</div>
 
 					<div className="absolute right-2 top-1/2 -translate-y-1/2 w-0 h-0 border-l-5 border-l-transparent border-r-5 border-r-transparent border-b-10 border-b-[#5b6479] transition-transform duration-300 peer-checked:rotate-0 -rotate-180" />
