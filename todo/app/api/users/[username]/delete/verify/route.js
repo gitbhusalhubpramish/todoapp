@@ -156,6 +156,17 @@ export async function POST(req, {params}){
 			}
 		);
 		
+		await db.collection("usrdata").updateMany(
+			{},
+			{
+				$pull:{
+					notification:{
+						user: username,
+					},
+				},
+			}
+		)
+		
 		//delete user from usrdata database collection
 		await db.collection("usrdata").deleteOne({username: username})
 		
