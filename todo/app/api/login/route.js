@@ -81,7 +81,7 @@ export async function POST(req) {
 				);
 			}
 			
-			await sendResetEmail(user.email, resetCode);
+			await sendResetEmail(user.email, resetCode, "Reset Forgetten Password", "Reset Forgetten password otp code");
 			const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 min
 			
 			await forgetcode.insertOne({

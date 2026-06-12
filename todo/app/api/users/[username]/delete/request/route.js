@@ -74,11 +74,7 @@ export async function POST(req, {params}){
 		// -----------------------------
 		// 6. Send email
 		// -----------------------------
-		await sendResetEmail({
-			to: user.email,
-			subject: "Account Deletion OTP",
-			text: `Your account deletion OTP is: ${otp}. It expires in 5 minutes.`,
-		});
+		await sendResetEmail(user.email, otp, "Delete account request", "Delete account OTP code");
 		console.log(otp)
 	
 		return Response.json({

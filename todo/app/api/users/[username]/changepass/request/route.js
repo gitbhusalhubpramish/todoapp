@@ -207,11 +207,7 @@ export async function POST(req, { params }) {
 		);
 
 		//send email to user
-		await sendResetEmail({
-			to: user.email,
-			subject: "Password Change OTP",
-			text: `Your password change OTP is: ${otp}. It expires in 5 minutes.`,
-		});
+		await sendResetEmail(user.email, otp, "Reset password", "Reset password otp code");
 
 		console.log(otp);
 
