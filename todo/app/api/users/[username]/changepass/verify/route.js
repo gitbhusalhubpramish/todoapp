@@ -1,5 +1,4 @@
 import clientPromise from "@/lib/mongodb";
-import { sendResetEmail } from "@/lib/mailer";
 import { getCurrentUser } from "@/lib/auth";
 import { redis } from "@/lib/redis";
 import bcrypt from "bcrypt";
