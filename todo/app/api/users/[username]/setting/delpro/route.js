@@ -44,7 +44,7 @@ export async function POST(req, {params}){
 	const likedusers = projectDocs.flatMap(p => p.likes || []);
 	
 	//format as it is stored
-	const formatpro = projects.map(p => `${username}/${p}`)
+	const formatpro = projects.map(p => `/${username}/${p}`)
 	
 	//delete project form others liked collectioin
 	await db.collection("usrdata").updateMany(
@@ -54,11 +54,23 @@ export async function POST(req, {params}){
 		}
 	)
 	
+	await db.collection("usrdata").updateMany(
+		{username},
+		{
+			$pull:{
+				notification:{
+					entity: {$in: formatpro}
+				}
+			}
+		}
+	)
+	
 	//delete project
 	await db.collection("projects").deleteMany({
 		owner: username,
 		"content.title": {$in: projects},
 	});
+	
 	
 	return Response.json( {status:200})
 }
