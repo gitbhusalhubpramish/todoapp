@@ -1,19 +1,37 @@
-import { cookies } from "next/headers";
+"use client";
+
+import { useEffect, useState, use } from "react";
 import Link from "next/link";
 import Image from 'next/image';
 import options from "@/data/option.json"
-import {getCurrentUser} from "@/lib/auth.js"
-
-async function checkSession() {
-	const cookieStore = await cookies();
-	const session = cookieStore.get("session");
-
-	return !!session;
-}
 
 export default async function UsrNav(){
-	const login = await getCurrentUser()
-	//const login = await checkSession()
+	//initlize session
+	const [session, setSessionUser] = useState(null);
+	
+	//fetch user auth
+	useEffect(() => {
+		async function loadSession() {
+			try {
+				const res = await fetch("/api/me/auth");
+				const data = await res.json();
+
+				setSessionUser(data.user);
+
+				if (!data.user) {
+					router.push("/login");
+				}
+			} catch (err) {
+				console.log(err);
+			}
+		}
+
+		loadSession();
+	}, []);
+	
+	//set login paramater as bool
+	const login = !!session
+	
 	let pp
 	const fallbackSVG = (
 		<svg
