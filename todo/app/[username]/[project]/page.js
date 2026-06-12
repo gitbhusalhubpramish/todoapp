@@ -329,7 +329,7 @@ export default function project({ params }) {
 								{projects?.likes?.length}
 							</button>
 							{owner && (
-								<Link href={`/${username}/${project}/setting`} className="flex items-center gap-1 text-gray-600 dark:text-gray-300 cursor-pointer">
+								<Link href={`/setting`} className="flex items-center gap-1 text-gray-600 dark:text-gray-300 cursor-pointer">
 									<Settings size={18} className="border-current"/>
 								</Link>
 							)}
