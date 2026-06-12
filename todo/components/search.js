@@ -20,7 +20,7 @@ export default function Search() {
 
 	useEffect(() => {
 		const timeout = setTimeout(async () => {
-			if (!query.trim()) {
+			if (!query.trim() || query.trim() === q.trim()) {
 				setResults([]);
 				setOpen(false);
 				return;
