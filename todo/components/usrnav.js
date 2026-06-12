@@ -5,9 +5,9 @@ import Link from "next/link";
 import Image from 'next/image';
 import options from "@/data/option.json"
 
-export default async function UsrNav(){
+export default function UsrNav(){
 	//initlize session
-	const [session, setSessionUser] = useState(null);
+	const [login, setSessionUser] = useState(false);
 	
 	//fetch user auth
 	useEffect(() => {
@@ -16,7 +16,7 @@ export default async function UsrNav(){
 				const res = await fetch("/api/me/auth");
 				const data = await res.json();
 
-				setSessionUser(data.user);
+				setSessionUser(!!data.user);
 
 				if (!data.user) {
 					router.push("/login");
@@ -29,8 +29,6 @@ export default async function UsrNav(){
 		loadSession();
 	}, []);
 	
-	//set login paramater as bool
-	const login = !!session
 	
 	let pp
 	const fallbackSVG = (
