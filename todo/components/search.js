@@ -5,22 +5,25 @@ import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation"
 
 export default function Search() {
+	
+	//initialize router
 	const router = useRouter();
 	
-	
+	//get search paramaters(query) form url
 	const searchParams = useSearchParams();
 	const q = searchParams.get("q") || "";
 	
+	//initlize state
 	const [query, setQuery] = useState(q);
 	const [results, setResults] = useState([]);
 	const [open, setOpen] = useState(false);
 	const [selectedIndex, setSelectedIndex] = useState(-1);
 	const [activeTab, setActiveTab] = useState("projects");
 
-
+	//send request on search box change
 	useEffect(() => {
 		const timeout = setTimeout(async () => {
-			if (!query.trim()) {
+			if (!query.trim() || query.trim() === q.trim()) {
 				setResults([]);
 				setOpen(false);
 				return;
@@ -38,6 +41,8 @@ export default function Search() {
 
 		return () => clearTimeout(timeout);
 	}, [query]);
+	
+	//haldel selecting querry dropdown selection
 	function handleKeyDown(e) {
 		if (!open) return;
 
