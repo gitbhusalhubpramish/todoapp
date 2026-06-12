@@ -7,7 +7,9 @@ import options from "@/data/option.json"
 
 export default function UsrNav(){
 	//initlize session
-	const [login, setSessionUser] = useState(false);
+	const [session, setSessionUser] = useState(null);
+	const [unread, setUnread] = useState(false)
+	const [login, setLogin] = useState(false)
 	
 	//fetch user auth
 	useEffect(() => {
@@ -16,19 +18,35 @@ export default function UsrNav(){
 				const res = await fetch("/api/me/auth");
 				const data = await res.json();
 
-				setSessionUser(!!data.user);
+				setSessionUser(data.user);
+				setLogin(!!data.user)
 
-				if (!data.user) {
-					router.push("/login");
-				}
 			} catch (err) {
 				console.log(err);
 			}
 		}
+		
+		
 
 		loadSession();
 	}, []);
 	
+	useEffect(()=>{
+		async function checkunread(){
+			try{
+				const res = await fetch(`/api/users/${session.username}/newnot`)
+				
+				const data = await res.json()
+				
+				setUnread(data.unread)
+			} catch (err){
+				console.log(err)
+			}
+		}
+		if (session?.username){
+			checkunread()
+		}
+	},[session])
 	
 	let pp
 	const fallbackSVG = (
