@@ -26,11 +26,11 @@ export async function GET(req, { params }) {
 	);
 
 	if (!user || !user.notifications || user.notifications.length === 0) {
-		return Response.json(false);
+		return Response.json({unread:false});
 	}
 
 	// last notification
 	const lastNotification = user.notifications[user.notifications.length - 1];
 
-	return Response.json(lastNotification.isRead);
+	return Response.json({unread:!lastNotification.isRead});
 }
