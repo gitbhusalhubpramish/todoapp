@@ -10,6 +10,7 @@ export default function UsrNav(){
 	const [unread, setUnread] = useState(false)
 	const [login, setLogin] = useState(false)
 	const [dropdown, setDropdown] = useState(false)
+	const [pp, setpp] = useState(null)
 	
 	const pathname = usePathname();
 	
@@ -35,9 +36,12 @@ export default function UsrNav(){
 		async function checkunread(){
 			try{
 				const res = await fetch(`/api/users/${session.username}/newnot`)
+				const pplink = await fetch(`/api/users/${session.username}/pp`)
 				
+				const ppdata = await pplink.json()
 				const data = await res.json()
 				
+				setpp(ppdata.profilepic)
 				setUnread(data.unread)
 			} catch (err){
 				console.log(err)
@@ -48,7 +52,6 @@ export default function UsrNav(){
 		}
 	}, [pathname, session])
 	
-	let pp
 	const fallbackSVG = (
 		<svg
 			width="40"
