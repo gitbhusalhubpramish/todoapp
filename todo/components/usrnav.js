@@ -100,63 +100,63 @@ export default function UsrNav(){
 				</label>
 
 				{/* Dropdown menu */}
-<div className="absolute top-12 right-0 z-65 w-64 overflow-hidden rounded-xl border border-black/10 dark:border-white/10 bg-[#dbffe9] dark:bg-[#0b1120] shadow-xl peer-checked:block hidden">
+				<div className="absolute top-12 right-0 z-65 w-64 overflow-hidden rounded-xl border border-black/10 dark:border-white/10 bg-[#dbffe9] dark:bg-[#0b1120] shadow-xl peer-checked:block hidden">
 
-	<div className="border-b border-black/10 dark:border-white/10 px-4 py-3">
-		<p className="font-medium text-gray-900 dark:text-gray-100">
-			@{session.username}
-		</p>
-	</div>
+					<div className="border-b border-black/10 dark:border-white/10 px-4 py-3">
+						<p className="font-medium text-gray-900 dark:text-gray-100">
+							@{session.username}
+						</p>
+					</div>
 
-	<div className="p-2">
-		<Link
-			href={`/${session.username}`}
-			className="block rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-[#00c950]/10 dark:hover:bg-white/5"
-		>
-			Profile
-		</Link>
+					<div className="p-2">
+						<Link
+							href={`/${session.username}`}
+							className="block rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-[#00c950]/10 dark:hover:bg-white/5"
+						>
+							Profile
+						</Link>
 
-		<Link
-			href="/newproject"
-			className="block rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-[#00c950]/10 dark:hover:bg-white/5"
-		>
-			New Project
-		</Link>
+						<Link
+							href="/newproject"
+							className="block rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-[#00c950]/10 dark:hover:bg-white/5"
+						>
+							New Project
+						</Link>
 
-		<Link
-			href="/notification"
-			className="block rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-[#00c950]/10 dark:hover:bg-white/5"
-		>
-			Notifications
-			{unread && (
-				<span className="ml-2 inline-block h-2 w-2 rounded-full bg-red-500" />
-			)}
-		</Link>
+						<Link
+							href="/notification"
+							className="block rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-[#00c950]/10 dark:hover:bg-white/5"
+						>
+							Notifications
+							{unread && (
+								<span className="ml-2 inline-block h-2 w-2 rounded-full bg-red-500" />
+							)}
+						</Link>
 
-		<Link
-			href="/setting"
-			className="block rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-[#00c950]/10 dark:hover:bg-white/5"
-		>
-			Settings
-		</Link>
+						<Link
+							href="/setting"
+							className="block rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-[#00c950]/10 dark:hover:bg-white/5"
+						>
+							Settings
+						</Link>
 
-		<div className="my-2 border-t border-black/10 dark:border-white/10" />
+						<div className="my-2 border-t border-black/10 dark:border-white/10" />
 
-		<Link
-			href="/logout"
-			className="block rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-red-500/10"
-		>
-			Logout
-		</Link>
+						<Link
+							href="/logout"
+							className="block rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-red-500/10"
+						>
+							Logout
+						</Link>
 
-		<Link
-			href="/delacc"
-			className="block rounded-lg px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-500/10"
-		>
-			Delete Account
-		</Link>
-	</div>
-</div>
+						<Link
+							href="/delacc"
+							className="block rounded-lg px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-500/10"
+						>
+							Delete Account
+						</Link>
+					</div>
+				</div>
 
 				{/* Fullscreen overlay to detect outside clicks */}
 				<label
