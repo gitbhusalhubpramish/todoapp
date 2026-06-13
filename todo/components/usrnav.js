@@ -2,8 +2,7 @@
 
 import { useEffect, useState, use } from "react";
 import Link from "next/link";
-import Image from 'next/image';
-import options from "@/data/option.json"
+import { usePathname } from "next/navigation";
 
 export default function UsrNav(){
 	//initlize session
@@ -11,6 +10,8 @@ export default function UsrNav(){
 	const [unread, setUnread] = useState(false)
 	const [login, setLogin] = useState(false)
 	const [dropdown, setDropdown] = useState(false)
+	
+	const pathname = usePathname();
 	
 	//fetch user auth
 	useEffect(() => {
@@ -27,10 +28,8 @@ export default function UsrNav(){
 			}
 		}
 		
-		
-
 		loadSession();
-	}, []);
+	}, [pathname]);
 	
 	useEffect(()=>{
 		async function checkunread(){
@@ -47,7 +46,7 @@ export default function UsrNav(){
 		if (session?.username){
 			checkunread()
 		}
-	},[session])
+	}, [pathname, session])
 	
 	let pp
 	const fallbackSVG = (
@@ -91,7 +90,7 @@ export default function UsrNav(){
 						<div className="">
 							{pp ? <img className="size-10 rounded-full" src={pp} alt="profile pic" /> : fallbackSVG}
 						</div>
-						{!dropdown && (
+						{((!dropdown) && unread) && (
 							<div className="bg-red-500 w-4 h-4 rounded-full z-2 border-2 border absolute bottom-7/10 -left-1/10"/>
 						)}
 					</div>
