@@ -92,7 +92,7 @@ export default function UsrNav(){
 							{pp ? <img className="size-10 rounded-full" src={pp} alt="profile pic" /> : fallbackSVG}
 						</div>
 						{!dropdown && (
-							<div className="bg-blue-500 w-4 h-4 rounded-full z-2 border-2 border absolute bottom-7/10 -left-1/10"/>
+							<div className="bg-red-500 w-4 h-4 rounded-full z-2 border-2 border absolute bottom-7/10 -left-1/10"/>
 						)}
 					</div>
 
@@ -100,14 +100,63 @@ export default function UsrNav(){
 				</label>
 
 				{/* Dropdown menu */}
-				<div className="absolute top-10 -left-20 rounded-md z-65 w-40 text-white dark:bg-gray-600 mr-5 overflow-hidden peer-checked:block hidden bg-gray-400 ">
-					{options.options.map((item, index) => (
-						<Link href={item.href} key={index} className="border-black p-2 border-b-1 block z-30 relative flex">
-							<Image width="40" height="40" className="size-5 object-center overflow-hidden mr-2" src={item.img} alt="" />
-							{item.option}
-						</Link>
-					))}
-				</div>
+<div className="absolute top-12 right-0 z-65 w-64 overflow-hidden rounded-xl border border-black/10 dark:border-white/10 bg-[#dbffe9] dark:bg-[#0b1120] shadow-xl peer-checked:block hidden">
+
+	<div className="border-b border-black/10 dark:border-white/10 px-4 py-3">
+		<p className="font-medium text-gray-900 dark:text-gray-100">
+			@{session.username}
+		</p>
+	</div>
+
+	<div className="p-2">
+		<Link
+			href={`/${session.username}`}
+			className="block rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-[#00c950]/10 dark:hover:bg-white/5"
+		>
+			Profile
+		</Link>
+
+		<Link
+			href="/newproject"
+			className="block rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-[#00c950]/10 dark:hover:bg-white/5"
+		>
+			New Project
+		</Link>
+
+		<Link
+			href="/notification"
+			className="block rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-[#00c950]/10 dark:hover:bg-white/5"
+		>
+			Notifications
+			{unread && (
+				<span className="ml-2 inline-block h-2 w-2 rounded-full bg-red-500" />
+			)}
+		</Link>
+
+		<Link
+			href="/setting"
+			className="block rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-[#00c950]/10 dark:hover:bg-white/5"
+		>
+			Settings
+		</Link>
+
+		<div className="my-2 border-t border-black/10 dark:border-white/10" />
+
+		<Link
+			href="/logout"
+			className="block rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-red-500/10"
+		>
+			Logout
+		</Link>
+
+		<Link
+			href="/delacc"
+			className="block rounded-lg px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-500/10"
+		>
+			Delete Account
+		</Link>
+	</div>
+</div>
 
 				{/* Fullscreen overlay to detect outside clicks */}
 				<label
