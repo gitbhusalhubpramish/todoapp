@@ -81,7 +81,7 @@ export async function POST(req) {
 		const hashedPassword = await bcrypt.hash(password, 10);
 		
 		// insert user to users db collection
-		await users.insertOne({
+		const result = await users.insertOne({
 			normalizedEmail,
 			username,
 			password: hashedPassword,

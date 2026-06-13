@@ -75,12 +75,13 @@ export default function NotificationsPage() {
 			} 
 		}; 
 		if (session?.username) fetchNotifications(); 
-	}, [session?.username]]);
+	}, [session?.username]);
 	
+	/*
 	//return null
 	if (!loading && (!notifications || notifications.length === 0)) { 
 		return ( <div className="p-4 text-center text-sm text-zinc-500"> No notifications </div> ); 
-	}
+	}*/
 	
 	//loading skeleton
 	const Skeleton = ({ className }) => (

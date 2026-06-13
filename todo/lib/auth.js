@@ -33,5 +33,5 @@ export async function getCurrentUser() {
 		return false
 	}
 
-	return sessions;
+	return session;
 }
