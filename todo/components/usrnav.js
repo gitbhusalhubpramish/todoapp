@@ -10,6 +10,7 @@ export default function UsrNav(){
 	const [session, setSessionUser] = useState(null);
 	const [unread, setUnread] = useState(false)
 	const [login, setLogin] = useState(false)
+	const [dropdown, setDropdown] = useState(false)
 	
 	//fetch user auth
 	useEffect(() => {
@@ -80,7 +81,7 @@ export default function UsrNav(){
 			<Link href="/newproject" id = "triangleBtn" className="text-white p-1 px-3 rounded-md border-1 border-green-700 dark:bg-green-500 text-center items-center flex cursor-pointer bg-[#26a85a] hover:bg-[#228e4d] dark:hover:bg-[#26a85a] hidden sm:inline-block"><span className="text-2xl mr-px">+</span> New Project</Link>
 			
 			<div className="relative inline-block">
-				<input type="checkbox" id="toggle-triangle" className="hidden peer" />
+				<input type="checkbox" id="toggle-triangle" className="hidden peer" onChange={(e) => setDropdown(e.target.checked)} />
 
 				<label
 					htmlFor="toggle-triangle"
@@ -90,7 +91,9 @@ export default function UsrNav(){
 						<div className="">
 							{pp ? <img className="size-10 rounded-full" src={pp} alt="profile pic" /> : fallbackSVG}
 						</div>
-						<div className="bg-blue-500 w-4 h-4 rounded-full z-2 border-2 border absolute bottom-7/10 -left-1/10"/>
+						{!dropdown && (
+							<div className="bg-blue-500 w-4 h-4 rounded-full z-2 border-2 border absolute bottom-7/10 -left-1/10"/>
+						)}
 					</div>
 
 					<div className="absolute right-2 top-1/2 -translate-y-1/2 w-0 h-0 border-l-5 border-l-transparent border-r-5 border-r-transparent border-b-10 border-b-[#5b6479] transition-transform duration-300 peer-checked:rotate-0 -rotate-180" />
