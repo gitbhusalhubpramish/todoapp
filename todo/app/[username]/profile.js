@@ -7,9 +7,7 @@ import { notFound } from "next/navigation";
 import { Folder, Heart } from "lucide-react";
 import { redirect } from "next/navigation";
 
-export default function Profile({ params }) {
-	//get target username
-	const { username } = use(params)
+export default function Profile({ username }) {
 
 	//initilize states
 	const [user, setUser] = useState(null);

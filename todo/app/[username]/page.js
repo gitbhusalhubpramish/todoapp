@@ -1,7 +1,8 @@
 import Profile from "./profile.js"
 
-export default function ProfilePage({ params }) {
+export default async function ProfilePage({ params }) {
+	const {username} = await params
 	return (
-		<Profile/>
+		<Profile username={username}/>
 	)
 }
