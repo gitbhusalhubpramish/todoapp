@@ -12,7 +12,7 @@ function sanitizeInput(value) {
 }
 
 export const metadata = {
-	title: "Create a New Project | Tick It"
+	title: "Create a New Project | Tick It",
 
 	description:"Start a new project, organize tasks, document progress, and share your work with the Tick It community."
 };
