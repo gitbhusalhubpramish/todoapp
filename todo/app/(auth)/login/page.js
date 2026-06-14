@@ -3,6 +3,12 @@ import { useState, useRef } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import Link from "next/link";
 
+export const metadata = {
+	title: "Login to Tick It"
+
+	description: "Sign in to Tick It to manage tasks, track projects, connect with creators, and stay productive."
+};
+
 export default function Signup() {
 	//refs
 	const recaptchaRef = useRef(null);
