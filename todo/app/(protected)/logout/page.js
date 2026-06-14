@@ -1,31 +1,17 @@
-"use client";
-import { useRouter } from "next/navigation";
+import LogoutButton from "./logout.js"
 
-export default function LogoutButton() {
-	//initlize router
-	const router = useRouter();
+export const metadata = {
+	robots: {
+		index: false,
+		follow: false,
+	},
+	title: "Sign Out | Tick It",
 
-	//request to logout in server
-	const logout = async () => {
-		await fetch("/api/logout", { method: "POST" });
-		router.push("/");
-		router.refresh();
-	};
+	description:"Securely sign out of your Tick It account."
+};
 
+export default function LogoutButtonpage() {
 	return (
-		<div className="min-h-screen flex items-center justify-center bg-[#dbffe9] dark:bg-[#0b1120] transition-colors">
-			<div className="bg-white dark:bg-gray-900 shadow-xl rounded-xl p-6 w-80 text-center">
-				<p className="text-gray-800 dark:text-gray-200 text-lg mb-5">
-					Are you sure you want to logout?
-				</p>
-
-				<button
-					onClick={logout}
-					className="w-full bg-red-500 hover:bg-red-600 active:scale-95 transition text-white font-semibold py-2 rounded-lg cursor-pointer"
-				>
-					Logout
-				</button>
-			</div>
-		</div>
-	);
+		<LogoutButton/>
+	)
 }
