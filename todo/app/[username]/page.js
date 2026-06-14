@@ -5,7 +5,7 @@ export async function generateMetadata({ params }) {
 
 	return {
 		title: `${username} | Tick It`,
-		description: `View ${username}'s projects and profile on Tick It.`,
+		description: `View ${username}'s projects and profile on Tick It.`
 	};
 }
 
