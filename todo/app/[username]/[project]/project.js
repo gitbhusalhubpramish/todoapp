@@ -303,13 +303,13 @@ export default function Project({ username, project }) {
 									</span>
 								</div>
 
-								<p
+								<div
 									className={`text-sm leading-relaxed
 										text-gray-600 dark:text-gray-300
 									}`}
 								>
 									<Skeleton className="w-30 h-2"/>
-								</p>
+								</div>
 							</button>
 						))}
 						<div className="flex justify-end gap-2">
