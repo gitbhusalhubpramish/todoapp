@@ -6,8 +6,8 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export async function sendResetEmail(to, code, text, subject) {
 	//send email
 	await resend.emails.send({
-		from: tickit <onboarding@resend.dev>,
-		to,
+		from: "tickit <onboarding@resend.dev>",
+		to:to,
 		subject: subject,
 		html: `
 			<div style="font-family: sans-serif">

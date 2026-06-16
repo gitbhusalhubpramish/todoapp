@@ -82,7 +82,7 @@ export async function POST(req) {
 		
 		// insert user to users db collection
 		const result = await users.insertOne({
-			normalizedEmail,
+			email:normalizedEmail,
 			username,
 			password: hashedPassword,
 			createdAt: new Date(),
