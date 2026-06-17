@@ -2,8 +2,31 @@
 
 import {useState, useEffect} from "react"
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+	//initlize router
+	const router = useRouter();
+	
+	//initlize session state
+	const [sessionUser, setSessionUser] = useState(null);
+	
+	//user auth
+	useEffect(() => {
+		async function loadSession() {
+			try {
+				const res = await fetch("/api/me/auth");
+				const data = await res.json();
+
+				setSessionUser(data.user);
+			} catch (err) {
+				console.log(err);
+			}
+		}
+
+		loadSession();
+	}, []);
+	
 	return (
 		<>
 			<div className="h-full min-h-screen overflow-visible bg-[#dbffe9] dark:bg-[#0b1120] text-[#00bf00] flex flex-wrap overflow-x-hidden ">
