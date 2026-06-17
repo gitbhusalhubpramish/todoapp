@@ -52,22 +52,7 @@ export default function UsrNav(){
 		}
 	}, [pathname, session])
 	
-	const fallbackSVG = (
-		<svg
-			width="40"
-			height="40"
-			viewBox="0 0 24 24"
-			fill="none"
-			xmlns="http://www.w3.org/2000/svg"
-			className="rounded-full bg-gray-200"
-		>
-			<circle cx="12" cy="12" r="12" fill="#e5e7eb" />
-			<path
-				d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
-				fill="#9ca3af"
-			/>
-		</svg>
-	);
+	
 
 	return !login ? (
 		<div className="m-5 w-1/4 flex justify-evenly text-white">
@@ -91,7 +76,7 @@ export default function UsrNav(){
 				>
 					<div className="size-10 rounded-full">
 						<div className="">
-							{pp ? <img className="size-10 rounded-full" src={pp} alt="profile pic" /> : fallbackSVG}
+							<img className="size-10 rounded-full" src={pp|| "/profile"} alt="profile pic" /> 
 						</div>
 						{((!dropdown) && unread) && (
 							<div className="bg-red-500 w-4 h-4 rounded-full z-2 border-2 border absolute bottom-7/10 -left-1/10"/>
