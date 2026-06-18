@@ -88,9 +88,12 @@ export default function UsrNav(){
 
 				{/* Dropdown menu */}
 				<div
-					className={`absolute top-12 right-0 z-65 w-64 overflow-hidden rounded-xl border border-black/10 dark:border-white/10 bg-[#dbffe9] dark:bg-[#0b1120] shadow-xl ${
-						dropdown ? "block" : "hidden"
-					}`}
+					className={`absolute top-12 right-0 z-65 w-64 overflow-hidden rounded-xl border border-black/10 dark:border-white/10 bg-[#dbffe9] dark:bg-[#0b1120] shadow-xl origin-top-right transition-all duration-200 ease-out
+					${dropdown
+						? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
+						: "opacity-0 scale-95 -translate-y-2 pointer-events-none"
+					}
+					`}
 				>
 
 					<div className="border-b border-black/10 dark:border-white/10 px-4 py-3">
