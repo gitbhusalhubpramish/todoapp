@@ -52,7 +52,7 @@ export default function UsrNav(){
 		}
 	}, [pathname, session])
 	
-	
+	const closeDropdown = () => setDropdown(false);
 
 	return !login ? (
 		<div className="m-5 w-1/4 flex justify-evenly text-white">
@@ -68,7 +68,7 @@ export default function UsrNav(){
 			<Link href="/newproject" id = "triangleBtn" className="text-white p-1 px-3 rounded-md border-1 border-green-700 dark:bg-green-500 text-center items-center flex cursor-pointer bg-[#26a85a] hover:bg-[#228e4d] dark:hover:bg-[#26a85a] hidden sm:inline-block"><span className="text-2xl mr-px">+</span> New Project</Link>
 			
 			<div className="relative inline-block">
-				<input type="checkbox" id="toggle-triangle" className="hidden peer" onChange={(e) => setDropdown(e.target.checked)} />
+				<input type="checkbox" id="toggle-triangle" className="hidden peer" onClick={() => setDropdown(prev => !prev)} />
 
 				<label
 					htmlFor="toggle-triangle"
@@ -76,18 +76,22 @@ export default function UsrNav(){
 				>
 					<div className="size-10 rounded-full">
 						<div className="">
-							<img className="size-10 rounded-full" src={pp|| "/profile"} alt="profile pic" /> 
+							<img className="size-10 rounded-full" src={pp|| "/profile.svg"} alt="profile pic" /> 
 						</div>
 						{((!dropdown) && unread) && (
 							<div className="bg-red-500 w-4 h-4 rounded-full z-2 border-2 border absolute bottom-7/10 -left-1/10"/>
 						)}
 					</div>
 
-					<div className="absolute right-2 top-1/2 -translate-y-1/2 w-0 h-0 border-l-5 border-l-transparent border-r-5 border-r-transparent border-b-10 border-b-[#5b6479] transition-transform duration-300 peer-checked:rotate-0 -rotate-180" />
+					<div className={`absolute right-2 top-1/2 -translate-y-1/2 w-0 h-0 border-l-5 border-l-transparent border-r-5 border-r-transparent border-b-10 border-b-[#5b6479] transition-transform duration-300 ${ dropdown ? "rotate-0" : "-rotate-180"}`} />
 				</label>
 
 				{/* Dropdown menu */}
-				<div className="absolute top-12 right-0 z-65 w-64 overflow-hidden rounded-xl border border-black/10 dark:border-white/10 bg-[#dbffe9] dark:bg-[#0b1120] shadow-xl peer-checked:block hidden">
+				<div
+					className={`absolute top-12 right-0 z-65 w-64 overflow-hidden rounded-xl border border-black/10 dark:border-white/10 bg-[#dbffe9] dark:bg-[#0b1120] shadow-xl ${
+						dropdown ? "block" : "hidden"
+					}`}
+				>
 
 					<div className="border-b border-black/10 dark:border-white/10 px-4 py-3">
 						<p className="font-medium text-gray-900 dark:text-gray-100">
@@ -98,6 +102,7 @@ export default function UsrNav(){
 					<div className="p-2">
 						<Link
 							href={`/${session.username}`}
+							onClick={closeDropdown}
 							className="block rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-[#00c950]/10 dark:hover:bg-white/5"
 						>
 							Profile
@@ -105,6 +110,7 @@ export default function UsrNav(){
 
 						<Link
 							href="/newproject"
+							onClick={closeDropdown}
 							className="block rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-[#00c950]/10 dark:hover:bg-white/5"
 						>
 							New Project
@@ -112,6 +118,7 @@ export default function UsrNav(){
 
 						<Link
 							href="/notification"
+							onClick={closeDropdown}
 							className="block rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-[#00c950]/10 dark:hover:bg-white/5"
 						>
 							Notifications
@@ -122,6 +129,7 @@ export default function UsrNav(){
 
 						<Link
 							href="/setting"
+							onClick={closeDropdown}
 							className="block rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-[#00c950]/10 dark:hover:bg-white/5"
 						>
 							Settings
@@ -131,6 +139,7 @@ export default function UsrNav(){
 
 						<Link
 							href="/logout"
+							onClick={closeDropdown}
 							className="block rounded-lg px-3 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-red-500/10"
 						>
 							Logout
@@ -138,6 +147,7 @@ export default function UsrNav(){
 
 						<Link
 							href="/delacc"
+							onClick={closeDropdown}
 							className="block rounded-lg px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-500/10"
 						>
 							Delete Account
