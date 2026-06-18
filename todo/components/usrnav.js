@@ -76,7 +76,7 @@ export default function UsrNav(){
 				>
 					<div className="size-10 rounded-full">
 						<div className="">
-							<img className="size-10 rounded-full" src={pp|| "/profile.svg"} alt="profile pic" /> 
+							<img className="size-10 rounded-full" src={pp|| "/profile.svg"} alt="profile pic" loading="eager" /> 
 						</div>
 						{((!dropdown) && unread) && (
 							<div className="bg-red-500 w-4 h-4 rounded-full z-2 border-2 border absolute bottom-7/10 -left-1/10"/>
@@ -158,7 +158,7 @@ export default function UsrNav(){
 				{/* Fullscreen overlay to detect outside clicks */}
 				<label
 					htmlFor="toggle-triangle"
-					className="fixed inset-0 z-60 h-screen w-screen  peer-checked:block hidden pointer-events-auto"
+					className={`fixed inset-0 z-60 h-screen w-screen  ${dropdown ? "block" : "hidden"} pointer-events-auto`}
 				/>
 			</div>
 		</div>
