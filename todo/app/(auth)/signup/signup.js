@@ -12,6 +12,7 @@ export default function Signup() {
 	const [mounted, setMounted] = useState(false);
 	const [captchaToken, setCaptchaToken] = useState(null);
 	const [error, setError] = useState("")
+	const [loading, setLoading] = useState(false)
 	const [form, setForm] = useState({
 		email: "",
 		username: "",
@@ -51,6 +52,7 @@ export default function Signup() {
 	//handel recaptcha verification and submit form
 	const handleCaptchaVerify = async (token) => {
 		try {
+			setLoading(true)
 			setCaptchaToken(token);
 
 			const res = await fetch("/api/signup", {
@@ -78,6 +80,7 @@ export default function Signup() {
 				password: "",
 				confirmPassword: "",
 			})
+			setLoading(false)
 		} catch (err) {
 			console.error(err);
 		}
@@ -156,7 +159,8 @@ export default function Signup() {
 				{/* Submit */}
 				<button
 					type="submit"
-					className="bg-[#00bf00] text-white py-2 rounded-lg font-semibold hover:opacity-90 transition disabled:opacity-50"
+					disabled={loading}
+					className="bg-[#00bf00] text-white py-2 rounded-lg font-semibold hover:opacity-90 transition disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
 				>
 					Create Account
 				</button>
