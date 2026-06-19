@@ -13,6 +13,7 @@ export default function Login() {
 	const [captchaToken, setCaptchaToken] = useState(null);
 	const [error, setError] = useState("")
 	const [conformpass, setConformpass] = useState("")
+	const [loading, setLoading] = useState(false)
 	
 	const [form, setForm] = useState({
 		action:"",
@@ -113,6 +114,7 @@ export default function Login() {
 	//verify captcha and send request
 	const handleCaptchaVerify = async (token) => {
 		try {
+			setLoading(true)
 			setCaptchaToken(token);
 
 			const res = await fetch("/api/login", {
@@ -129,12 +131,13 @@ export default function Login() {
 			recaptchaRef.current?.reset();
 			setCaptchaToken(null);
 			
-			if (res.status === 201){
+			if (res.status === 200){
 				alert("login success");
 				window.location.reload()
 			}
 			else if (res.status>=400){
 				setError(data.error)
+				setLoading(false)
 				return
 			}
 			
@@ -154,10 +157,12 @@ export default function Login() {
 				password: "",
 				code:Array(6).fill(""),
 			})
+			setLoading(false)
 		} catch (err) {
 			console.error(err);
 			recaptchaRef.current?.reset();
 			setCaptchaToken(null);
+			setLoading(false)
 		}
 	};
 	
@@ -245,8 +250,9 @@ export default function Login() {
 
 				{/* Submit */}
 				<button
+					disabled={loading}
 					type="submit"
-					className="bg-[#00bf00] text-white py-2 rounded-lg font-semibold hover:opacity-90 transition disabled:opacity-50 cursor-pointer"
+					className="bg-[#00bf00] text-white py-2 rounded-lg font-semibold hover:opacity-90 transition disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
 				>
 					{form.action !=="" ? "Submit" : "Log In"}
 				</button>
