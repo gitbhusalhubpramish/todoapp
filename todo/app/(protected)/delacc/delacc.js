@@ -206,7 +206,7 @@ export default function DeleteAccount() {
 						<button
 							onClick={requestDeletion}
 							disabled={loading}
-							className="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed py-3 rounded-xl font-medium text-white"
+							className="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed py-3 rounded-xl font-medium text-white cursor-pointer disabled:cursor-not-allowed"
 						>
 							{loading ? (
 								<>
