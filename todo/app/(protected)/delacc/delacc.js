@@ -140,7 +140,7 @@ export default function DeleteAccount() {
 		}
 	}
 
-	//loading
+	/*//loading
 	if (checkingSession) {
 		return (
 			<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] flex items-center justify-center">
@@ -150,7 +150,7 @@ export default function DeleteAccount() {
 				</div>
 			</div>
 		);
-	}
+	}*/
 
 	return (
 		<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] flex items-center justify-center px-4 py-10">
