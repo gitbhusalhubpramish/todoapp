@@ -476,7 +476,7 @@ export default function ChangePassword() {
 								disabled={
 									cooldown > 0 || loading
 								}
-								className="w-full bg-[#f0fdf4] dark:bg-[#182235] border border-[#bbf7d0] dark:border-[#263248] py-3 rounded-lg disabled:opacity-50 text-[#166534] dark:text-[#d1fae5] hover:bg-[#dcfce7] dark:hover:bg-[#1d2940] transition-colors"
+								className="w-full bg-[#f0fdf4] dark:bg-[#182235] border border-[#bbf7d0] dark:border-[#263248] py-3 rounded-lg disabled:opacity-50 text-[#166534] dark:text-[#d1fae5] hover:bg-[#dcfce7] dark:hover:bg-[#1d2940] transition-colors cursor-pointer disabled:cursor-not-allowed"
 							>
 								{cooldown > 0
 									? `Resend in ${cooldown}s`
