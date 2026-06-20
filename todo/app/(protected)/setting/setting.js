@@ -6,8 +6,11 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { SquarePen, Camera , Trash2} from "lucide-react";
 import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function Setting(){
+	//initlize router
+	const router = useRouter();
 
 	//initlize state
 	const [user, setUser] = useState(null);
@@ -36,8 +39,7 @@ export default function Setting(){
 			} catch (err) {
 				console.log(err);
 				router.push("/login");
-				return
-			}
+			} 
 		}
 
 		loadSession();
