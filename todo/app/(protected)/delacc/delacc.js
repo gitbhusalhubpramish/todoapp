@@ -3,8 +3,12 @@
 import { useEffect, useState, useRef } from "react";
 import { Loader2, ShieldAlert, Trash2 } from "lucide-react";
 import ReCAPTCHA from "react-google-recaptcha";
+import { useRouter } from "next/navigation";
 
 export default function DeleteAccount() {
+	//initlize louter
+	const router = useRouter()
+	
 	//state init
 	const [sessionUser, setSessionUser] = useState(null);
 	const [step, setStep] = useState("confirm");
