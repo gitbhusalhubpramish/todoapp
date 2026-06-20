@@ -17,6 +17,11 @@ export default function Navbar() {
 							alt="TickIt"
 							className="h-15 w-auto object-contain dark:inline hidden"
 						/>
+						<img
+							src="/tickitlight.png"
+							alt="TickIt"
+							className="h-15 w-auto object-contain dark:hidden inline"
+						/>
 					</a>
 				</div>
 
