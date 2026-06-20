@@ -21,7 +21,6 @@ export default function Profile({ username }) {
 		async function loadSession() {
 			const res = await fetch("/api/me/auth");
 			const data = await res.json();
-			console.log("session raw data ",data)
 			setSessionUser(data.user);
 		}
 
