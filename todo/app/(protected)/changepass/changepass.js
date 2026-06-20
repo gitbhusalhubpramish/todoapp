@@ -439,11 +439,7 @@ export default function ChangePassword() {
 							disabled={loading}
 							className="w-full bg-[#166534] hover:bg-[#14532d] dark:bg-[#86efac] dark:hover:bg-[#4ade80] text-white dark:text-[#052e16] font-semibold py-3 rounded-lg disabled:opacity-50 flex items-center justify-center transition-colors cursor-pointer disabled:cursor-not-allowed"
 						>
-							{loading ? (
-								<Loader2 className="animate-spin" />
-							) : (
-								"Send OTP"
-							)}
+							Send OTP
 						</button>
 						</>
 					) : (
@@ -464,11 +460,7 @@ export default function ChangePassword() {
 								disabled={loading}
 								className="w-full bg-[#166534] hover:bg-[#14532d] dark:bg-[#86efac] dark:hover:bg-[#4ade80] text-white dark:text-[#052e16] font-semibold py-3 rounded-lg disabled:opacity-50 flex items-center justify-center transition-colors cursor-pointer disabled:cursor-not-allowed"
 							>
-								{loading ? (
-									<Loader2 className="animate-spin" />
-								) : (
-									"Verify OTP"
-								)}
+								Verify OTP
 							</button>
 
 							<button
