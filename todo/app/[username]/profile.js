@@ -150,8 +150,8 @@ export default function Profile({ username }) {
 				<div>
 					<h1 className="sm:text-4xl text-3xl h-1/2 flex items-end m-3">{user ? user.username : (<Skeleton className="w-30 h-5"/>)}</h1>
 					<div className="flex gap-2 m-3 text-gray-500 ">
-						<Link href="./followers" className="underline decoration-dashed">{user ? (user.followers?.length ?? 0)+" followers" : <Skeleton className="h-4 w-10" />}</Link>
-						<Link href = "./following" className="underline decoration-dashed">{user ? (user.following?.length ?? 0)+" following" : <Skeleton className="h-4 w-10" />} </Link>
+						<Link href={`/${username}/followers`} className="underline decoration-dashed">{user ? (user.followers?.length ?? 0)+" followers" : <Skeleton className="h-4 w-10" />}</Link>
+						<Link href = {`/${username}/following`} className="underline decoration-dashed">{user ? (user.following?.length ?? 0)+" following" : <Skeleton className="h-4 w-10" />} </Link>
 					</div>
 				</div>
 				<div className="flex justify-center sm:justify-start items-center mt-4 sm:mt-0 sm:ml-6">
