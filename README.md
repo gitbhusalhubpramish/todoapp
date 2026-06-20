@@ -742,11 +742,6 @@ PORT=3001 npm run dev
 
 ---
 
-## 📄 License
-
-MIT License
-
----
 
 ## 👨‍💻 Author
 
