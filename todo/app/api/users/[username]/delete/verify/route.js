@@ -41,7 +41,6 @@ export async function POST(req, {params}){
 		const verdata = await verifyRes.json();
 
 		if (!verdata.success || (verdata.score && verdata.score < 0.5)) {
-			console.log(verdata.success, verdata.score);
 			return Response.json({ error: "Bot detected" }, { status: 403 });
 		}
 		
@@ -98,7 +97,6 @@ export async function POST(req, {params}){
 		if (!usr){
 			return Response.json({error: "user is null in usrdata database collections"}, {status: 404})
 		}
-		console.log(usr)
 		
 		//get userproject
 		const projects = usr.projects
