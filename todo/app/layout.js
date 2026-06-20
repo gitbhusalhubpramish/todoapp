@@ -32,7 +32,7 @@ export default function RootLayout({ children }) {
 			className={`${geistSans.variable} ${geistMono.variable} ${poppins.className} h-full antialiased`}
 		>
 		
-			<body className="w-screen min-h-screen [&_*]:transition-colors [&_*]:duration-300">
+			<body className="w-screen min-h-screen [&_*]:transition-all [&_*]:duration-300">
 				<Navbar/>
 				<div className="relative  z-10 top-30 w-full ">
 					<Script
