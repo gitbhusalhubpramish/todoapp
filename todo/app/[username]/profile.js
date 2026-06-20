@@ -41,7 +41,6 @@ export default function Profile({ username }) {
 			}
 
 			const data = await res.json();
-			console.log(data)
 			setUser(data.user);
 			setLoading(false);
 		}
@@ -94,8 +93,6 @@ export default function Profile({ username }) {
 	
 	//follow button structre and style
 	const Followbtn = () => {
-		console.log("session ", session)
-		console.log("user ", user)
 
 		// keep Follow button style same
 		const followStyle = "px-5 py-2 rounded-full font-medium text-sm transition-all duration-200 bg-green-600 text-white hover:bg-green-700 active:scale-95 shadow-md hover:shadow-lg dark:bg-green-500 dark:hover:bg-green-600 cursor-pointer"
