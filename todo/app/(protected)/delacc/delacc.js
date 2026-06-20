@@ -140,7 +140,7 @@ export default function DeleteAccount() {
 		}
 	}
 
-	//loading
+	/*//loading
 	if (checkingSession) {
 		return (
 			<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] flex items-center justify-center">
@@ -150,7 +150,7 @@ export default function DeleteAccount() {
 				</div>
 			</div>
 		);
-	}
+	}*/
 
 	return (
 		<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] flex items-center justify-center px-4 py-10">
@@ -206,7 +206,7 @@ export default function DeleteAccount() {
 						<button
 							onClick={requestDeletion}
 							disabled={loading}
-							className="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed py-3 rounded-xl font-medium text-white"
+							className="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed py-3 rounded-xl font-medium text-white cursor-pointer disabled:cursor-not-allowed"
 						>
 							{loading ? (
 								<>
@@ -262,7 +262,7 @@ export default function DeleteAccount() {
 						<button
 							onClick={verifyAndDelete}
 							disabled={loading || otp.length !== 6}
-							className="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed py-3 rounded-xl font-medium text-white"
+							className="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed py-3 rounded-xl font-medium text-white cursor-pointer"
 						>
 							{loading ? (
 								<>

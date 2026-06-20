@@ -256,14 +256,14 @@ export default function ChangePassword() {
 		}
 	}
 	
-	//loading
+	/*//loading
 	if (!session) {
 		return (
 			<div className="min-h-screen flex items-center justify-center bg-[#dbffe9] dark:bg-[#0b1120]">
 				<Loader2 className="animate-spin text-black dark:text-white" />
 			</div>
 		);
-	}
+	}*/
 
 	return (
 		<div className="min-h-screen flex items-center justify-center bg-[#dbffe9] dark:bg-[#0b1120] px-4 transition-colors duration-300">
@@ -437,13 +437,9 @@ export default function ChangePassword() {
 						<button
 							onClick={requestOTP}
 							disabled={loading}
-							className="w-full bg-[#166534] hover:bg-[#14532d] dark:bg-[#86efac] dark:hover:bg-[#4ade80] text-white dark:text-[#052e16] font-semibold py-3 rounded-lg disabled:opacity-50 flex items-center justify-center transition-colors"
+							className="w-full bg-[#166534] hover:bg-[#14532d] dark:bg-[#86efac] dark:hover:bg-[#4ade80] text-white dark:text-[#052e16] font-semibold py-3 rounded-lg disabled:opacity-50 flex items-center justify-center transition-colors cursor-pointer disabled:cursor-not-allowed"
 						>
-							{loading ? (
-								<Loader2 className="animate-spin" />
-							) : (
-								"Send OTP"
-							)}
+							Send OTP
 						</button>
 						</>
 					) : (
@@ -462,13 +458,9 @@ export default function ChangePassword() {
 							<button
 								onClick={verifyOTP}
 								disabled={loading}
-								className="w-full bg-[#166534] hover:bg-[#14532d] dark:bg-[#86efac] dark:hover:bg-[#4ade80] text-white dark:text-[#052e16] font-semibold py-3 rounded-lg disabled:opacity-50 flex items-center justify-center transition-colors"
+								className="w-full bg-[#166534] hover:bg-[#14532d] dark:bg-[#86efac] dark:hover:bg-[#4ade80] text-white dark:text-[#052e16] font-semibold py-3 rounded-lg disabled:opacity-50 flex items-center justify-center transition-colors cursor-pointer disabled:cursor-not-allowed"
 							>
-								{loading ? (
-									<Loader2 className="animate-spin" />
-								) : (
-									"Verify OTP"
-								)}
+								Verify OTP
 							</button>
 
 							<button
@@ -476,7 +468,7 @@ export default function ChangePassword() {
 								disabled={
 									cooldown > 0 || loading
 								}
-								className="w-full bg-[#f0fdf4] dark:bg-[#182235] border border-[#bbf7d0] dark:border-[#263248] py-3 rounded-lg disabled:opacity-50 text-[#166534] dark:text-[#d1fae5] hover:bg-[#dcfce7] dark:hover:bg-[#1d2940] transition-colors"
+								className="w-full bg-[#f0fdf4] dark:bg-[#182235] border border-[#bbf7d0] dark:border-[#263248] py-3 rounded-lg disabled:opacity-50 text-[#166534] dark:text-[#d1fae5] hover:bg-[#dcfce7] dark:hover:bg-[#1d2940] transition-colors cursor-pointer disabled:cursor-not-allowed"
 							>
 								{cooldown > 0
 									? `Resend in ${cooldown}s`

@@ -1,5 +1,32 @@
+"use client"
+
+import {useState, useEffect} from "react"
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 export default function Home() {
+	//initlize router
+	const router = useRouter();
+	
+	//initlize session state
+	const [sessionUser, setSessionUser] = useState(null);
+	
+	//user auth
+	useEffect(() => {
+		async function loadSession() {
+			try {
+				const res = await fetch("/api/me/auth");
+				const data = await res.json();
+
+				setSessionUser(data.user);
+			} catch (err) {
+				console.log(err);
+			}
+		}
+
+		loadSession();
+	}, []);
+	
 	return (
 		<>
 			<div className="h-full min-h-screen overflow-visible bg-[#dbffe9] dark:bg-[#0b1120] text-[#00bf00] flex flex-wrap overflow-x-hidden ">
@@ -25,7 +52,16 @@ export default function Home() {
 						
 						<div className="items-end flex">
 							<p className="dark:text-white text-gray-500">
-								Get started by <Link href="/login" className="text-blue-500 underline">logging in</Link> or <Link href="signup" className="text-blue-500 underline">signing up</Link>
+								Get started by
+								{sessionUser ? (
+										<>
+										<Link href="/newproject" className="text-blue-500 underline"> creating new project</Link>
+										</>
+									) : (
+										<>
+										<Link href="/login" className="text-blue-500 underline">logging in</Link> or <Link href="signup" className="text-blue-500 underline">signing up</Link>
+										</>
+								)}
 							</p>
 						</div>
 						

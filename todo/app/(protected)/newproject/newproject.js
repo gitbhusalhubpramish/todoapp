@@ -199,12 +199,12 @@ export default function NewProject() {
 
 					{/* Submit */}
 					<button
-						type="submit"
-						disabled={loading}
-						className="w-full py-3 rounded-xl bg-green-600 text-white hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 font-semibold transition cursor-pointer"
-					>
-						{loading ? "Creating..." : "Create Project"}
-					</button>
+	type="submit"
+	disabled={loading}
+	className="w-full py-3 rounded-xl bg-green-600 text-white hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 font-semibold transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
+>
+	{loading ? "Creating..." : "Create Project"}
+</button>
 				</form>
 			</div>
 		</div>
