@@ -166,7 +166,7 @@ export async function POST(req) {
 			userId: user._id,
 			username:user.username,
 			createdAt: new Date(),
-			expiresAt: new Date(Date.now() + 86400000), // 1 day
+			expiresAt: new Date(Date.now() + 86400000*365), // 1 year
 		});
 
 		const cookieStore = await cookies();
