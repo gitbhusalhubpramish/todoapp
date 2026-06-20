@@ -132,7 +132,6 @@ export default function Project({ username, project }) {
 	
 	//handel user like action
 	const handelLike = async () => {
-		console.log("clicked");
 		if (!session?.username){
 			redirect("/login")
 		}
