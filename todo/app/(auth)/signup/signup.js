@@ -65,7 +65,6 @@ export default function Signup() {
 			});
 
 			const data = await res.json();
-			console.log(data);
 			if (res.status === 201){
 				alert("Signup success");}
 			else{

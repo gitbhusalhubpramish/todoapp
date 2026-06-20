@@ -28,7 +28,6 @@ export async function POST(req) {
 		const data = await verifyRes.json();
 
 		if (!data.success || (data.score && data.score < 0.5)) {
-			console.log(data.success, data.score);
 			return Response.json({ error: "Bot detected" }, { status: 403 });
 		}
 
@@ -93,8 +92,6 @@ export async function POST(req) {
 				createdAt: new Date(),
 			});
 			
-			console.log(resetCode)
-			
 			return Response.json({ message: "Reset code sent" });
 		}
 		
@@ -106,10 +103,7 @@ export async function POST(req) {
 				{ sort: { createdAt: -1 } }
 			);
 			
-			console.log(otp)
-			
 			const usrotp = code.join("")
-			console.log(usrotp)
 			
 			if (otp.expiresAt < new Date()) {
 				
@@ -122,7 +116,6 @@ export async function POST(req) {
 			if (otp.code === usrotp){
 				
 				await users.updateOne({_id: user._id}, {$set:{password: otp.newpass}})
-				console.log(otp.newpass)
 			
 				const sessionId = randomUUID();
 
@@ -173,7 +166,7 @@ export async function POST(req) {
 			userId: user._id,
 			username:user.username,
 			createdAt: new Date(),
-			expiresAt: new Date(Date.now() + 86400000), // 1 day
+			expiresAt: new Date(Date.now() + 86400000*365), // 1 year
 		});
 
 		const cookieStore = await cookies();

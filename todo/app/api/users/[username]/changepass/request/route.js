@@ -209,8 +209,6 @@ export async function POST(req, { params }) {
 		//send email to user
 		await sendResetEmail(user.email, otp, "Reset password", "Reset password otp code");
 
-		console.log(otp);
-
 		return Response.json({
 			message: "OTP sent to your email",
 		});

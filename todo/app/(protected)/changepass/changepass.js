@@ -39,18 +39,19 @@ export default function ChangePassword() {
 				const res = await fetch("/api/me/auth");
 				const data = await res.json();
 
-				setSessionUser(data.user);
-
-				if (!data.user) {
-					router.push("/login");
+				if (!res.ok || !data?.user) {
+					router.push("/login")
+					return;
 				}
+				setSessionUser(data.user);
 			} catch (err) {
 				console.log(err);
-			}
+				router.push("/login");
+			} 
 		}
 
 		loadSession();
-	}, [router]);
+	}, []);
 
 	//cooldown
 	useEffect(() => {

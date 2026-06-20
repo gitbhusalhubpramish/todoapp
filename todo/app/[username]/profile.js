@@ -21,7 +21,6 @@ export default function Profile({ username }) {
 		async function loadSession() {
 			const res = await fetch("/api/me/auth");
 			const data = await res.json();
-			console.log("session raw data ",data)
 			setSessionUser(data.user);
 		}
 
@@ -42,7 +41,6 @@ export default function Profile({ username }) {
 			}
 
 			const data = await res.json();
-			console.log(data)
 			setUser(data.user);
 			setLoading(false);
 		}
@@ -95,8 +93,6 @@ export default function Profile({ username }) {
 	
 	//follow button structre and style
 	const Followbtn = () => {
-		console.log("session ", session)
-		console.log("user ", user)
 
 		// keep Follow button style same
 		const followStyle = "px-5 py-2 rounded-full font-medium text-sm transition-all duration-200 bg-green-600 text-white hover:bg-green-700 active:scale-95 shadow-md hover:shadow-lg dark:bg-green-500 dark:hover:bg-green-600 cursor-pointer"
@@ -154,8 +150,8 @@ export default function Profile({ username }) {
 				<div>
 					<h1 className="sm:text-4xl text-3xl h-1/2 flex items-end m-3">{user ? user.username : (<Skeleton className="w-30 h-5"/>)}</h1>
 					<div className="flex gap-2 m-3 text-gray-500 ">
-						<div className="underline decoration-dashed">{user ? (user.followers?.length ?? 0)+" followers" : <Skeleton className="h-4 w-10" />}</div>
-						<div className="underline decoration-dashed">{user ? (user.following?.length ?? 0)+" following" : <Skeleton className="h-4 w-10" />} </div>
+						<Link href={`/${username}/followers`} className="underline decoration-dashed">{user ? (user.followers?.length ?? 0)+" followers" : <Skeleton className="h-4 w-10" />}</Link>
+						<Link href = {`/${username}/following`} className="underline decoration-dashed">{user ? (user.following?.length ?? 0)+" following" : <Skeleton className="h-4 w-10" />} </Link>
 					</div>
 				</div>
 				<div className="flex justify-center sm:justify-start items-center mt-4 sm:mt-0 sm:ml-6">

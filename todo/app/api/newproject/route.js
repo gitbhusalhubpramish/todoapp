@@ -37,7 +37,6 @@ export async function POST(req) {
 		likes: Array(),
 		content,
 	}
-	console.log(JSON.stringify(project, null, 2));
 	
 	//search for existing project
 	const projects = db.collection("projects")

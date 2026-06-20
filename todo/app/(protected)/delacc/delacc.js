@@ -3,11 +3,14 @@
 import { useEffect, useState, useRef } from "react";
 import { Loader2, ShieldAlert, Trash2 } from "lucide-react";
 import ReCAPTCHA from "react-google-recaptcha";
+import { useRouter } from "next/navigation";
 
 export default function DeleteAccount() {
+	//initlize louter
+	const router = useRouter()
+	
 	//state init
 	const [sessionUser, setSessionUser] = useState(null);
-	const [checkingSession, setCheckingSession] = useState(true);
 	const [step, setStep] = useState("confirm");
 	const [otp, setOtp] = useState("");
 	const [loading, setLoading] = useState(false);
@@ -22,20 +25,15 @@ export default function DeleteAccount() {
 				const res = await fetch("/api/me/auth");
 				const data = await res.json();
 
-				console.log("session raw data ", data);
-
 				if (!res.ok || !data?.user) {
-					window.location.href = "/login";
+					router.push("/login")
 					return;
 				}
-
 				setSessionUser(data.user);
 			} catch (err) {
 				console.log(err);
-				window.location.href = "/login";
-			} finally {
-				setCheckingSession(false);
-			}
+				router.push("/login");
+			} 
 		}
 
 		loadSession();
@@ -140,17 +138,6 @@ export default function DeleteAccount() {
 		}
 	}
 
-	/*//loading
-	if (checkingSession) {
-		return (
-			<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] flex items-center justify-center">
-				<div className="flex items-center gap-2 text-black dark:text-white">
-					<Loader2 className="animate-spin" size={20} />
-					Loading...
-				</div>
-			</div>
-		);
-	}*/
 
 	return (
 		<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] flex items-center justify-center px-4 py-10">

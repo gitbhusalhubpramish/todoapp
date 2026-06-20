@@ -47,9 +47,7 @@ export default function Notifications() {
 			} catch (err) {
 				console.log(err);
 				router.push("/login");
-			} finally {
-				setLoading(false);
-			}
+			} 
 		}
 
 		loadSession();
