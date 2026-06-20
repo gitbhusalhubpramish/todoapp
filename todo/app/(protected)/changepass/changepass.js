@@ -256,14 +256,14 @@ export default function ChangePassword() {
 		}
 	}
 	
-	//loading
+	/*//loading
 	if (!session) {
 		return (
 			<div className="min-h-screen flex items-center justify-center bg-[#dbffe9] dark:bg-[#0b1120]">
 				<Loader2 className="animate-spin text-black dark:text-white" />
 			</div>
 		);
-	}
+	}*/
 
 	return (
 		<div className="min-h-screen flex items-center justify-center bg-[#dbffe9] dark:bg-[#0b1120] px-4 transition-colors duration-300">
