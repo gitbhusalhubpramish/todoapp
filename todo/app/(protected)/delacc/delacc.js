@@ -7,7 +7,6 @@ import ReCAPTCHA from "react-google-recaptcha";
 export default function DeleteAccount() {
 	//state init
 	const [sessionUser, setSessionUser] = useState(null);
-	const [checkingSession, setCheckingSession] = useState(true);
 	const [step, setStep] = useState("confirm");
 	const [otp, setOtp] = useState("");
 	const [loading, setLoading] = useState(false);
@@ -23,17 +22,14 @@ export default function DeleteAccount() {
 				const data = await res.json();
 
 				if (!res.ok || !data?.user) {
-					window.location.href = "/login";
+					router.push("/login")
 					return;
 				}
-
 				setSessionUser(data.user);
 			} catch (err) {
 				console.log(err);
-				window.location.href = "/login";
-			} finally {
-				setCheckingSession(false);
-			}
+				router.push("/login");
+			} 
 		}
 
 		loadSession();
@@ -138,17 +134,6 @@ export default function DeleteAccount() {
 		}
 	}
 
-	/*//loading
-	if (checkingSession) {
-		return (
-			<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] flex items-center justify-center">
-				<div className="flex items-center gap-2 text-black dark:text-white">
-					<Loader2 className="animate-spin" size={20} />
-					Loading...
-				</div>
-			</div>
-		);
-	}*/
 
 	return (
 		<div className="min-h-screen bg-[#dbffe9] dark:bg-[#0b1120] flex items-center justify-center px-4 py-10">
