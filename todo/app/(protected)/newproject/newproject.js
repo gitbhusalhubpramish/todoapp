@@ -40,9 +40,7 @@ export default function NewProject() {
 			} catch (err) {
 				console.log(err);
 				router.push("/login");
-			} finally {
-				setCheckingSession(false);
-			}
+			} 
 		}
 
 		loadSession();
