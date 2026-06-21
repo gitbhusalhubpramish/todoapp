@@ -26,7 +26,9 @@ export default function Navbar() {
 				</div>
 
 				{/* Search */}
-				<Search />
+				<Suspense fallback={null}>
+        			<Search />
+      			</Suspense>
 
 				{/* User Navigation */}
 				<UsrNav />
