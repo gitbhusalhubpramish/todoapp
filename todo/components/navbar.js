@@ -1,5 +1,6 @@
 import UsrNav from "./usrnav.js";
 import Search from "./search.js";
+import { Suspense } from "react";
 
 export default function Navbar() {
 	return (
