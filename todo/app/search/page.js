@@ -1,4 +1,5 @@
 import Search from "./search.js"
+import { Suspense } from "react";
 
 export const metadata = {
 	title: "Search Projects, Tasks & Users | Tick It",
@@ -8,6 +9,8 @@ export const metadata = {
 
 export default function SearchPage() {
 	return (
-		<Search/>
+		<Suspense fallback={null}>
+			<Search/>
+		</Suspense>
 	)
 }
