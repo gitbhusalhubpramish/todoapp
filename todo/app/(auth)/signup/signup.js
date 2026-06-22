@@ -66,7 +66,9 @@ export default function Signup() {
 
 			const data = await res.json();
 			if (res.status === 201){
-				alert("Signup success");}
+				alert("Signup success");
+				window.location.reload()
+			}
 			else{
 				setError(data.error)
 			}
