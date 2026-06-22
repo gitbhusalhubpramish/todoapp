@@ -90,6 +90,7 @@ export async function POST(req) {
 		
 		//insert user to usrdata colleciton
 		await usrdta.insertOne({
+				userId: result.insertedId,
 				username,
 				profilepic: "/profile.svg",
 				projects: [],
