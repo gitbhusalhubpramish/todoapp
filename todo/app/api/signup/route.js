@@ -66,7 +66,7 @@ export async function POST(req) {
 
 		// search for existing user
 		const existing = await users.findOne({
-			$or: [{ normalizedEmail }, { username }],
+			$or: [{ email: normalizedEmail }, { username: username }],
 		});
 
 		//throw error on existing user
