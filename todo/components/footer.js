@@ -22,7 +22,7 @@ export default function Footer(){
 					</div>
 				</div>
 				<div className="flex justify-center m-2">
-					<p>Source available on <a className="underline text-blue-500 hover:text-blue-600" href="https://github.com/gitbhusalhubpramish/portfilo">GitHub</a></p>
+					<p>Source available on <a className="underline text-blue-500 hover:text-blue-600" href="https://github.com/gitbhusalhubpramish/todoapp">GitHub</a></p>
 				</div>
 			</div>
 		</>
